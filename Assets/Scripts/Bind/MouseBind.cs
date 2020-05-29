@@ -12,7 +12,7 @@ public class MouseBind : IBindable
 
     public Vector2 GetPosition()
     {
-        var v = Input.mousePosition;
+        var v = SharedObjects.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         return v;
     }
 

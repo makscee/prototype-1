@@ -6,7 +6,7 @@ public class BindVisual : MonoBehaviour
     public IBindable first, second;
     RectTransform _rectTransform;
 
-    const float MinWidth = 0, MaxWidth = 4;
+    const float MinWidth = 0, MaxWidth = 0.1f;
     float MaxLength;
 
     public Bind bind;
@@ -16,7 +16,7 @@ public class BindVisual : MonoBehaviour
         var b = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.Canvas.transform).GetComponent<BindVisual>();
         b.first = bind.First;
         b.second = bind.Second;
-        b.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 300;
+        b.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 3;
         b.bind = bind;
     }
 

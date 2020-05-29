@@ -9,7 +9,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public int X, Y;
     public GameObject inside;
 
-    protected const float BlockSide = 50;
+    protected const float BlockSide = 1;
     void OnEnable()
     {
         ColorPalette.SubscribeGameObject(gameObject, 3);
