@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler
 {
+    public int X, Y;
     public GameObject inside;
 
-    public float BlockSide;
+    protected const float BlockSide = 50;
     void OnEnable()
     {
         ColorPalette.SubscribeGameObject(gameObject, 3);
@@ -18,7 +19,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     protected override void Start()
     {
         base.Start();
-        var blockSide = TetrisField.Instance.BlockSide;
+        var blockSide = BlockSide;
         var rect = GetComponent<RectTransform>();
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, blockSide);
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, blockSide);
@@ -29,11 +30,11 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         return Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.Canvas.transform).GetComponent<Block>();
     }
     
-    public void OnBeginDrag(PointerEventData eventData)
+    public virtual void OnBeginDrag(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, MouseBindStrength);
+            BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
         }
         else
         {
@@ -41,7 +42,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public virtual void OnEndDrag(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
@@ -50,27 +51,58 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         else
         {
             var pos = MouseBind.Get().GetPosition();
-            var m = TetrisField.Instance.BlockSide;
-            var size = new Vector2(m, m);
-            var up = new Rect(GetPosition() + new Vector2(0, m) - size / 2, size);
-            var down = new Rect(GetPosition() + new Vector2(0, -m) - size / 2, size);
-            var left = new Rect(GetPosition() + new Vector2(-m, 0) - size / 2, size);
-            var right = new Rect(GetPosition() + new Vector2(m, 0) - size / 2, size);
+            var size = new Vector2(BlockSide, BlockSide);
+            var up = new Rect(GetPosition() + new Vector2(0, BlockSide) - size / 2, size);
+            var down = new Rect(GetPosition() + new Vector2(0, -BlockSide) - size / 2, size);
+            var left = new Rect(GetPosition() + new Vector2(-BlockSide, 0) - size / 2, size);
+            var right = new Rect(GetPosition() + new Vector2(BlockSide, 0) - size / 2, size);
 
             Vector2 newBlockOffset;
-            if (up.Contains(pos)) newBlockOffset = Vector2.up * m;
-            else if (down.Contains(pos)) newBlockOffset = Vector2.down * m;
-            else if (left.Contains(pos)) newBlockOffset = Vector2.left * m;
-            else if (right.Contains(pos)) newBlockOffset = Vector2.right * m;
+            int x, y;
+            if (up.Contains(pos))
+            {
+                newBlockOffset = Vector2.up * BlockSide;
+                x = X;
+                y = Y + 1;
+            }
+            else if (down.Contains(pos))
+            {
+                newBlockOffset = Vector2.down * BlockSide;
+                x = X;
+                y = Y - 1;
+            }
+            else if (left.Contains(pos))
+            {
+                newBlockOffset = Vector2.left * BlockSide;
+                x = X - 1;
+                y = Y;
+            }
+            else if (right.Contains(pos))
+            {
+                newBlockOffset = Vector2.right * BlockSide;
+                x = X + 1;
+                y = Y;
+            }
             else
             {
                 BindMatrix.RemoveBind(this, MouseBind.Get());
                 return;
             }
 
-            var b = Create();
-            b.transform.position = transform.position;
-            BindMatrix.AddBind(this, b, newBlockOffset, BlockBindStrength);
+            var existingBlock = FieldMatrix.Get(x, y);
+            if (existingBlock != null)
+            {
+                BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
+            }
+            else
+            {
+                var b = Create();
+                b.transform.position = transform.position;
+                b.X = x;
+                b.Y = y;
+                FieldMatrix.Add(x, y, b);
+                BindMatrix.AddBind(this, b, newBlockOffset, Bind.BlockBindStrength);
+            }
             BindMatrix.RemoveBind(this, MouseBind.Get());
         }
     }
@@ -78,12 +110,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public void OnDrag(PointerEventData eventData)
     {
         
-    }
-
-    protected override void FixedUpdate()
-    {
-        FieldCheck();
-        base.FixedUpdate();
     }
 
     IEnumerable<Block> CollectBoundBlocks()
@@ -97,46 +123,65 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         return result;
     }
 
-    bool _checkedAfterUnbound;
-
-    void FieldCheck()
+    readonly List<Block> _lastPulseFrom = new List<Block>();
+    public virtual void ReceivePulse(Block from)
     {
-        if (IsAnchored())
+        if (_lastPulseFrom.Count == 0)
         {
-            _checkedAfterUnbound = false;
-            return;
+            ColorPalette.SubscribeGameObject(inside, 3);
+            StartCoroutine(nameof(PassCoroutine));
         }
-        if (_checkedAfterUnbound) return;
+        _lastPulseFrom.Add(from);
+    }
 
-        _checkedAfterUnbound = true;
-        foreach (var block in CollectBoundBlocks())
+    public virtual void PassPulse()
+    {
+        bool passed = false;
+        ColorPalette.SubscribeGameObject(inside, 1);
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            block.TryToStick();
+            if ((bind.First == this ? bind.Second : bind.First) is Block block)
+                if (!_lastPulseFrom.Contains(block))
+                {
+                    block.ReceivePulse(this);
+                    passed = true;
+                }
+        }
+
+        if (!passed)
+        {
+            var v = transform.position - _lastPulseFrom[0].transform.position;
+            var parent = _lastPulseFrom[0];
+            var x = X - parent.X;
+            var y = Y - parent.Y;
+            transform.position += v;
+            if (x > 0)
+                SoundsPlayer.Kick();
+            else if (x < 0)
+                SoundsPlayer.Hat();
+            else if (y > 0)
+                SoundsPlayer.Clap();
+        }
+        _lastPulseFrom.Clear();
+    }
+
+    protected IEnumerator PassCoroutine()
+    {
+        yield return new WaitForSeconds(PulseBlock.PulseDelay);
+        PassPulse();
+    }
+
+    public virtual void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Middle)
+        {
+            Destroy();
         }
     }
 
-    const int BlockBindStrength = 5;
-    const int CellBindStrength = 5;
-    const int MouseBindStrength = 7;
-
-    void TryToStick()
+    public void Destroy()
     {
-        if (!TetrisField.Instance.GetCoordsFromScreenPos(transform.position, out var x, out var y))
-        {
-            return;
-        }
-        
-        BindMatrix.AddBind(this, TetrisField.Instance.GetCell(x, y), Vector2.zero, CellBindStrength, 50);
-        
-        var left = TetrisField.Instance.GetBlock(x - 1, y);
-        var right = TetrisField.Instance.GetBlock(x + 1, y);
-        var up = TetrisField.Instance.GetBlock(x, y + 1);
-        var down = TetrisField.Instance.GetBlock(x, y - 1);
-
-        var m = TetrisField.Instance.BlockSide;
-        if (left != null)  BindMatrix.AddBind(this, left, Vector2.left * m, BlockBindStrength);
-        if (right != null) BindMatrix.AddBind(this, right, Vector2.right * m, BlockBindStrength);
-        if (up != null)  BindMatrix.AddBind(this, up, Vector2.up * m, BlockBindStrength);
-        if (down != null) BindMatrix.AddBind(this, down, Vector2.down * m, BlockBindStrength);
+        BindMatrix.RemoveAllBinds(this);
+        Destroy(gameObject);
     }
 }

@@ -19,7 +19,7 @@ public class InputHandler : MonoBehaviour
             // }
         }
 
-        if (Input.GetMouseButtonDown(2))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             var b = Block.Create();
             b.transform.position += new Vector3(200, 200);

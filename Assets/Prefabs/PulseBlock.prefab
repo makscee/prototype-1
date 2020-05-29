@@ -81,10 +81,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1038025866221496447}
   - component: {fileID: 8540842673089334935}
-  - component: {fileID: 413987079}
   - component: {fileID: -1491573410832159246}
+  - component: {fileID: 970950226850876637}
   m_Layer: 5
-  m_Name: Block
+  m_Name: PulseBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,20 +118,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5419607776513826146}
   m_CullTransparentMesh: 0
---- !u!114 &413987079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5419607776513826146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 168150d291e494c4fa742af7732992a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Movable: 1
-  inside: {fileID: 3284993695328691668}
 --- !u!114 &-1491573410832159246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,3 +144,17 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &970950226850876637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5419607776513826146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0286defb07d94aa58082372ef08bad1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Movable: 1
+  inside: {fileID: 3284993695328691668}

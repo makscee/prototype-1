@@ -18,11 +18,6 @@ public class TetrisField : MonoBehaviour
     public float BlockSide;
 
     public static TetrisField Instance;
-
-    void Update()
-    {
-        BindMatrix.Update();
-    }
     void OnEnable()
     {
         Instance = this;

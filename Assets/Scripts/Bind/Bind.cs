@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Bind
 {
+    public const int BlockBindStrength = 5;
+    public const int MouseBindStrength = 7;
+    public const int PulseBlockBindStrength = 14;
+    
     public Bind(IBindable fist, IBindable second, Vector2 offset, int strength, float breakDistance = -1)
     {
         First = fist;
@@ -11,7 +15,6 @@ public class Bind
         Offset = offset;
         Strength = strength;
         BreakDistance = breakDistance;
-        BindVisual.Create(fist, second, breakDistance);
     }
     
     public IBindable First, Second;

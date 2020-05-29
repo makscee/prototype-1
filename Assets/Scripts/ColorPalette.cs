@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -111,8 +112,28 @@ public static class ColorPalette
         }
     }
 
+    struct PaletteSubscription
+    {
+        public Action<Color> Action;
+        public int NumInPalette;
+
+        public PaletteSubscription(Action<Color> action, int numInPalette)
+        {
+            Action = action;
+            NumInPalette = numInPalette;
+        }
+    }
+
+    static Dictionary<GameObject, PaletteSubscription> _subscribers = new Dictionary<GameObject, PaletteSubscription>();
+    
     public static void SubscribeGameObject(GameObject obj, int numInPalette)
     {
+        if (_subscribers.ContainsKey(obj))
+        {
+            var subscription = _subscribers[obj];
+            UnsubscribeFromPalette(subscription.Action, subscription.NumInPalette);
+        }
+        
         Action<Color> a = null;
         var found = false;
         
@@ -164,6 +185,7 @@ public static class ColorPalette
         if (found)
         {
             SubscribeToPalette(a, numInPalette);
+            _subscribers[obj] = new PaletteSubscription(a, numInPalette);
             return;
         }
 

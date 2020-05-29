@@ -54,7 +54,6 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
         return false;
     }
 
-    [SerializeField]
     bool _anchored;
     public virtual bool IsAnchored()
     {

@@ -12,6 +12,7 @@ public static class BindMatrix
         if (IsBound(first, second)) return;
         
         var b = new Bind(first, second, offset, strength, breakDistance);
+        BindVisual.Create(b);
         
         if (!Matrix.ContainsKey(first)) Matrix[first] = new Dictionary<IBindable, Bind>();
         if (!Matrix.ContainsKey(second)) Matrix[second] = new Dictionary<IBindable, Bind>();
@@ -29,6 +30,11 @@ public static class BindMatrix
             secondH.OnBind(first);
     }
 
+    public static Bind GetBind(IBindable first, IBindable second)
+    {
+        return Matrix.ContainsKey(first) ? (Matrix[first].ContainsKey(second) ? Matrix[first][second] : null) : null;
+    }
+
     public static void RemoveBind(IBindable first, IBindable second)
     {
         Matrix[first]?.Remove(second);
@@ -41,11 +47,22 @@ public static class BindMatrix
             secondH.OnUnbind(first);
     }
 
+    public static void RemoveAllBinds(IBindable obj)
+    {
+        if (!Matrix.ContainsKey(obj)) return;
+
+        var l = new List<Bind>(Matrix[obj].Values);
+        foreach (var bind in l)
+        {
+            RemoveBind(bind.First, bind.Second);
+        }
+    }
+
     public static bool IsBound(IBindable first, IBindable second)
     {
         if (first == null || second == null)
         {
-            Debug.Log("Binding a null"); 
+            Debug.Log("Binding a null");
             return false;
         }
         return Matrix.ContainsKey(first) && Matrix[first].ContainsKey(second);
@@ -90,23 +107,6 @@ public static class BindMatrix
         foreach (var o in bound)
         {
             o.SetAnchored(hasAnchor);
-        }
-    }
-
-    public static void Update()
-    {
-        var objects = new HashSet<Bind>();
-        foreach (var d in Matrix.Values)
-        {
-            foreach (var bind in d.Values)
-            {
-                objects.Add(bind);
-            }
-        }
-
-        foreach (var bind in objects)
-        {
-            bind.Update();
         }
     }
 

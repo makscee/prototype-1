@@ -11,12 +11,13 @@ public class BindVisual : MonoBehaviour
 
     public Bind bind;
 
-    public static void Create(IBindable first, IBindable second, float breakDistance)
+    public static void Create(Bind bind)
     {
         var b = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.Canvas.transform).GetComponent<BindVisual>();
-        b.first = first;
-        b.second = second;
-        b.MaxLength = breakDistance > -1 ? breakDistance : 300;
+        b.first = bind.First;
+        b.second = bind.Second;
+        b.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 300;
+        b.bind = bind;
     }
 
     void OnEnable()
@@ -32,6 +33,8 @@ public class BindVisual : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        
+        bind.Update();
         
         var firstPosition = first.GetPosition();
         var dir = (second.GetPosition() - firstPosition) / 2;
