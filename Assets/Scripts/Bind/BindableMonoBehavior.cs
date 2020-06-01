@@ -37,7 +37,7 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
             force += new Vector2(Mathf.Cos(t * speed * _speedRand) * radius, Mathf.Sin(t * speed * _speedRand) * radius);
         }
 
-        _velocity += (force - _velocity) / 2;
+        _velocity += (force - _velocity) * 0.8f;
         transform.position += (Vector3)_velocity * (Time.fixedDeltaTime);
     }
 

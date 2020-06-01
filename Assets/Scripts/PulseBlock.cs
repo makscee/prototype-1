@@ -57,19 +57,25 @@ public class PulseBlock : Block
 
     public override void ReceivePulse(Block from)
     {
-        if (from.X == 0 && from.Y == 1) return;
         ColorPalette.SubscribeGameObject(inside, 3);
+        StopCoroutine(nameof(PassCoroutine));
         StartCoroutine(nameof(PassCoroutine));
     }
 
     public override void PassPulse()
     {
-        FieldMatrix.Get(0, 1)?.ReceivePulse(this);
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
+        {
+            if (bind.First == this && bind.Second is Block block)
+            {
+                block.ReceivePulse(this);
+            }
+        }
         ColorPalette.SubscribeGameObject(inside, 2);
     }
 
     void Pulse()
     {
-        FieldMatrix.Get(0, 1)?.ReceivePulse(this);
+        ReceivePulse(null);
     }
 }

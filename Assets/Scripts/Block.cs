@@ -146,12 +146,10 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     readonly List<Block> _lastPulseFrom = new List<Block>();
     public virtual void ReceivePulse(Block from)
     {
-        if (_lastPulseFrom.Count == 0)
-        {
-            ColorPalette.SubscribeGameObject(inside, 3);
-            StartCoroutine(nameof(PassCoroutine));
-        }
         _lastPulseFrom.Add(from);
+        ColorPalette.SubscribeGameObject(inside, 3);
+        StopCoroutine(nameof(PassCoroutine));
+        StartCoroutine(nameof(PassCoroutine));
     }
 
     public virtual void PassPulse()
@@ -160,27 +158,28 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         RevertToDefaultColor();
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            if ((bind.First == this ? bind.Second : bind.First) is Block block)
-                if (!_lastPulseFrom.Contains(block))
-                {
-                    block.ReceivePulse(this);
-                    passed = true;
-                }
+            if (bind.First == this && bind.Second is Block block)
+            {
+                block.ReceivePulse(this);
+                passed = true;
+            }
         }
 
         if (!passed)
         {
-            var v = transform.position - _lastPulseFrom[0].transform.position;
-            var parent = _lastPulseFrom[0];
-            var x = X - parent.X;
-            var y = Y - parent.Y;
-            transform.position += v;
-            if (x > 0)
-                SoundsPlayer.Kick();
-            else if (x < 0)
-                SoundsPlayer.Hat();
-            else if (y > 0)
-                SoundsPlayer.Clap();
+            foreach (var last in _lastPulseFrom)
+            {
+                var v = transform.position - last.transform.position;
+                var x = X - last.X;
+                var y = Y - last.Y;
+                transform.position += v;
+                if (x > 0)
+                    SoundsPlayer.Kick();
+                else if (x < 0)
+                    SoundsPlayer.Hat();
+                else if (y > 0)
+                    SoundsPlayer.Clap();
+            }
         }
         _lastPulseFrom.Clear();
     }
