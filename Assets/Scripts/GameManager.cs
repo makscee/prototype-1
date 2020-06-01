@@ -6,11 +6,12 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         Instance = this;
-        ColorPalette.SubscribeToPalette((c) => Camera.main.backgroundColor = c, 0);
+        var cam = SharedObjects.Instance.Camera;
+        ColorPalette.SubscribeToPalette(cam.gameObject, (c) => cam.backgroundColor = c, 0);
     }
     void OnDisable()
     {
-        ColorPalette.ClearListeners();
+        //ColorPalette.ClearListeners();
     }
 
     void Update()

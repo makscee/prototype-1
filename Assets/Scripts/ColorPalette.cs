@@ -45,38 +45,20 @@ public static class ColorPalette
         Palettes[0].CopyTo(_colors, 0);
     }
 
-    static readonly Action<Color>[] _updateListeners = new Action<Color>[4];
-    
-    public static void SubscribeToPalette(Action<Color> a, int numInPalette)
-    {
-        _updateListeners[numInPalette] += a;
-        a(_colors[numInPalette]);
-    }
-
-    public static void UnsubscribeFromPalette(Action<Color> a, int numInPalette)
-    {
-        _updateListeners[numInPalette] -= a;
-    }
-
     static void Refresh()
     {
-        for (var i = 0; i < 4; i++)
+        foreach (var subscription in _subscribers.Values)
         {
-            if (_updateListeners[i] == null) continue;
-            _updateListeners[i](_colors[i]);
+            subscription.ApplyColor();
         }
+
+        DoUnsubscribe();
     }
 
     public static void SwitchToPalette(int num)
     {
         _colors = Palettes[num];
         curPalette = num;
-        Refresh();
-    }
-
-    public static void SwitchToNextPalette()
-    {
-        SwitchToPalette(++curPalette % Palettes.Length);
     }
 
     public static void AnimateSwitchToNextPalette()
@@ -100,19 +82,11 @@ public static class ColorPalette
             {
                 _colors[i] = Color.Lerp(_colorsFrom[i], _colorsTo[i], t);
             }
-            Refresh();
         }
+        Refresh();
     }
 
-    public static void ClearListeners()
-    {
-        for (var i = 0; i < 4; i++)
-        {
-            _updateListeners[i] = null;
-        }
-    }
-
-    struct PaletteSubscription
+    class PaletteSubscription
     {
         public Action<Color> Action;
         public int NumInPalette;
@@ -121,31 +95,79 @@ public static class ColorPalette
         {
             Action = action;
             NumInPalette = numInPalette;
+            ApplyColor();
+        }
+
+        public void ApplyColor()
+        {
+            Action(_colors[NumInPalette]);
         }
     }
 
     static Dictionary<GameObject, PaletteSubscription> _subscribers = new Dictionary<GameObject, PaletteSubscription>();
-    
+
+    public static void SubscribeToPalette(GameObject obj, Action<Color> action, int numInPalette)
+    {
+        _subscribers[obj] = new PaletteSubscription(action, numInPalette);
+    }
+
+    public static void SubscribeToGameObject(GameObject to, GameObject self)
+    {
+        if (!_subscribers.ContainsKey(to)) Debug.LogError("Didn't find subscription object");
+        var toSubscription = _subscribers[to];
+        var subscription = new PaletteSubscription(GetColorAction(self), toSubscription.NumInPalette);
+        subscription.Action = (color =>
+        {
+            if (!_subscribers.ContainsKey(to))
+            {
+                UnsubscribeFromPalette(self);
+                return;
+            }
+            subscription.NumInPalette = _subscribers[to].NumInPalette;
+        }) + subscription.Action;
+        // subscription.ApplyColor();
+        _subscribers[self] = subscription;
+    }
+
+    static List<GameObject> _unsubscribeBuffer = new List<GameObject>();
+    static void UnsubscribeFromPalette(GameObject obj)
+    {
+        _unsubscribeBuffer.Add(obj);
+    }
+
+    static void DoUnsubscribe()
+    {
+        foreach (var obj in _unsubscribeBuffer)
+        {
+            _subscribers.Remove(obj);
+        }
+    }
     public static void SubscribeGameObject(GameObject obj, int numInPalette)
     {
         if (_subscribers.ContainsKey(obj))
         {
             var subscription = _subscribers[obj];
-            UnsubscribeFromPalette(subscription.Action, subscription.NumInPalette);
+            subscription.NumInPalette = numInPalette;
+            // subscription.ApplyColor();
+            return;
         }
-        
+
+        var a = GetColorAction(obj);
+        _subscribers[obj] = new PaletteSubscription(a, numInPalette);
+    }
+
+    static Action<Color> GetColorAction(GameObject obj)
+    {
         Action<Color> a = null;
-        var found = false;
         
         var sr = obj.GetComponent<SpriteRenderer>();
         if (sr != null)
         {
-            found = true;
             a = color =>
             {
                 if (sr == null)
                 {
-                    UnsubscribeFromPalette(a, numInPalette);
+                    UnsubscribeFromPalette(obj);
                     return;
                 }
                 sr.color = color;
@@ -155,12 +177,11 @@ public static class ColorPalette
         var rawImg = obj.GetComponent<RawImage>();
         if (rawImg != null)
         {
-            found = true;
             a = color =>
             {
                 if (rawImg == null)
                 {
-                    UnsubscribeFromPalette(a, numInPalette);
+                    UnsubscribeFromPalette(obj);
                     return;
                 }
                 rawImg.color = color;
@@ -170,25 +191,36 @@ public static class ColorPalette
         var img = obj.GetComponent<Image>();
         if (img != null)
         {
-            found = true;
             a = color =>
             {
                 if (img == null)
                 {
-                    UnsubscribeFromPalette(a, numInPalette);
+                    UnsubscribeFromPalette(obj);
                     return;
                 }
                 img.color = color;
             };
         }
 
-        if (found)
+        var text = obj.GetComponent<Text>();
+        if (text != null)
         {
-            SubscribeToPalette(a, numInPalette);
-            _subscribers[obj] = new PaletteSubscription(a, numInPalette);
-            return;
+            a = color =>
+            {
+                if (text == null)
+                {
+                    UnsubscribeFromPalette(obj);
+                    return;
+                }
+                text.color = color;
+            };
         }
 
-        Debug.LogError($"Render component not found for {obj}");
+        if (a == null)
+        {
+            Debug.LogError($"Render component not found for {obj}");
+        }
+
+        return a;
     }
 }

@@ -42,7 +42,7 @@ public static class BindMatrix
         RefreshAnchored(first);
         RefreshAnchored(second);
         if (first is IBindHandler firstH)
-            firstH.OnUnbind(second); 
+            firstH.OnUnbind(second);
         if (second is IBindHandler secondH)
             secondH.OnUnbind(first);
     }

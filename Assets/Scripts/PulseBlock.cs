@@ -3,14 +3,12 @@ using UnityEngine.EventSystems;
 
 public class PulseBlock : Block
 {
-    public const float PulseDelay = 60f / 100f / 4; // pulse bpm
+    public const float PulseDelay = 60f / 65f / 4f; // pulse bpm
 
     void OnEnable()
     {
         ColorPalette.SubscribeGameObject(gameObject, 3);
         ColorPalette.SubscribeGameObject(inside, 2);
-        X = 0;
-        Y = 0;
         FieldMatrix.Add(0, 0, this);
     }
 

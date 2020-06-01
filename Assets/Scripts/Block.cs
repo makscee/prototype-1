@@ -3,26 +3,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler
 {
-    public int X, Y;
+    int _x, _y;
     public GameObject inside;
+    public GameObject text;
 
-    protected const float BlockSide = 1;
+    public const float BlockSide = 1;
+
+    public int X => _x;
+    public int Y => _y;
+
+    void SetCoords(int x, int y)
+    {
+        _x = x;
+        _y = y;
+        RevertToDefaultColor();
+    }
+
+    void RevertToDefaultColor()
+    {
+        var xt = _x + 1000000;
+        var yt = _y + 1000000;
+        ColorPalette.SubscribeGameObject(inside, 1 - (xt + yt) % 2);
+        ColorPalette.SubscribeGameObject(text, 2 + (xt + yt) % 2);
+    }
+
     void OnEnable()
     {
         ColorPalette.SubscribeGameObject(gameObject, 3);
-        ColorPalette.SubscribeGameObject(inside, 1);
+        RevertToDefaultColor();
+        _text = text.GetComponent<Text>();
     }
 
     protected override void Start()
     {
         base.Start();
-        var blockSide = BlockSide;
         var rect = GetComponent<RectTransform>();
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, blockSide);
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, blockSide);
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, BlockSide);
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, BlockSide);
     }
 
     public static Block Create()
@@ -98,8 +119,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             {
                 var b = Create();
                 b.transform.position = transform.position;
-                b.X = x;
-                b.Y = y;
+                b.SetCoords(x, y);
                 FieldMatrix.Add(x, y, b);
                 BindMatrix.AddBind(this, b, newBlockOffset, Bind.BlockBindStrength);
             }
@@ -137,7 +157,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public virtual void PassPulse()
     {
         bool passed = false;
-        ColorPalette.SubscribeGameObject(inside, 1);
+        RevertToDefaultColor();
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
             if ((bind.First == this ? bind.Second : bind.First) is Block block)
@@ -183,5 +203,11 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         BindMatrix.RemoveAllBinds(this);
         Destroy(gameObject);
+    }
+
+    Text _text;
+    public void DisplayText(string text)
+    {
+        _text.text = text;
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -34,7 +31,7 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
         }
         else
         {
-            const float radius = 2f; 
+            const float radius = 0.5f; 
             const float speed = 4f;
             var t = Time.time;
             force += new Vector2(Mathf.Cos(t * speed * _speedRand) * radius, Mathf.Sin(t * speed * _speedRand) * radius);
