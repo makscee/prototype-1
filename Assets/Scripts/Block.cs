@@ -57,7 +57,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         {
             BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
         }
-        else
+        else if (eventData.button == PointerEventData.InputButton.Right)
         {
             BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, 0);
         }
@@ -69,7 +69,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         {
             BindMatrix.RemoveBind(this, MouseBind.Get());
         }
-        else
+        else if (eventData.button == PointerEventData.InputButton.Right)
         {
             var pos = MouseBind.Get().GetPosition();
             var size = new Vector2(BlockSide, BlockSide);
@@ -113,7 +113,14 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             var existingBlock = FieldMatrix.Get(x, y);
             if (existingBlock != null)
             {
-                BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
+                var bind = BindMatrix.GetBind(this, existingBlock);
+                if (bind == null)
+                    BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
+                else if (bind.First != this)
+                {
+                    bind.Break();
+                    BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
+                }
             }
             else
             {
