@@ -120,6 +120,9 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 {
                     bind.Break();
                     BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
+                } else if (bind.First == this)
+                {
+                    bind.Break();
                 }
             }
             else
@@ -222,14 +225,15 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         InputHandler.BlockClicked = false;
     }
 
-    int _stepNumber = int.MaxValue;
+    [SerializeField]
+    int stepNumber = int.MaxValue / 2;
     protected int StepNumber
     {
-        get => _stepNumber;
+        get => stepNumber;
         set
         {
-            _stepNumber = value;
-            DisplayText(_stepNumber.ToString());
+            stepNumber = value;
+            DisplayText(stepNumber.ToString());
         }
     }
 
@@ -249,7 +253,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public virtual void RefreshStepNumber()
     {
-        var t = int.MaxValue;
+        var t = int.MaxValue / 2;
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
             if (bind.Second == this && bind.First is Block block)

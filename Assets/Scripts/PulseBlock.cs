@@ -4,8 +4,6 @@ using UnityEngine.EventSystems;
 
 public class PulseBlock : Block
 {
-    public const float PulseDelay = 60f / 65f / 4f; // pulse bpm
-
     public PulseBlock()
     {
         StepNumber = 0;

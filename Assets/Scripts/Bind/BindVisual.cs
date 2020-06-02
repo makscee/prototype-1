@@ -35,7 +35,7 @@ public class BindVisual : MonoBehaviour
 
     void Update()
     {
-        if (!BindMatrix.IsBound(first, second))
+        if (BindMatrix.GetBind(first, second) != bind)
         {
             Destroy(gameObject);
             return;
