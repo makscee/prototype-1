@@ -61,6 +61,11 @@ public static class ColorPalette
         curPalette = num;
     }
 
+    public static void SwitchToNextPalette()
+    {
+        SwitchToPalette((curPalette + 1) % Palettes.Length);
+    }
+
     public static void AnimateSwitchToNextPalette()
     {
         _colors.CopyTo(_colorsFrom, 0);

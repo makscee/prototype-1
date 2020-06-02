@@ -1,5 +1,5 @@
 public interface IBindHandler
 {
-    void OnBind(IBindable obj);
-    void OnUnbind(IBindable obj);
+    void OnBind(Bind bind);
+    void OnUnbind(Bind bind);
 }

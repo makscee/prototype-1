@@ -25,7 +25,7 @@ public class CameraScript : MonoBehaviour
         UpdateDrag();
     }
     
-    const float MinZoom = 0.3f;
+    const float MinZoom = 1f;
     const float MaxZoom = 30f;
 
     void ZoomOrthoCamera(Vector3 zoomTowards, float amount)

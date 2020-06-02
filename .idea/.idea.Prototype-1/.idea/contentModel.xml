@@ -21,9 +21,7 @@
           </e>
           <e p="Block.cs" t="Include" />
           <e p="CameraScript.cs" t="Include" />
-          <e p="Cell.cs" t="Include" />
           <e p="ColorPalette.cs" t="Include" />
-          <e p="Coords.cs" t="Include" />
           <e p="FieldMatrix.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="InputHandler.cs" t="Include" />
@@ -32,7 +30,6 @@
           <e p="Shape.cs" t="Include" />
           <e p="SharedObjects.cs" t="Include" />
           <e p="SoundsPlayer.cs" t="Include" />
-          <e p="TetrisField.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />

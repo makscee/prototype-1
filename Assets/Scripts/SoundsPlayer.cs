@@ -27,5 +27,6 @@ public class SoundsPlayer : MonoBehaviour
     public static void Clap()
     {
         _instace.ClapSource.Play();
+        ColorPalette.SwitchToNextPalette();
     }
 }

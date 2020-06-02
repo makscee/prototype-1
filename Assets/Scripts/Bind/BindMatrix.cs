@@ -25,9 +25,9 @@ public static class BindMatrix
                 obj.SetAnchored(true);
 
         if (first is IBindHandler firstH)
-            firstH.OnBind(second);
+            firstH.OnBind(b);
         if (second is IBindHandler secondH)
-            secondH.OnBind(first);
+            secondH.OnBind(b);
     }
 
     public static Bind GetBind(IBindable first, IBindable second)
@@ -37,14 +37,16 @@ public static class BindMatrix
 
     public static void RemoveBind(IBindable first, IBindable second)
     {
+        if (!Matrix.ContainsKey(first) || !Matrix[first].ContainsKey(second)) return;
+        var bind = Matrix[first][second];
         Matrix[first]?.Remove(second);
         Matrix[second]?.Remove(first);
         RefreshAnchored(first);
         RefreshAnchored(second);
         if (first is IBindHandler firstH)
-            firstH.OnUnbind(second);
+            firstH.OnUnbind(bind);
         if (second is IBindHandler secondH)
-            secondH.OnUnbind(first);
+            secondH.OnUnbind(bind);
     }
 
     public static void RemoveAllBinds(IBindable obj)

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IBindHandler
 {
     int _x, _y;
     public GameObject inside;
@@ -28,12 +28,12 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         var xt = _x + 1000000;
         var yt = _y + 1000000;
         ColorPalette.SubscribeGameObject(inside, 1 - (xt + yt) % 2);
-        ColorPalette.SubscribeGameObject(text, 2 + (xt + yt) % 2);
     }
 
     void OnEnable()
     {
         ColorPalette.SubscribeGameObject(gameObject, 3);
+        ColorPalette.SubscribeGameObject(text, 3);
         RevertToDefaultColor();
         _text = text.GetComponent<Text>();
     }
@@ -212,9 +212,11 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     }
 
     Text _text;
-    public void DisplayText(string text)
+    public void DisplayText(string s)
     {
-        _text.text = text;
+        if (s.Length > 3) s = "";
+        if (_text)
+            _text.text = s;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -225,5 +227,57 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public void OnPointerUp(PointerEventData eventData)
     {
         InputHandler.BlockClicked = false;
+    }
+
+    int _stepNumber = int.MaxValue;
+    protected int StepNumber
+    {
+        get => _stepNumber;
+        set
+        {
+            _stepNumber = value;
+            DisplayText(_stepNumber.ToString());
+        }
+    }
+
+    public void OnBind(Bind bind)
+    {
+        if (bind.Second == this && bind.First is Block block)
+        {
+            RefreshStepNumber();
+        }
+    }
+
+    public void OnUnbind(Bind b)
+    {
+        if (b.Second != this || !(b.First is Block)) return;
+        RefreshStepNumber();
+    }
+
+    public void RefreshStepNumber()
+    {
+        var t = int.MaxValue;
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
+        {
+            if (bind.Second == this && bind.First is Block block)
+            {
+                t = Math.Min(t, block.StepNumber + 1);
+            }
+        }
+
+        if (t == StepNumber) return;
+        StepNumber = t;
+        StepNumberChangeNotify();
+    }
+
+    public void StepNumberChangeNotify()
+    {
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
+        {
+            if (bind.First == this && bind.Second is Block block)
+            {
+                block.RefreshStepNumber();
+            }
+        }
     }
 }
