@@ -24,6 +24,7 @@
           <e p="ColorPalette.cs" t="Include" />
           <e p="FieldMatrix.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
+          <e p="GlobalPulse.cs" t="Include" />
           <e p="InputHandler.cs" t="Include" />
           <e p="Prefabs.cs" t="Include" />
           <e p="PulseBlock.cs" t="Include" />

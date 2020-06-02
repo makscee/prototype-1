@@ -155,8 +155,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         _lastPulseFrom.Add(from);
         ColorPalette.SubscribeGameObject(inside, 3);
-        StopCoroutine(nameof(PassCoroutine));
-        StartCoroutine(nameof(PassCoroutine));
+        GlobalPulse.SubscribeToNext(PassPulse);
     }
 
     public virtual void PassPulse()
@@ -189,12 +188,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             }
         }
         _lastPulseFrom.Clear();
-    }
-
-    protected IEnumerator PassCoroutine()
-    {
-        yield return new WaitForSeconds(PulseBlock.PulseDelay);
-        PassPulse();
     }
 
     public virtual void OnPointerClick(PointerEventData eventData)
@@ -254,7 +247,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         RefreshStepNumber();
     }
 
-    public void RefreshStepNumber()
+    public virtual void RefreshStepNumber()
     {
         var t = int.MaxValue;
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))

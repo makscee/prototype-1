@@ -58,17 +58,12 @@ public class PulseBlock : Block
 
     public override void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            RefreshStepNumbers();
-        }
     }
 
     public override void ReceivePulse(Block from)
     {
         ColorPalette.SubscribeGameObject(inside, 3);
-        StopCoroutine(nameof(PassCoroutine));
-        StartCoroutine(nameof(PassCoroutine));
+        GlobalPulse.SubscribeToNext(PassPulse);
     }
 
     public override void PassPulse()
@@ -119,5 +114,10 @@ public class PulseBlock : Block
         {
             block.Used = false;
         }
+    }
+
+    public override void RefreshStepNumber()
+    {
+        
     }
 }
