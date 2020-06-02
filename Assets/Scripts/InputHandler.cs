@@ -4,6 +4,7 @@ public class InputHandler : MonoBehaviour
 {
     public TetrisField field;
     public Camera camera;
+    public static bool BlockClicked;
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -34,6 +35,4 @@ public class InputHandler : MonoBehaviour
             ColorPalette.AnimateSwitchToNextPalette();
         }
     }
-    
-    
 }

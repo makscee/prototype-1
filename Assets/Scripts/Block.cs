@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler
+public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
     int _x, _y;
     public GameObject inside;
@@ -110,7 +110,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 return;
             }
 
-            var existingBlock = FieldMatrix.Get(x, y);
+            var existingBlock = FieldMatrix.Get(x, y); 
             if (existingBlock != null)
             {
                 var bind = BindMatrix.GetBind(this, existingBlock);
@@ -215,5 +215,15 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public void DisplayText(string text)
     {
         _text.text = text;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        InputHandler.BlockClicked = true;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        InputHandler.BlockClicked = false;
     }
 }
