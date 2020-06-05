@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -39,7 +40,9 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
 
     public Vector2 GetPosition()
     {
-        return transform.position;
+        if (!_destroyed)
+            return transform.position;
+        return Vector2.zero;
     }
 
     public virtual bool IsAnchor()
@@ -59,4 +62,10 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
     }
 
     public bool Used { get; set; }
+
+    bool _destroyed;
+    protected virtual void OnDestroy()
+    {
+        _destroyed = true;
+    }
 }

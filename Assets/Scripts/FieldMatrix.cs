@@ -29,4 +29,14 @@ public static class FieldMatrix
     {
         if (Matrix.ContainsKey(x)) Matrix[x].Remove(y);
     }
+
+    public static void ClearMeDaddy(Block block)
+    {
+        var x = block.X;
+        var y = block.Y;
+        if (Matrix.ContainsKey(x) && Matrix[x].ContainsKey(y) && Matrix[x][y] == block)
+        {
+            Matrix[x].Remove(y);
+        }
+    }
 }

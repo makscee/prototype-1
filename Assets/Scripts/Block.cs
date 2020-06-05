@@ -208,11 +208,13 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 var y = Y - last.Y;
                 transform.position += v;
                 if (x > 0)
-                    SoundsPlayer.Kick();
+                    SoundsPlayer.Play(1);
                 else if (x < 0)
-                    SoundsPlayer.Hat();
+                    SoundsPlayer.Play(3);
                 else if (y > 0)
-                    SoundsPlayer.Clap();
+                    SoundsPlayer.Play(0);
+                else if (y < 0)
+                    SoundsPlayer.Play(2);
             }
         }
         _lastPulseFrom.Clear();
@@ -301,5 +303,11 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 block.RefreshStepNumber();
             }
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        FieldMatrix.ClearMeDaddy(this);
+        base.OnDestroy();
     }
 }

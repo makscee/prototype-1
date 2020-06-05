@@ -697,6 +697,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundsPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 1424118470154840462, guid: fcaca20205bea01469471100bcf6505d,
+        type: 3}
+      propertyPath: Code.Array.data[0]
+      value: PLAY 1938 6977 44100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1424118470154840462, guid: fcaca20205bea01469471100bcf6505d,
+        type: 3}
+      propertyPath: Code.Array.data[1]
+      value: PLAY 9464 4029 44100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1424118470154840462, guid: fcaca20205bea01469471100bcf6505d,
+        type: 3}
+      propertyPath: Code.Array.data[3]
+      value: PLAY 13883 1855 44100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1424118470154840462, guid: fcaca20205bea01469471100bcf6505d,
+        type: 3}
+      propertyPath: Code.Array.data[2]
+      value: PLAY 9464 4029 44100
+      objectReference: {fileID: 0}
     - target: {fileID: 1424118470154840463, guid: fcaca20205bea01469471100bcf6505d,
         type: 3}
       propertyPath: m_LocalPosition.x
