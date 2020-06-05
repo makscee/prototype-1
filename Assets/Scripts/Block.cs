@@ -14,6 +14,8 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public const float BlockSide = 1;
 
+    public PulseBlock PulseBlock;
+
     public int X => _x;
     public int Y => _y;
 
@@ -61,7 +63,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         if (!IsAnchored())
         {
-            UpdateCoordsWhenDetached();
+            UpdateCoordsFromTransformPosition();
             if (FieldMatrix.Get(X, Y, out var block) && block != this)
             {
                 Velocity += (GetPosition() - block.GetPosition()).normalized * 40f;
@@ -70,7 +72,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         base.FixedUpdate();
     }
 
-    void UpdateCoordsWhenDetached()
+    protected void UpdateCoordsFromTransformPosition()
     {
         var pos = transform.position;
         SetCoords((int)Math.Round(pos.x), (int)Math.Round(pos.y));
@@ -152,6 +154,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             else
             {
                 var b = Create();
+                b.PulseBlock = PulseBlock;
                 b.transform.position = transform.position;
                 b.SetCoords(x, y);
                 b.RevertToDefaultColor();
@@ -201,20 +204,20 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
         if (!passed)
         {
-            foreach (var last in _lastPulseFrom)
+            foreach (var last in _lastPulseFrom) // todo stop pulse propagation on 2 pulse sources
             {
                 var v = transform.position - last.transform.position;
                 var x = X - last.X;
                 var y = Y - last.Y;
                 transform.position += v;
                 if (x > 0)
-                    SoundsPlayer.Play(1);
+                    PulseBlock.SoundsPlayer.Play(1);
                 else if (x < 0)
-                    SoundsPlayer.Play(3);
+                    PulseBlock.SoundsPlayer.Play(3);
                 else if (y > 0)
-                    SoundsPlayer.Play(0);
+                    PulseBlock.SoundsPlayer.Play(0);
                 else if (y < 0)
-                    SoundsPlayer.Play(2);
+                    PulseBlock.SoundsPlayer.Play(2);
             }
         }
         _lastPulseFrom.Clear();

@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 public class PulseBlock : Block
 {
+    public SoundsPlayer SoundsPlayer;
     public PulseBlock()
     {
         StepNumber = 0;
@@ -13,7 +14,9 @@ public class PulseBlock : Block
     {
         ColorPalette.SubscribeGameObject(gameObject, 3);
         ColorPalette.SubscribeGameObject(inside, 2);
-        FieldMatrix.Add(0, 0, this);
+        UpdateCoordsFromTransformPosition();
+        FieldMatrix.Add(X, Y, this);
+        PulseBlock = this;
     }
 
     protected override void Start()
