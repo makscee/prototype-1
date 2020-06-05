@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IBindHandler
 {
+    [SerializeField]
     int _x, _y;
     public GameObject inside;
     public GameObject text;
@@ -18,9 +19,14 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     void SetCoords(int x, int y)
     {
+        if (x != _x || y != _y)
+        {
+            if (FieldMatrix.Get(_x, _y, out var block) && block == this)
+                FieldMatrix.Clear(_x, _y);
+        }
         _x = x;
         _y = y;
-        RevertToDefaultColor();
+        FieldMatrix.Add(x, y, this);
     }
 
     void RevertToDefaultColor()
@@ -50,7 +56,26 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         return Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.Canvas.transform).GetComponent<Block>();
     }
-    
+
+    protected override void FixedUpdate()
+    {
+        if (!IsAnchored())
+        {
+            UpdateCoordsWhenDetached();
+            if (FieldMatrix.Get(X, Y, out var block) && block != this)
+            {
+                Velocity += (GetPosition() - block.GetPosition()).normalized * 40f;
+            }
+        }
+        base.FixedUpdate();
+    }
+
+    void UpdateCoordsWhenDetached()
+    {
+        var pos = transform.position;
+        SetCoords((int)Math.Round(pos.x), (int)Math.Round(pos.y));
+    }
+
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -109,9 +134,8 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 BindMatrix.RemoveBind(this, MouseBind.Get());
                 return;
             }
-
-            var existingBlock = FieldMatrix.Get(x, y); 
-            if (existingBlock != null)
+ 
+            if (FieldMatrix.Get(x, y, out var existingBlock))
             {
                 var bind = BindMatrix.GetBind(this, existingBlock);
                 if (bind == null)
@@ -130,6 +154,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 var b = Create();
                 b.transform.position = transform.position;
                 b.SetCoords(x, y);
+                b.RevertToDefaultColor();
                 FieldMatrix.Add(x, y, b);
                 BindMatrix.AddBind(this, b, newBlockOffset, Bind.BlockBindStrength);
             }

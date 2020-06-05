@@ -26,6 +26,7 @@
           <e p="GameManager.cs" t="Include" />
           <e p="GlobalPulse.cs" t="Include" />
           <e p="InputHandler.cs" t="Include" />
+          <e p="PlayCode.cs" t="Include" />
           <e p="Prefabs.cs" t="Include" />
           <e p="PulseBlock.cs" t="Include" />
           <e p="Shape.cs" t="Include" />

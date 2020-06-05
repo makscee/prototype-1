@@ -9,36 +9,32 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
 
     protected virtual void Start()
     {
-        _speedRand = Random.Range(1f, 1.1f);
+        _speedRand = 1f; //Random.Range(1f, 1.1f);
     }
 
-    Vector2 _velocity;
+    protected Vector2 Velocity;
     protected virtual void FixedUpdate()
     {
         if (!Movable) return;
         var force = Vector2.zero;
         
-        if (IsAnchored())
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
-            {
-                var v = bind.GetTarget(this) - GetPosition();
-                var f = v * (bind.Strength * Bind.StrengthMultiplier);
+            var v = bind.GetTarget(this) - GetPosition();
+            var f = v * (bind.Strength * Bind.StrengthMultiplier);
 
-                force += f;
-            }
-
+            force += f;
         }
-        else
+        if (!IsAnchored())
         {
-            const float radius = 0.5f; 
-            const float speed = 4f;
+            const float radius = 0.1f; 
+            const float speed = 1f;
             var t = Time.time;
             force += new Vector2(Mathf.Cos(t * speed * _speedRand) * radius, Mathf.Sin(t * speed * _speedRand) * radius);
         }
 
-        _velocity += (force - _velocity) * 0.8f;
-        transform.position += (Vector3)_velocity * (Time.fixedDeltaTime);
+        Velocity += (force - Velocity) * 0.8f;
+        transform.position += (Vector3)Velocity * (Time.fixedDeltaTime);
     }
 
     public Vector2 GetPosition()
@@ -57,7 +53,7 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
         return _anchored;
     }
 
-    public void SetAnchored(bool value)
+    public virtual void SetAnchored(bool value)
     {
         _anchored = value;
     }
