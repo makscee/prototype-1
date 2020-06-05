@@ -46,14 +46,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         _text = text.GetComponent<Text>();
     }
 
-    protected override void Start()
-    {
-        base.Start();
-        var rect = GetComponent<RectTransform>();
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, BlockSide);
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, BlockSide);
-    }
-
     public static Block Create()
     {
         return Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.Canvas.transform).GetComponent<Block>();
@@ -66,7 +58,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             UpdateCoordsFromTransformPosition();
             if (FieldMatrix.Get(X, Y, out var block) && block != this)
             {
-                Velocity += (GetPosition() - block.GetPosition()).normalized * 40f;
+                Velocity += (GetPosition() - block.GetPosition()).normalized * 5f;
             }
         }
         base.FixedUpdate();

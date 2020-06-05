@@ -29,6 +29,7 @@
           <e p="PlayCode.cs" t="Include" />
           <e p="Prefabs.cs" t="Include" />
           <e p="PulseBlock.cs" t="Include" />
+          <e p="PulseBlockCenter.cs" t="Include" />
           <e p="Shape.cs" t="Include" />
           <e p="SharedObjects.cs" t="Include" />
           <e p="SoundsPlayer.cs" t="Include" />

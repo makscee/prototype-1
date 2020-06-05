@@ -2,29 +2,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PulseBlock : Block
+public class PulseBlockCenter : Block
 {
-    public SoundsPlayer SoundsPlayer;
-    public PulseBlock()
-    {
-        StepNumber = 0;
-    }
-
+    public static PulseBlockCenter Instance;
     void OnEnable()
     {
         ColorPalette.SubscribeGameObject(gameObject, 3);
         ColorPalette.SubscribeGameObject(inside, 2);
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
-        PulseBlock = this;
+        Instance = this;
     }
 
     protected override void Start()
     {
         base.Start();
         BindMatrix.AddBind(this, StaticAnchor.Create(GetPosition()), Vector2.zero, Bind.PulseBlockBindStrength);
-        var v = new Vector2(X, Y) - new Vector2(PulseBlockCenter.Instance.X, PulseBlockCenter.Instance.Y);
-        BindMatrix.AddBind(PulseBlockCenter.Instance, this, v, Bind.BlockBindStrength);
     }
 
     public override bool IsAnchor()
@@ -52,7 +45,7 @@ public class PulseBlock : Block
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             ColorPalette.SubscribeGameObject(inside, 2);
-            Pulse();
+            PassPulse();
         }
     }
 
@@ -62,8 +55,6 @@ public class PulseBlock : Block
 
     public override void ReceivePulse(Block from)
     {
-        ColorPalette.SubscribeGameObject(inside, 3);
-        GlobalPulse.SubscribeToNext(PassPulse);
     }
 
     public override void PassPulse()
@@ -76,44 +67,6 @@ public class PulseBlock : Block
             }
         }
         ColorPalette.SubscribeGameObject(inside, 2);
-    }
-
-    void Pulse()
-    {
-        ReceivePulse(null);
-    }
-
-    void RefreshStepNumbers()
-    {
-        var list = new List<Block>();
-        var q = new Queue<Block>();
-        q.Enqueue(this);
-        list.Add(this);
-        Used = true;
-        int num = 0;
-        while (q.Count > 0)
-        {
-            var arr = q.ToArray();
-            q.Clear();
-            foreach (var block in arr)
-            {
-                block.DisplayText(num.ToString());
-                foreach (var bind in BindMatrix.GetAllAdjacentBinds(block))
-                {
-                    if (bind.First == block && !bind.Second.Used && bind.Second is Block b)
-                    {
-                       list.Add(b);
-                       q.Enqueue(b);
-                    }
-                }
-            }
-            num++;
-        }
-
-        foreach (var block in list)
-        {
-            block.Used = false;
-        }
     }
 
     public override void RefreshStepNumber()

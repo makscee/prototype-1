@@ -15,11 +15,8 @@ public class PlayCode
 
         var channels = clip.channels;
         var newClip = AudioClip.Create(clip.name + "-sub", sampleAmount, channels, sampleRate, false);
-        /* Create a temporary buffer for the samples */
         var data = new float[sampleAmount * channels];
-        /* Get the data from the original clip */
         clip.GetData(data, sampleStart);
-        /* Transfer the data to the new clip */
         newClip.SetData(data, 0);
         return newClip;
     }

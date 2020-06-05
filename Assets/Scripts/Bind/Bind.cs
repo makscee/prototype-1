@@ -25,7 +25,7 @@ public class Bind
 
     public readonly int Strength;
     public readonly float BreakDistance;
-    public const int StrengthMultiplier = 5;
+    public const int StrengthMultiplier = 3;
 
     public bool Used(IBindable obj)
     {
