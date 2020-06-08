@@ -163,6 +163,8 @@ public static class ColorPalette
 
     static Action<Color> GetColorAction(GameObject obj)
     {
+        if (obj == null) return color => { };
+        
         Action<Color> a = null;
         
         var sr = obj.GetComponent<SpriteRenderer>();

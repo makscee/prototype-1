@@ -183,7 +183,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public virtual void PassPulse()
     {
-        bool passed = false;
+        var passed = false;
         RevertToDefaultColor();
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
@@ -303,6 +303,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     protected override void OnDestroy()
     {
         FieldMatrix.ClearMeDaddy(this);
+        GlobalPulse.UnsubscribeFromNext(PassPulse);
         base.OnDestroy();
     }
 }

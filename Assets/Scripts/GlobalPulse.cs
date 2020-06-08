@@ -17,6 +17,11 @@ public static class GlobalPulse
         _subscribers += a;
     }
 
+    public static void UnsubscribeFromNext(Action a)
+    {
+        _subscribers -= a;
+    }
+
 
     static float _t;
     public static void Update()
