@@ -207,13 +207,13 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 var y = Y - last.Y;
                 transform.position += v;
                 if (x > 0)
-                    PulseBlock.SoundsPlayer.Play(1);
+                    PulseBlock.OnPulseDeadEnd(1);
                 else if (x < 0)
-                    PulseBlock.SoundsPlayer.Play(3);
+                    PulseBlock.OnPulseDeadEnd(3);
                 else if (y > 0)
-                    PulseBlock.SoundsPlayer.Play(0);
+                    PulseBlock.OnPulseDeadEnd(0);
                 else if (y < 0)
-                    PulseBlock.SoundsPlayer.Play(2);
+                    PulseBlock.OnPulseDeadEnd(2);
             }
         }
         _lastPulseFrom.Clear();

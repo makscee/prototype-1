@@ -175,6 +175,7 @@ public class ColorPalette
                     UnsubscribeFromPalette(obj);
                     return;
                 }
+                color.a = sr.color.a;
                 sr.color = color;
             };
         }
@@ -189,6 +190,7 @@ public class ColorPalette
                     UnsubscribeFromPalette(obj);
                     return;
                 }
+                color.a = rawImg.color.a;
                 rawImg.color = color;
             };
         }
@@ -203,6 +205,7 @@ public class ColorPalette
                     UnsubscribeFromPalette(obj);
                     return;
                 }
+                color.a = img.color.a;
                 img.color = color;
             };
         }
@@ -217,6 +220,7 @@ public class ColorPalette
                     UnsubscribeFromPalette(obj);
                     return;
                 }
+                color.a = text.color.a;
                 text.color = color;
             };
         }
