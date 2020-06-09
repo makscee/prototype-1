@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         var cam = SharedObjects.Instance.Camera;
-        ColorPalette.SubscribeToPalette(cam.gameObject, (c) => cam.backgroundColor = c, 0);
+        // ColorPalette.SubscribeToPalette(cam.gameObject, (c) => cam.backgroundColor = c, 0);
     }
     void OnDisable()
     {
@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        ColorPalette.Update();
         GlobalPulse.Update();
     }
 }

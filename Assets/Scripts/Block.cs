@@ -35,15 +35,19 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         var xt = _x + 1000000;
         var yt = _y + 1000000;
-        ColorPalette.SubscribeGameObject(inside, 1 - (xt + yt) % 2);
+        PulseBlock.ColorPalette.SubscribeGameObject(inside, 1 - (xt + yt) % 2);
     }
 
     void OnEnable()
     {
-        ColorPalette.SubscribeGameObject(gameObject, 3);
-        ColorPalette.SubscribeGameObject(text, 3);
-        RevertToDefaultColor();
         _text = text.GetComponent<Text>();
+    }
+
+    void Start()
+    {
+        PulseBlock.ColorPalette.SubscribeGameObject(gameObject, 3);
+        PulseBlock.ColorPalette.SubscribeGameObject(text, 3);
+        RevertToDefaultColor();
     }
 
     public static Block Create()
@@ -177,7 +181,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public virtual void ReceivePulse(Block from)
     {
         _lastPulseFrom.Add(from);
-        ColorPalette.SubscribeGameObject(inside, 3);
+        PulseBlock.ColorPalette.SubscribeGameObject(inside, 3);
         GlobalPulse.SubscribeToNext(PassPulse);
     }
 

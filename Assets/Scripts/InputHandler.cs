@@ -31,7 +31,7 @@ public class InputHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             // ColorPalette.SwitchToNextPalette();
-            ColorPalette.AnimateSwitchToNextPalette();
+            // ColorPalette.AnimateSwitchToNextPalette();
         }
     }
 }

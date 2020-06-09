@@ -5,13 +5,6 @@ using Random = UnityEngine.Random;
 public class BindableMonoBehavior : MonoBehaviour, IBindable
 {
     public bool Movable;
-    
-    float _speedRand;
-
-    protected virtual void Start()
-    {
-        _speedRand = 1f; //Random.Range(1f, 1.1f);
-    }
 
     protected Vector2 Velocity;
     protected virtual void FixedUpdate()
@@ -31,7 +24,7 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
             const float radius = 0.1f; 
             const float speed = 1f;
             var t = Time.time;
-            force += new Vector2(Mathf.Cos(t * speed * _speedRand) * radius, Mathf.Sin(t * speed * _speedRand) * radius);
+            force += new Vector2(Mathf.Cos(t * speed) * radius, Mathf.Sin(t * speed) * radius);
         }
 
         Velocity += (force - Velocity) * 0.8f;

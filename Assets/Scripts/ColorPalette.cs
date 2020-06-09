@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public static class ColorPalette
+public class ColorPalette
 {
     static readonly Color[][] Palettes = {
         new[]
@@ -37,15 +37,16 @@ public static class ColorPalette
         },
     };
 
-    static int curPalette = 0;
-    static Color[] _colors = new Color[4];
+    int curPalette = 0;
+    Color[] _colors = new Color[4];
 
-    static ColorPalette()
+    static int _lastNum = -1;
+    public ColorPalette(int num = -1)
     {
-        Palettes[0].CopyTo(_colors, 0);
+        Palettes[num == -1 ? ++_lastNum % 4 : num].CopyTo(_colors, 0);
     }
 
-    static void Refresh()
+    void Refresh()
     {
         foreach (var subscription in _subscribers.Values)
         {
@@ -55,18 +56,13 @@ public static class ColorPalette
         DoUnsubscribe();
     }
 
-    public static void SwitchToPalette(int num)
+    public void SwitchToPalette(int num)
     {
         _colors = Palettes[num];
         curPalette = num;
     }
 
-    public static void SwitchToNextPalette()
-    {
-        SwitchToPalette((curPalette + 1) % Palettes.Length);
-    }
-
-    public static void AnimateSwitchToNextPalette()
+    public void AnimateSwitchToNextPalette()
     {
         _colors.CopyTo(_colorsFrom, 0);
         curPalette = (curPalette + 1) % Palettes.Length;
@@ -74,11 +70,11 @@ public static class ColorPalette
         t = 0f;
     }
 
-    static Color[] _colorsFrom = new Color[4];
-    static Color[] _colorsTo = new Color[4];
-    static float _over = 1f, t = 1f;
+    Color[] _colorsFrom = new Color[4];
+    Color[] _colorsTo = new Color[4];
+    float _over = 1f, t = 1f;
 
-    public static void Update()
+    public void Update()
     {
         if (t < _over)
         {
@@ -95,32 +91,34 @@ public static class ColorPalette
     {
         public Action<Color> Action;
         public int NumInPalette;
+        ColorPalette _palette;
 
-        public PaletteSubscription(Action<Color> action, int numInPalette)
+        public PaletteSubscription(Action<Color> action, int numInPalette, ColorPalette palette)
         {
             Action = action;
             NumInPalette = numInPalette;
+            _palette = palette;
             ApplyColor();
         }
 
         public void ApplyColor()
         {
-            Action(_colors[NumInPalette]);
+            Action(_palette._colors[NumInPalette]);
         }
     }
+    
+    Dictionary<GameObject, PaletteSubscription> _subscribers = new Dictionary<GameObject, PaletteSubscription>();
 
-    static Dictionary<GameObject, PaletteSubscription> _subscribers = new Dictionary<GameObject, PaletteSubscription>();
-
-    public static void SubscribeToPalette(GameObject obj, Action<Color> action, int numInPalette)
+    public void SubscribeToPalette(GameObject obj, Action<Color> action, int numInPalette)
     {
-        _subscribers[obj] = new PaletteSubscription(action, numInPalette);
+        _subscribers[obj] = new PaletteSubscription(action, numInPalette, this);
     }
 
-    public static void SubscribeToGameObject(GameObject to, GameObject self)
+    public void SubscribeToGameObject(GameObject to, GameObject self)
     {
         if (!_subscribers.ContainsKey(to)) Debug.LogError("Didn't find subscription object");
         var toSubscription = _subscribers[to];
-        var subscription = new PaletteSubscription(GetColorAction(self), toSubscription.NumInPalette);
+        var subscription = new PaletteSubscription(GetColorAction(self), toSubscription.NumInPalette, this);
         subscription.Action = (color =>
         {
             if (!_subscribers.ContainsKey(to))
@@ -139,15 +137,15 @@ public static class ColorPalette
     {
         _unsubscribeBuffer.Add(obj);
     }
-
-    static void DoUnsubscribe()
+    
+    void DoUnsubscribe()
     {
         foreach (var obj in _unsubscribeBuffer)
         {
             _subscribers.Remove(obj);
         }
     }
-    public static void SubscribeGameObject(GameObject obj, int numInPalette)
+    public void SubscribeGameObject(GameObject obj, int numInPalette)
     {
         if (_subscribers.ContainsKey(obj))
         {
@@ -158,10 +156,10 @@ public static class ColorPalette
         }
 
         var a = GetColorAction(obj);
-        _subscribers[obj] = new PaletteSubscription(a, numInPalette);
+        _subscribers[obj] = new PaletteSubscription(a, numInPalette, this);
     }
 
-    static Action<Color> GetColorAction(GameObject obj)
+    Action<Color> GetColorAction(GameObject obj)
     {
         if (obj == null) return color => { };
         

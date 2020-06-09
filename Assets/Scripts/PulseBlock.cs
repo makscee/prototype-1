@@ -5,26 +5,34 @@ using UnityEngine.EventSystems;
 public class PulseBlock : Block
 {
     public SoundsPlayer SoundsPlayer;
+    public ColorPalette ColorPalette;
     public PulseBlock()
     {
         StepNumber = 0;
+        ColorPalette = new ColorPalette();
+        PulseBlock = this;
     }
 
     void OnEnable()
     {
+        PulseBlock = this;
         ColorPalette.SubscribeGameObject(gameObject, 3);
         ColorPalette.SubscribeGameObject(inside, 2);
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
-        PulseBlock = this;
     }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         BindMatrix.AddBind(this, StaticAnchor.Create(GetPosition()), Vector2.zero, Bind.PulseBlockBindStrength);
         var v = new Vector2(X, Y) - new Vector2(PulseBlockCenter.Instance.X, PulseBlockCenter.Instance.Y);
         BindMatrix.AddBind(PulseBlockCenter.Instance, this, v, Bind.BlockBindStrength);
+    }
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        ColorPalette.Update();
     }
 
     public override bool IsAnchor()

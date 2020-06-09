@@ -7,16 +7,15 @@ public class PulseBlockCenter : Block
     public static PulseBlockCenter Instance;
     void OnEnable()
     {
-        ColorPalette.SubscribeGameObject(gameObject, 3);
-        ColorPalette.SubscribeGameObject(inside, 2);
+        // ColorPalette.SubscribeGameObject(gameObject, 3);
+        // ColorPalette.SubscribeGameObject(inside, 2);
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
         Instance = this;
     }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         BindMatrix.AddBind(this, StaticAnchor.Create(GetPosition()), Vector2.zero, Bind.PulseBlockBindStrength);
     }
 
@@ -35,7 +34,7 @@ public class PulseBlockCenter : Block
         base.OnBeginDrag(eventData);
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ColorPalette.SubscribeGameObject(inside, 3);
+            // ColorPalette.SubscribeGameObject(inside, 3);
         }
     }
 
@@ -44,7 +43,7 @@ public class PulseBlockCenter : Block
         base.OnEndDrag(eventData);
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ColorPalette.SubscribeGameObject(inside, 2);
+            // ColorPalette.SubscribeGameObject(inside, 2);
             PassPulse();
         }
     }
@@ -66,7 +65,7 @@ public class PulseBlockCenter : Block
                 block.ReceivePulse(this);
             }
         }
-        ColorPalette.SubscribeGameObject(inside, 2);
+        // ColorPalette.SubscribeGameObject(inside, 2);
     }
 
     public override void RefreshStepNumber()
