@@ -6,6 +6,7 @@ public class PulseBlock : Block
 {
     public SoundsPlayer SoundsPlayer;
     public ColorPalette ColorPalette;
+    public GameObject Background;
     public PulseBlock()
     {
         StepNumber = 0;
@@ -16,6 +17,7 @@ public class PulseBlock : Block
     void OnEnable()
     {
         PulseBlock = this;
+        ColorPalette.SubscribeGameObject(Background, 0);
         ColorPalette.SubscribeGameObject(gameObject, 3);
         ColorPalette.SubscribeGameObject(inside, 2);
         UpdateCoordsFromTransformPosition();

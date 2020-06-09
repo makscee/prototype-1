@@ -40,7 +40,7 @@ public class PulseBlockCenter : Block
 
     public override void OnEndDrag(PointerEventData eventData)
     {
-        base.OnEndDrag(eventData);
+        base.OnEndDrag(eventData); // todo forbid block creation
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             // ColorPalette.SubscribeGameObject(inside, 2);
