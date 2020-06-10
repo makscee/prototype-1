@@ -18,7 +18,7 @@ public class BindVisual : MonoBehaviour
             palette = t.PulseBlock.ColorPalette;
         else return;
         
-        var b = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.Canvas.transform).GetComponent<BindVisual>();
+        var b = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.FrontCanvas.transform).GetComponent<BindVisual>();
         b.first = bind.First;
         b.second = bind.Second;
         b.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 3;

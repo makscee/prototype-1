@@ -52,7 +52,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public static Block Create()
     {
-        return Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.Canvas.transform).GetComponent<Block>();
+        return Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.FrontCanvas.transform).GetComponent<Block>();
     }
 
     protected override void FixedUpdate()
@@ -263,18 +263,50 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         }
     }
 
+    FieldCircle _fieldCircle;
+    void RefreshFieldCircle()
+    {
+        var show = true;
+        if (!IsAnchored())
+        {
+            show = false;
+        }
+        else
+        {
+            foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
+            {
+                if (bind.First == this && bind.Second is Block)
+                {
+                    show = false;
+                    break;
+                }
+            }
+        }
+
+        if (show && _fieldCircle == null)
+        {
+            _fieldCircle = FieldCircle.Create(transform);
+            PulseBlock.ColorPalette.SubscribeGameObject(_fieldCircle.gameObject, 1);
+        } else if (!show && _fieldCircle != null)
+        {
+            Destroy(_fieldCircle.gameObject);
+            _fieldCircle = null;
+        }
+    }
+
     public void OnBind(Bind bind)
     {
-        if (bind.Second == this && bind.First is Block block)
+        if (bind.Second == this && bind.First is Block)
         {
             RefreshStepNumber();
         }
+        RefreshFieldCircle();
     }
 
     public void OnUnbind(Bind b)
     {
-        if (b.Second != this || !(b.First is Block)) return;
-        RefreshStepNumber();
+        if (b.Second == this && b.First is Block) RefreshStepNumber();
+        RefreshFieldCircle();
     }
 
     public virtual void RefreshStepNumber()

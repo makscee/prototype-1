@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class SharedObjects : MonoBehaviour
 {
-    public GameObject Canvas;
+    public GameObject BackCanvas;
+    public GameObject MidCanvas;
+    public GameObject FrontCanvas;
     public Camera Camera;
 
     public static SharedObjects Instance;
