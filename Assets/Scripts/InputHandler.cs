@@ -19,15 +19,6 @@ public class InputHandler : MonoBehaviour
             // }
         }
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            var b = Block.Create();
-            b.transform.position += new Vector3(200, 200);
-            // Debug.Log(
-            //     RectTransformUtility.ScreenPointToLocalPointInRectangle(field.RectTransform, Input.mousePosition, null, out var v));
-            // Debug.Log(v);
-        }
-
         if (Input.GetKeyDown(KeyCode.T))
         {
             // ColorPalette.SwitchToNextPalette();

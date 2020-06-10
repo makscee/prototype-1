@@ -48,11 +48,11 @@ public class ColorPalette
 
     void Refresh()
     {
+        DoUnsubscribe(); // in case of unsub from outside
         foreach (var subscription in _subscribers.Values)
         {
             subscription.ApplyColor();
         }
-
         DoUnsubscribe();
     }
 
@@ -132,8 +132,8 @@ public class ColorPalette
         _subscribers[self] = subscription;
     }
 
-    static List<GameObject> _unsubscribeBuffer = new List<GameObject>();
-    static void UnsubscribeFromPalette(GameObject obj)
+    List<GameObject> _unsubscribeBuffer = new List<GameObject>();
+    public void UnsubscribeFromPalette(GameObject obj)
     {
         _unsubscribeBuffer.Add(obj);
     }
@@ -156,7 +156,9 @@ public class ColorPalette
         }
 
         var a = GetColorAction(obj);
-        _subscribers[obj] = new PaletteSubscription(a, numInPalette, this);
+        var paletteSubscription = new PaletteSubscription(a, numInPalette, this);
+        _subscribers[obj] = paletteSubscription;
+        paletteSubscription.ApplyColor();
     }
 
     Action<Color> GetColorAction(GameObject obj)

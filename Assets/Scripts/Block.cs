@@ -55,6 +55,19 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         return Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.FrontCanvas.transform).GetComponent<Block>();
     }
 
+    public static Block Create(Block parent, int x, int y)
+    {
+        var b = Create();
+        b.PulseBlock = parent.PulseBlock;
+        b.transform.position = parent.transform.position;
+        b.SetCoords(x, y);
+        b.RevertToDefaultColor();
+        FieldMatrix.Add(x, y, b);
+        var newBlockOffset = new Vector2(x - parent.X, y - parent.Y);
+        BindMatrix.AddBind(parent, b, newBlockOffset, Bind.BlockBindStrength);
+        return b;
+    }
+
     protected override void FixedUpdate()
     {
         if (!IsAnchored())
@@ -101,29 +114,24 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             var left = new Rect(GetPosition() + new Vector2(-BlockSide, 0) - size / 2, size);
             var right = new Rect(GetPosition() + new Vector2(BlockSide, 0) - size / 2, size);
 
-            Vector2 newBlockOffset;
             int x, y;
             if (up.Contains(pos))
             {
-                newBlockOffset = Vector2.up * BlockSide;
                 x = X;
                 y = Y + 1;
             }
             else if (down.Contains(pos))
             {
-                newBlockOffset = Vector2.down * BlockSide;
                 x = X;
                 y = Y - 1;
             }
             else if (left.Contains(pos))
             {
-                newBlockOffset = Vector2.left * BlockSide;
                 x = X - 1;
                 y = Y;
             }
             else if (right.Contains(pos))
             {
-                newBlockOffset = Vector2.right * BlockSide;
                 x = X + 1;
                 y = Y;
             }
@@ -132,6 +140,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 BindMatrix.RemoveBind(this, MouseBind.Get());
                 return;
             }
+            var newBlockOffset = new Vector2(x - X, y - Y);
  
             if (FieldMatrix.Get(x, y, out var existingBlock))
             {
@@ -149,13 +158,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             }
             else
             {
-                var b = Create();
-                b.PulseBlock = PulseBlock;
-                b.transform.position = transform.position;
-                b.SetCoords(x, y);
-                b.RevertToDefaultColor();
-                FieldMatrix.Add(x, y, b);
-                BindMatrix.AddBind(this, b, newBlockOffset, Bind.BlockBindStrength);
+                var b = Create(this, x, y);
             }
             BindMatrix.RemoveBind(this, MouseBind.Get());
         }
@@ -221,10 +224,20 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            ShowNewBlockPlaceholders();
+        }
         if (eventData.button == PointerEventData.InputButton.Middle)
         {
             Destroy();
         }
+    }
+
+    protected void ShowNewBlockPlaceholders()
+    {
+        NewBlockPlaceholderPool.ClearAll();
+        NewBlockPlaceholderPool.CreateAround(this);
     }
 
     public void Destroy()

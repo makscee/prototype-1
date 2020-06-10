@@ -27,6 +27,8 @@
           <e p="GameManager.cs" t="Include" />
           <e p="GlobalPulse.cs" t="Include" />
           <e p="InputHandler.cs" t="Include" />
+          <e p="NewBlockPlaceholder.cs" t="Include" />
+          <e p="NewBlockPlaceholderPool.cs" t="Include" />
           <e p="PlayCode.cs" t="Include" />
           <e p="Prefabs.cs" t="Include" />
           <e p="PulseBlock.cs" t="Include" />
@@ -34,6 +36,7 @@
           <e p="Shape.cs" t="Include" />
           <e p="SharedObjects.cs" t="Include" />
           <e p="SoundsPlayer.cs" t="Include" />
+          <e p="Utils.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />

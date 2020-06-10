@@ -80,6 +80,10 @@ public class PulseBlock : Block
 
     public override void OnPointerClick(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            ShowNewBlockPlaceholders();
+        }
     }
 
     public void OnPulseDeadEnd(int dir)
