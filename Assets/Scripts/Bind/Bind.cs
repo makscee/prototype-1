@@ -6,7 +6,7 @@ public class Bind
 {
     public const int BlockBindStrength = 5;
     public const int BlockStaticBindStrength = 6;
-    public const int MouseBindStrength = 7;
+    public const int MouseBindStrength = 8;
     public const int PulseBlockBindStrength = 14;
     
     public Bind(IBindable fist, IBindable second, Vector2 offset, int strength, float breakDistance = -1)
@@ -17,11 +17,11 @@ public class Bind
         Strength = strength;
         BreakDistance = breakDistance;
     }
-    
-    public IBindable First, Second;
+
+    public readonly IBindable First, Second;
     
     // from first to second
-    public readonly Vector2 Offset;
+    readonly Vector2 Offset;
 
     public readonly int Strength;
     public readonly float BreakDistance;
@@ -41,8 +41,7 @@ public class Bind
         else target = First.GetPosition() + Offset;
         return target;
     }
-
-    // return true if was broken
+    
     public void Update()
     {
         Debug.DrawLine(First.GetPosition(), Second.GetPosition(), Color.green);

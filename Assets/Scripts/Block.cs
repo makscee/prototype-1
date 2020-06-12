@@ -68,17 +68,13 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         return b;
     }
 
-    protected override void FixedUpdate()
+    protected override void Update()
     {
         if (!IsAnchored())
         {
             UpdateCoordsFromTransformPosition();
-            if (FieldMatrix.Get(X, Y, out var block) && block != this)
-            {
-                Velocity += (GetPosition() - block.GetPosition()).normalized * 5f;
-            }
         }
-        base.FixedUpdate();
+        base.Update();
     }
 
     protected void UpdateCoordsFromTransformPosition()
@@ -87,8 +83,10 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         SetCoords((int)Math.Round(pos.x), (int)Math.Round(pos.y));
     }
 
+    bool _dragging;
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
+        _dragging = true;
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
@@ -224,20 +222,37 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Left && !BindMatrix.IsBound(this, MouseBind.Get()))
         {
             ShowNewBlockPlaceholders();
         }
         if (eventData.button == PointerEventData.InputButton.Middle)
         {
-            Destroy();
+            OnMiddleClick();
+        }
+    }
+
+    protected virtual void OnMiddleClick()
+    {
+        Destroy();
+    }
+    
+    void OnTriggerStay2D(Collider2D other)
+    {
+        var away = (Vector2)(transform.position - other.transform.position);
+        if (other is CircleCollider2D circle)
+        {
+            DesiredVelocity +=  (circle.radius * 2 - away.magnitude) * 120 * away.normalized;
         }
     }
 
     protected void ShowNewBlockPlaceholders()
     {
-        NewBlockPlaceholderPool.ClearAll();
-        NewBlockPlaceholderPool.CreateAround(this);
+        if (IsAnchored())
+        {
+            NewBlockPlaceholderPool.ClearAll();
+            NewBlockPlaceholderPool.CreateAround(this);
+        }
     }
 
     public void Destroy()
@@ -277,7 +292,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     }
 
     FieldCircle _fieldCircle;
-    void RefreshFieldCircle()
+    protected virtual void RefreshFieldCircle()
     {
         var show = true;
         if (!IsAnchored())

@@ -162,6 +162,8 @@ GameObject:
   - component: {fileID: 8540842673089334935}
   - component: {fileID: 413987079}
   - component: {fileID: -1491573410832159246}
+  - component: {fileID: -2374700686681206206}
+  - component: {fileID: 3553060563784053209}
   m_Layer: 5
   m_Name: Block
   m_TagString: Untagged
@@ -210,10 +212,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Movable: 1
-  X: 0
-  Y: 0
+  Velocity: {x: 0, y: 0}
+  _x: 0
+  _y: 0
   inside: {fileID: 3284993695328691668}
   text: {fileID: 1768653401}
+  PulseBlock: {fileID: 0}
+  stepNumber: 1073741823
 --- !u!114 &-1491573410832159246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,3 +245,40 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!50 &-2374700686681206206
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5419607776513826146}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!58 &3553060563784053209
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5419607776513826146}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.47

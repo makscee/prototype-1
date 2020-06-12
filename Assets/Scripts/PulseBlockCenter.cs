@@ -55,6 +55,10 @@ public class PulseBlockCenter : Block
     public override void ReceivePulse(Block from)
     {
     }
+    
+    protected override void RefreshFieldCircle()
+    {
+    }
 
     public override void PassPulse()
     {
@@ -71,5 +75,9 @@ public class PulseBlockCenter : Block
     public override void RefreshStepNumber()
     {
         
+    }
+
+    protected override void OnMiddleClick()
+    {
     }
 }

@@ -1,34 +1,34 @@
-using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class BindableMonoBehavior : MonoBehaviour, IBindable
 {
     public bool Movable;
 
     protected Vector2 Velocity;
-    protected virtual void FixedUpdate()
+    public Vector2 DesiredVelocity;
+    public const float MaxAcceleration = 300;
+    protected virtual void Update()
     {
         if (!Movable) return;
-        var force = Vector2.zero;
+        var maxSpeedChange = MaxAcceleration * Time.deltaTime;
         
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
             var v = bind.GetTarget(this) - GetPosition();
             var f = v * (bind.Strength * Bind.StrengthMultiplier);
 
-            force += f;
+            DesiredVelocity += f;
         }
         if (!IsAnchored())
         {
-            const float radius = 0.1f; 
+            const float radius = 0.1f;
             const float speed = 1f;
             var t = Time.time;
-            force += new Vector2(Mathf.Cos(t * speed) * radius, Mathf.Sin(t * speed) * radius);
+            DesiredVelocity += new Vector2(Mathf.Cos(t * speed) * radius, Mathf.Sin(t * speed) * radius);
         }
-
-        Velocity += (force - Velocity) * 0.8f;
-        transform.position += (Vector3)Velocity * (Time.fixedDeltaTime);
+        Velocity = Vector2.MoveTowards(Velocity, DesiredVelocity, maxSpeedChange);
+        transform.position += (Vector3)Velocity * (Time.deltaTime);
+        DesiredVelocity = Vector2.zero;
     }
 
     public Vector2 GetPosition()

@@ -37,9 +37,9 @@ public class PulseBlock : Block
     }
 
     float _bgDesiredAlpha = 0f, _bgAlphaChangeSpeed = 1.5f;
-    protected override void FixedUpdate()
+    protected override void Update()
     {
-        base.FixedUpdate();
+        base.Update();
         ColorPalette.Update();
         var c = _bgRawImg.color;
         if (c.a > _bgDesiredAlpha)
@@ -78,12 +78,8 @@ public class PulseBlock : Block
         }
     }
 
-    public override void OnPointerClick(PointerEventData eventData)
+    protected override void OnMiddleClick()
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            ShowNewBlockPlaceholders();
-        }
     }
 
     public void OnPulseDeadEnd(int dir)
