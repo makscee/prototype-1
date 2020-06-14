@@ -75,6 +75,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             UpdateCoordsFromTransformPosition();
         }
         base.Update();
+        TryDrawPlaceholdersOnDrag();
     }
 
     protected void UpdateCoordsFromTransformPosition()
@@ -83,81 +84,38 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         SetCoords((int)Math.Round(pos.x), (int)Math.Round(pos.y));
     }
 
-    bool _dragging;
+    bool _dragging, _placeholdersShown;
+    void TryDrawPlaceholdersOnDrag()
+    {
+        if (!_dragging)
+        {
+            ShowNewBlockPlaceholders(false);
+            return;
+        }
+        var bind = BindMatrix.GetBind(this, MouseBind.Get());
+        if (bind == null)
+        {
+            ShowNewBlockPlaceholders(false);
+            return;
+        }
+        if (bind.IsLoose()) ShowNewBlockPlaceholders(true);
+        else ShowNewBlockPlaceholders(false);
+    }
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         _dragging = true;
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, 0);
+            BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength, 1.5f);
         }
     }
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
+        _dragging = false;
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            BindMatrix.RemoveBind(this, MouseBind.Get());
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            var pos = MouseBind.Get().GetPosition();
-            var size = new Vector2(BlockSide, BlockSide);
-            var up = new Rect(GetPosition() + new Vector2(0, BlockSide) - size / 2, size);
-            var down = new Rect(GetPosition() + new Vector2(0, -BlockSide) - size / 2, size);
-            var left = new Rect(GetPosition() + new Vector2(-BlockSide, 0) - size / 2, size);
-            var right = new Rect(GetPosition() + new Vector2(BlockSide, 0) - size / 2, size);
-
-            int x, y;
-            if (up.Contains(pos))
-            {
-                x = X;
-                y = Y + 1;
-            }
-            else if (down.Contains(pos))
-            {
-                x = X;
-                y = Y - 1;
-            }
-            else if (left.Contains(pos))
-            {
-                x = X - 1;
-                y = Y;
-            }
-            else if (right.Contains(pos))
-            {
-                x = X + 1;
-                y = Y;
-            }
-            else
-            {
-                BindMatrix.RemoveBind(this, MouseBind.Get());
-                return;
-            }
-            var newBlockOffset = new Vector2(x - X, y - Y);
- 
-            if (FieldMatrix.Get(x, y, out var existingBlock))
-            {
-                var bind = BindMatrix.GetBind(this, existingBlock);
-                if (bind == null)
-                    BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
-                else if (bind.First != this)
-                {
-                    bind.Break();
-                    BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
-                } else if (bind.First == this)
-                {
-                    bind.Break();
-                }
-            }
-            else
-            {
-                var b = Create(this, x, y);
-            }
+            TryCreateBlock();
             BindMatrix.RemoveBind(this, MouseBind.Get());
         }
     }
@@ -165,6 +123,64 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public void OnDrag(PointerEventData eventData)
     {
         
+    }
+
+    protected virtual void TryCreateBlock()
+    {
+        var selfPos = GetPosition();
+        var pos = MouseBind.Get().GetPosition();
+        var size = new Vector2(BlockSide, BlockSide);
+        var up = new Rect(selfPos + new Vector2(0, BlockSide) - size / 2, size);
+        var down = new Rect(selfPos + new Vector2(0, -BlockSide) - size / 2, size);
+        var left = new Rect(selfPos + new Vector2(-BlockSide, 0) - size / 2, size);
+        var right = new Rect(selfPos+ new Vector2(BlockSide, 0) - size / 2, size);
+
+        int x, y;
+        if (up.Contains(pos))
+        {
+            x = X;
+            y = Y + 1;
+        }
+        else if (down.Contains(pos))
+        {
+            x = X;
+            y = Y - 1;
+        }
+        else if (left.Contains(pos))
+        {
+            x = X - 1;
+            y = Y;
+        }
+        else if (right.Contains(pos))
+        {
+            x = X + 1;
+            y = Y;
+        }
+        else
+        {
+            BindMatrix.RemoveBind(this, MouseBind.Get());
+            return;
+        }
+        var newBlockOffset = new Vector2(x - X, y - Y);
+ 
+        if (FieldMatrix.Get(x, y, out var existingBlock))
+        {
+            var bind = BindMatrix.GetBind(this, existingBlock);
+            if (bind == null)
+                BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
+            else if (bind.First != this)
+            {
+                bind.Break();
+                BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
+            } else if (bind.First == this)
+            {
+                bind.Break();
+            }
+        }
+        else
+        {
+            var b = Create(this, x, y);
+        }
     }
 
     IEnumerable<Block> CollectBoundBlocks()
@@ -222,10 +238,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left && !BindMatrix.IsBound(this, MouseBind.Get()))
-        {
-            ShowNewBlockPlaceholders();
-        }
         if (eventData.button == PointerEventData.InputButton.Middle)
         {
             OnMiddleClick();
@@ -246,13 +258,12 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         }
     }
 
-    protected void ShowNewBlockPlaceholders()
+    protected virtual void ShowNewBlockPlaceholders(bool value)
     {
-        if (IsAnchored())
-        {
-            NewBlockPlaceholderPool.ClearAll();
-            NewBlockPlaceholderPool.CreateAround(this);
-        }
+        if (_placeholdersShown == value) return;
+        _placeholdersShown = value;
+        NewBlockPlaceholderPool.ClearAll();
+        if (value) NewBlockPlaceholderPool.CreateAround(this);
     }
 
     public void Destroy()

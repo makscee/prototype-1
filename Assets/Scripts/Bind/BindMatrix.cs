@@ -7,11 +7,11 @@ public static class BindMatrix
     static readonly Dictionary<IBindable, Dictionary<IBindable, Bind>> Matrix = new Dictionary<IBindable, Dictionary<IBindable, Bind>>();
 
     public static void AddBind(IBindable first, IBindable second, Vector2 offset, int strength,
-        float breakDistance = -1)
+        float ropeLength = 0, float breakDistance = -1)
     {
         if (IsBound(first, second)) return;
         
-        var b = new Bind(first, second, offset, strength, breakDistance);
+        var b = new Bind(first, second, offset, strength, ropeLength, breakDistance);
         BindVisual.Create(b);
         
         if (!Matrix.ContainsKey(first)) Matrix[first] = new Dictionary<IBindable, Bind>();

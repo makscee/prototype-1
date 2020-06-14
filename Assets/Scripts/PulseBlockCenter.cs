@@ -48,6 +48,10 @@ public class PulseBlockCenter : Block
         }
     }
 
+    protected override void TryCreateBlock()
+    {
+    }
+
     public override void OnPointerClick(PointerEventData eventData)
     {
     }
@@ -57,6 +61,10 @@ public class PulseBlockCenter : Block
     }
     
     protected override void RefreshFieldCircle()
+    {
+    }
+
+    protected override void ShowNewBlockPlaceholders(bool value)
     {
     }
 

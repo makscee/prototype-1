@@ -9,12 +9,13 @@ public class Bind
     public const int MouseBindStrength = 8;
     public const int PulseBlockBindStrength = 14;
     
-    public Bind(IBindable fist, IBindable second, Vector2 offset, int strength, float breakDistance = -1)
+    public Bind(IBindable fist, IBindable second, Vector2 offset, int strength, float ropeLength = 0, float breakDistance = -1)
     {
         First = fist;
         Second = second;
         Offset = offset;
         Strength = strength;
+        RopeLength = ropeLength;
         BreakDistance = breakDistance;
     }
 
@@ -25,6 +26,7 @@ public class Bind
 
     public readonly int Strength;
     public readonly float BreakDistance;
+    public readonly float RopeLength;
     public const int StrengthMultiplier = 3;
 
     public bool Used(IBindable obj)
@@ -35,10 +37,20 @@ public class Bind
     public Vector2 GetTarget(IBindable self)
     {
         if (First != self && Second != self) throw new Exception("Trying to get target for object that is not part of the bind");
-
         Vector2 target;
-        if (First == self) target = Second.GetPosition() - Offset;
-        else target = First.GetPosition() + Offset;
+        var firstPos = First.GetPosition();
+        var secondPos = Second.GetPosition();
+        var selfPos = self.GetPosition();
+        if (First == self) target = secondPos - Offset;
+        else target = firstPos + Offset;
+
+        if (RopeLength > 0)
+        {
+            if (IsLoose()) return selfPos;
+            
+            var dist = (selfPos - target).magnitude;
+            return (target - selfPos).normalized * (dist - RopeLength) + selfPos;
+        }
         return target;
     }
     
@@ -50,6 +62,11 @@ public class Bind
         {
             Break();
         }
+    }
+
+    public bool IsLoose()
+    {
+        return RopeLength > 0f && (First.GetPosition() + Offset - Second.GetPosition()).magnitude < RopeLength;
     }
 
     public void Break()
