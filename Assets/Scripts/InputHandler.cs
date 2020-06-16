@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
-    public Camera camera;
     public static bool BlockClicked;
     void Update()
     {
