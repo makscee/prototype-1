@@ -43,7 +43,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         _text = text.GetComponent<Text>();
     }
 
-    void Start()
+    protected virtual void Start()
     {
         PulseBlock.ColorPalette.SubscribeGameObject(gameObject, 3);
         PulseBlock.ColorPalette.SubscribeGameObject(text, 3);
@@ -65,6 +65,17 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         FieldMatrix.Add(x, y, b);
         var newBlockOffset = new Vector2(x - parent.X, y - parent.Y);
         BindMatrix.AddBind(parent, b, newBlockOffset, Bind.BlockBindStrength);
+        return b;
+    }
+
+    public static Block Create(int x, int y, int pulseBlockX, int pulseBlockY)
+    {
+        var b = Create();
+        FieldMatrix.Get(pulseBlockX, pulseBlockY, out var pulseBlock);
+        b.PulseBlock = (PulseBlock) pulseBlock;
+        b.transform.position = new Vector3(x, y, 0f);
+        b.SetCoords(x, y);
+        b.RevertToDefaultColor();
         return b;
     }
 

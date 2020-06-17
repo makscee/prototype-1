@@ -39,6 +39,11 @@ public class BindVisual : MonoBehaviour
         _rectTransform = GetComponent<RectTransform>();
     }
 
+    void OnDisable()
+    {
+        Destroy(gameObject);
+    }
+
     void Update()
     {
         if (BindMatrix.GetBind(first, second) != bind)

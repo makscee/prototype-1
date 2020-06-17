@@ -31,6 +31,12 @@
           <e p="Prefabs.cs" t="Include" />
           <e p="PulseBlock.cs" t="Include" />
           <e p="PulseBlockCenter.cs" t="Include" />
+          <e p="Serialization" t="Include">
+            <e p="BindSerialized.cs" t="Include" />
+            <e p="BlockSerialized.cs" t="Include" />
+            <e p="GameSerialized.cs" t="Include" />
+            <e p="JsonUtilitySerializable.cs" t="Include" />
+          </e>
           <e p="Shape.cs" t="Include" />
           <e p="SharedObjects.cs" t="Include" />
           <e p="SoundsPlayer.cs" t="Include" />
@@ -42,6 +48,7 @@
       <e p="Prototype-1.sln" t="IncludeFlat" />
       <e p="Temp\bin" t="ExcludeRecursive" />
     </e>
+    <e p="C:\Users\mc_work\.Rider2019.3\config\scratches" t="IncludeRecursive" />
     <e p="C:\Users\mc_work\.Rider2019.3\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\mc_work\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Prototype-1.1579821638.00" t="ExcludeRecursive" />
   </component>

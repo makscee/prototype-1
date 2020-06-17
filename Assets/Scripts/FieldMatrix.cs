@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public static class FieldMatrix
 {
@@ -37,5 +38,10 @@ public static class FieldMatrix
         {
             Matrix[x].Remove(y);
         }
+    }
+
+    public static List<Block> GetAllAsList()
+    {
+        return Matrix.Values.SelectMany(dict => dict.Values).ToList();
     }
 }

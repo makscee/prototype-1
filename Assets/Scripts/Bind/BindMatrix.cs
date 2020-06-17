@@ -112,8 +112,13 @@ public static class BindMatrix
         }
     }
 
-    public static List<Bind> GetAllBindsAsList()
+    public static List<Bind> GetAllAsList()
     {
-        return Matrix.Values.SelectMany(dict => dict.Values).ToList();
+        return Matrix.Values.SelectMany(dict => dict.Values).Distinct().ToList();
+    }
+
+    public static void Clear()
+    {
+        
     }
 }

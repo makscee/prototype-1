@@ -44,7 +44,6 @@ public class CameraScript : MonoBehaviour
 
     void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
     {
-        Debug.Log("enter");
         if (_camera.orthographicSize < MinZoom && amount > 0 ||
             _camera.orthographicSize > MaxZoom && amount < 0) return;
         

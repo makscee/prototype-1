@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,11 +38,9 @@ public class ColorPalette
 
     int curPalette = 0;
     Color[] _colors = new Color[4];
-
-    static int _lastNum = -1;
-    public ColorPalette(int num = -1)
+    public ColorPalette(int num)
     {
-        Palettes[num == -1 ? ++_lastNum % 4 : num].CopyTo(_colors, 0);
+        Palettes[num].CopyTo(_colors, 0);
     }
 
     void Refresh()

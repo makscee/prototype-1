@@ -14,22 +14,27 @@ public class PulseBlock : Block
     public PulseBlock()
     {
         StepNumber = 0;
-        ColorPalette = new ColorPalette();
         PulseBlock = this;
     }
 
     void OnEnable()
     {
         PulseBlock = this;
+        UpdateCoordsFromTransformPosition();
+        ColorPalette = new ColorPalette(Utils.DirFromCoords(X, Y));
         ColorPalette.SubscribeGameObject(Background, 0);
         ColorPalette.SubscribeGameObject(gameObject, 3);
-        ColorPalette.SubscribeGameObject(inside, 2);
-        UpdateCoordsFromTransformPosition();
+        ColorPalette.SubscribeGameObject(inside, 2); 
         FieldMatrix.Add(X, Y, this);
         _bgRawImg = Background.GetComponent<RawImage>();
+        GameManager.AfterServiceObjectsInitialized += PostEnableInit;
     }
 
-    protected void Start()
+    protected override void Start()
+    {
+    }
+
+    void PostEnableInit()
     {
         BindMatrix.AddBind(this, StaticAnchor.Create(GetPosition()), Vector2.zero, Bind.PulseBlockBindStrength);
         var v = new Vector2(X, Y) - new Vector2(PulseBlockCenter.Instance.X, PulseBlockCenter.Instance.Y);

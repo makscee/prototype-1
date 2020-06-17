@@ -7,7 +7,11 @@ public class FieldCircle : MonoBehaviour
     float _scaleBase;
     void Update()
     {
-        if (Target == null) Destroy(gameObject);
+        if (Target == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
         if (_scaleBase < 0.9f) _scaleBase += Time.deltaTime / 3;
 
         transform.position = Target.transform.position;

@@ -12,16 +12,21 @@ public class PulseBlockCenter : Block
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
         Instance = this;
+        GameManager.AfterServiceObjectsInitialized += PostEnableInit;
     }
 
-    protected void Start()
+    void PostEnableInit()
     {
         BindMatrix.AddBind(this, StaticAnchor.Create(GetPosition()), Vector2.zero, Bind.PulseBlockBindStrength);
+    }
+    
+    protected override void Start()
+    {
     }
 
     public override bool IsAnchor()
     {
-        return true;
+        return true; 
     }
 
     public override bool IsAnchored()

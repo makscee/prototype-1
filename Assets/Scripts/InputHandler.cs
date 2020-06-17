@@ -20,8 +20,19 @@ public class InputHandler : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            // ColorPalette.SwitchToNextPalette();
-            // ColorPalette.AnimateSwitchToNextPalette();
+            GameManager.Instance.LoadSavedState();
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            GameManager.Instance.ClearField();
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            GameManager.Instance.SaveState();
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Debug.Log(GameSerialized.Create().ToJson());
         }
     }
 }

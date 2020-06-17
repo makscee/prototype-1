@@ -26,4 +26,13 @@ public static class Utils
                 throw new Exception($"Wrong dir passed: {dir}");
         }
     }
+
+    public static int DirFromCoords(int x, int y)
+    {
+        if (x == 0 && y > 0) return 0;
+        if (x > 0 && y == 0) return 1;
+        if (x == 0 && y < 0) return 2;
+        if (x < 0 && y == 0) return 3;
+        throw new Exception($"Wrong coords for dir passed {x} {y}");
+    }
 }
