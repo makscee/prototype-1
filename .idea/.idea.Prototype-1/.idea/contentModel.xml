@@ -22,6 +22,7 @@
           <e p="ColorPalette.cs" t="Include" />
           <e p="FieldCircle.cs" t="Include" />
           <e p="FieldMatrix.cs" t="Include" />
+          <e p="FileStorage.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="GlobalPulse.cs" t="Include" />
           <e p="InputHandler.cs" t="Include" />

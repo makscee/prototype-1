@@ -28,7 +28,11 @@ public class InputHandler : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            GameManager.Instance.SaveState();
+            GameManager.Instance.SaveGameToFile();
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            GameManager.Instance.LoadGameFromFile();
         }
         if (Input.GetKeyDown(KeyCode.D))
         {

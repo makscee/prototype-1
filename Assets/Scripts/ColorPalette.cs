@@ -141,6 +141,7 @@ public class ColorPalette
         {
             _subscribers.Remove(obj);
         }
+        _unsubscribeBuffer.Clear();
     }
     public void SubscribeGameObject(GameObject obj, int numInPalette)
     {

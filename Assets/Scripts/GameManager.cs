@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    static readonly string GameStateFileName = "game";
     [SerializeField] string JsonGameState;
     public static Action AfterServiceObjectsInitialized;
     void OnEnable()
@@ -12,6 +13,10 @@ public class GameManager : MonoBehaviour
         if (JsonGameState.Length > 0)
         {
             AfterServiceObjectsInitialized += LoadSavedState;
+        }
+        else
+        {
+            AfterServiceObjectsInitialized += LoadGameFromFile;
         }
     }
     void OnDisable()
@@ -41,6 +46,18 @@ public class GameManager : MonoBehaviour
     public void SaveState()
     {
         JsonGameState = GameSerialized.Create().ToJson();
+    }
+
+    public void SaveGameToFile()
+    {
+        SaveState();
+        FileStorage.SaveJsonToFile(JsonGameState, GameStateFileName);
+    }
+
+    public void LoadGameFromFile()
+    {
+        JsonGameState = FileStorage.LoadGameFromFile(GameStateFileName);
+        LoadSavedState();
     }
 
     public void LoadSavedState()
