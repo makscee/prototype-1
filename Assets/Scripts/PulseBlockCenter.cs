@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 public class PulseBlockCenter : Block
 {
     public static PulseBlockCenter Instance;
+    
+    public AudioClip Clip;
     void OnEnable()
     {
         // ColorPalette.SubscribeGameObject(gameObject, 3);
