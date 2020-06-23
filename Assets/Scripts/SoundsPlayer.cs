@@ -19,7 +19,7 @@ public class SoundsPlayer : MonoBehaviour
         for (var i = 0; i < 4; i++)
         {
             _playCode = new PlayCode(Code[i]);
-            var newSource = gameObject.AddComponent<AudioSource>();
+            var newSource = gameObject.AddComponent<AudioSource>(); 
             newSource.playOnAwake = false;
             newSource.clip = _playCode.GetClip(PulseBlockCenter.Instance.Clip);
             AudioSources[i] = newSource;
@@ -34,6 +34,12 @@ public class SoundsPlayer : MonoBehaviour
     {
         AudioSources[dir].Play();
     }
-    
-    
+
+    void OnDisable()
+    {
+        foreach (var audioSource in AudioSources)
+        {
+            Destroy(audioSource);
+        }
+    }
 }

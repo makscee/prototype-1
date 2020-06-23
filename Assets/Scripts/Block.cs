@@ -136,7 +136,8 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         
     }
 
-    protected virtual void TryCreateBlock()
+    // true if something affected
+    protected virtual bool TryCreateBlock()
     {
         var selfPos = GetPosition();
         var pos = MouseBind.Get().GetPosition();
@@ -170,7 +171,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         else
         {
             BindMatrix.RemoveBind(this, MouseBind.Get());
-            return;
+            return false;
         }
         var newBlockOffset = new Vector2(x - X, y - Y);
  
@@ -187,11 +188,10 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             {
                 bind.Break();
             }
+            return true;
         }
-        else
-        {
-            var b = Create(this, x, y);
-        }
+        var b = Create(this, x, y);
+        return true;
     }
 
     IEnumerable<Block> CollectBoundBlocks()

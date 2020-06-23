@@ -79,8 +79,14 @@ public class PulseBlock : Block
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             ColorPalette.SubscribeGameObject(inside, 2);
-            Pulse();
         }
+    }
+
+    protected override bool TryCreateBlock()
+    {
+        var result = base.TryCreateBlock();
+        if (!result) Pulse();
+        return result;
     }
 
     protected override void OnMiddleClick()
@@ -119,39 +125,6 @@ public class PulseBlock : Block
     void Pulse()
     {
         ReceivePulse(null);
-    }
-
-    void RefreshStepNumbers()
-    {
-        var list = new List<Block>();
-        var q = new Queue<Block>();
-        q.Enqueue(this);
-        list.Add(this);
-        Used = true;
-        int num = 0;
-        while (q.Count > 0)
-        {
-            var arr = q.ToArray();
-            q.Clear();
-            foreach (var block in arr)
-            {
-                block.DisplayText(num.ToString());
-                foreach (var bind in BindMatrix.GetAllAdjacentBinds(block))
-                {
-                    if (bind.First == block && !bind.Second.Used && bind.Second is Block b)
-                    {
-                       list.Add(b);
-                       q.Enqueue(b);
-                    }
-                }
-            }
-            num++;
-        }
-
-        foreach (var block in list)
-        {
-            block.Used = false;
-        }
     }
 
     public override void RefreshStepNumber()

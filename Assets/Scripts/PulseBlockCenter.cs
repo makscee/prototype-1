@@ -55,8 +55,9 @@ public class PulseBlockCenter : Block
         }
     }
 
-    protected override void TryCreateBlock()
+    protected override bool TryCreateBlock()
     {
+        return false;
     }
 
     public override void OnPointerClick(PointerEventData eventData)
