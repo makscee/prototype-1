@@ -6,16 +6,14 @@ public class WaveModule : MonoBehaviour
 {
     [Range(0f, 1f)] public float SelectLeft = 0f;
     [Range(0f, 1f)] public float SelectRight = 1f;
+    public RawImage WaveImage;
     
-    
-    RawImage _rawImage;
     Texture2D _texture;
     int _width, _heigth;
     Color32[] _texData;
     float _selectLeft = 0f, _selectRight = 1f;
     void Start()
     {
-        _rawImage = GetComponent<RawImage>();
         GenerateTexture(512, 256);
     }
 
@@ -86,11 +84,16 @@ public class WaveModule : MonoBehaviour
         ApplyTexture();
     }
 
+    public void Play()
+    {
+        Debug.Log("Play");
+    }
+
     void ApplyTexture()
     {
         _texture.SetPixelData(_texData, 0);
         _texture.Apply();
-        _rawImage.texture = _texture;
+        WaveImage.texture = _texture;
     }
 
     int Index(int x, int y)

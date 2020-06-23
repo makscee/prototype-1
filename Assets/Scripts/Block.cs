@@ -333,7 +333,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             }
         }
 
-        if (show && _fieldCircle == null)
+        if (show && _fieldCircle == null && SharedObjects.Instance.MidCanvas != null)
         {
             _fieldCircle = FieldCircle.Create(transform);
             PulseBlock.ColorPalette.SubscribeGameObject(_fieldCircle.gameObject, 1);

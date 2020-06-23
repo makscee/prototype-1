@@ -41,8 +41,9 @@ public static class BindMatrix
         var bind = Matrix[first][second];
         Matrix[first]?.Remove(second);
         Matrix[second]?.Remove(first);
-        RefreshAnchored(first);
-        RefreshAnchored(second);
+        if (!first.IsAnchor()) RefreshAnchored(first);
+        if (!second.IsAnchor()) RefreshAnchored(second);
+        
         if (first is IBindHandler firstH)
             firstH.OnUnbind(bind);
         if (second is IBindHandler secondH)
