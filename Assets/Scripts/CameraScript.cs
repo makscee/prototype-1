@@ -39,7 +39,7 @@ public class CameraScript : MonoBehaviour
         }
     }
 
-    const float MinZoom = 4f;
+    const float MinZoom = 1f;
     const float MaxZoom = 30f;
 
     void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
@@ -70,7 +70,7 @@ public class CameraScript : MonoBehaviour
     static readonly float PanSpeed = 20f;
     static readonly float ZoomSpeedTouch = 0.1f;
     static readonly float ZoomSpeedMouse = 0.5f;
-    static readonly float[] ZoomBounds = new float[] {1f, 85f};
+    static readonly float[] ZoomBounds = new float[] {0.1f, 85f};
     Vector2 lastPanPosition;
     Vector3 startCameraPos;
     int panFingerId; // Touch mode only
@@ -128,41 +128,5 @@ public class CameraScript : MonoBehaviour
                 wasZoomingLastFrame = false;
                 break;
         }
-    }
-
-    void HandleMouse_new()
-    {
-        // On mouse down, capture it's position.
-        // Otherwise, if the mouse is still down, pan the camera.
-        if (Input.GetMouseButtonDown(0))
-        {
-            lastPanPosition = Input.mousePosition;
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            PanCamera(Input.mousePosition);
-        }
-
-        // Check for scrolling to zoom the camera
-        var scroll = Input.GetAxis("Mouse ScrollWheel");
-        ZoomCamera(scroll, ZoomSpeedMouse);
-    }
-
-    void PanCamera(Vector2 newPanPosition)
-    {
-        Vector2 startPos = _camera.ScreenToWorldPoint(lastPanPosition);
-        Vector2 endPos = _camera.ScreenToWorldPoint(newPanPosition);
-        Vector3 offset = startPos - endPos;
-        transform.position = startCameraPos + offset;
-    }
-
-    void ZoomCamera(float offset, float speed)
-    {
-        if (offset == 0)
-        {
-            return;
-        }
-
-        _camera.fieldOfView = Mathf.Clamp(_camera.fieldOfView - (offset * speed), ZoomBounds[0], ZoomBounds[1]);
     }
 }

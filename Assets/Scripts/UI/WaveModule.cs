@@ -7,14 +7,16 @@ public class WaveModule : MonoBehaviour
     [Range(0f, 1f)] public float SelectLeft = 0f;
     [Range(0f, 1f)] public float SelectRight = 1f;
     public RawImage WaveImage;
+    public Slider SliderLeft, SliderRight;
     
     Texture2D _texture;
     int _width, _heigth;
     Color32[] _texData;
-    float _selectLeft = 0f, _selectRight = 1f;
+    float _selectLeft = 0f, _selectRight = 1f, _sliderBeforeLeft, _sliderBeforeRight;
     void Start()
     {
         GenerateTexture(512, 256);
+        ApplySelectFromSliders();
     }
 
     void Update()
@@ -66,6 +68,23 @@ public class WaveModule : MonoBehaviour
         ApplyTexture();
     }
 
+    public void ApplySelectFromSliders()
+    {
+        if (SliderLeft == null || SliderRight == null) return;
+
+        if (_sliderBeforeLeft != SliderLeft.value)
+        {
+            SelectLeft = Mathf.Lerp(0f, _selectRight, SliderLeft.value);
+            SliderRight.SetValueWithoutNotify(1f - (_selectRight - SelectLeft) / (1 - SelectLeft));
+        }
+        else if (_sliderBeforeRight != SliderRight.value)
+        {
+            SelectRight = Mathf.Lerp(_selectLeft, 1f, 1f - SliderRight.value);
+            SliderLeft.SetValueWithoutNotify(_selectLeft / SelectRight);
+        }
+        _sliderBeforeLeft = SliderLeft.value;
+        _sliderBeforeRight = SliderRight.value;
+    }
     public void ApplySelect()
     {
         var leftInd = (int) Mathf.Round(_selectLeft * _width);
