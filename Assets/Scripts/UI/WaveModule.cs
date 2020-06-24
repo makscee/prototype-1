@@ -7,7 +7,8 @@ public class WaveModule : MonoBehaviour
     [Range(0f, 1f)] public float SelectLeft = 0f;
     [Range(0f, 1f)] public float SelectRight = 1f;
     public RawImage WaveImage;
-    public Slider SliderLeft, SliderRight;
+    public Slider SliderLeft, SliderRight, SliderRate, SliderVolume;
+    public AudioSource AudioSource;
     
     Texture2D _texture;
     int _width, _heigth;
@@ -103,9 +104,17 @@ public class WaveModule : MonoBehaviour
         ApplyTexture();
     }
 
+    const float MinRate = 1000, MaxRate = 87000;
     public void Play()
     {
-        Debug.Log("Play");
+        var mainClip = PulseBlockCenter.Instance.Clip;
+        var sampleStart = (int)(mainClip.samples * _selectLeft);
+        var sampleAmount = (int)(mainClip.samples * _selectRight) - sampleStart;
+        var sampleRate = (int) Mathf.Lerp(MinRate, MaxRate, 1 - SliderRate.value);
+        var newClip = ClipMaker.Make(mainClip, sampleStart, sampleAmount, sampleRate);
+        AudioSource.clip = newClip;
+        AudioSource.volume = 1 - SliderVolume.value;
+        AudioSource.Play();
     }
 
     void ApplyTexture()
