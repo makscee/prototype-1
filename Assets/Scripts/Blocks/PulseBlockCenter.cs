@@ -10,6 +10,7 @@ public class PulseBlockCenter : Block
     public AudioClip Clip;
     void OnEnable()
     {
+        SetupPalette();
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
         Instance = this;

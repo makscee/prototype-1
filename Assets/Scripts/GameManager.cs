@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     {
         SaveState();
         ClearField();
-        _serviceObjectsInited = false; 
+        ServiceObjectsInitialized = false; 
     }
 
     void Update()
@@ -33,13 +33,13 @@ public class GameManager : MonoBehaviour
         CheckServiceObjectsInit();
     }
 
-    bool _serviceObjectsInited;
+    public static bool ServiceObjectsInitialized;
     void CheckServiceObjectsInit()
     {
-        if (_serviceObjectsInited) return;
+        if (ServiceObjectsInitialized) return;
         if (SharedObjects.Instance != null && Prefabs.Instance != null)
         {
-            _serviceObjectsInited = true;
+            ServiceObjectsInitialized = true;
             AfterServiceObjectsInitialized();
         }
     }

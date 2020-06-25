@@ -9,12 +9,12 @@ public class BlockSerialized : JsonUtilitySerializable
     public static bool Create(Block b, out BlockSerialized result)
     {
         result = null;
-        if (!b.IsAnchored() || b.pulseBlock == null || b.X == b.pulseBlock.X && b.Y == b.pulseBlock.Y)
+        if (!b.IsAnchored() || b.PulseBlock == null || b.X == b.PulseBlock.X && b.Y == b.PulseBlock.Y)
         {
             return false;
         }
 
-        result = new BlockSerialized {X = b.X, Y = b.Y, PulseBlockX = b.pulseBlock.X, PulseBlockY = b.pulseBlock.Y};
+        result = new BlockSerialized {X = b.X, Y = b.Y, PulseBlockX = b.PulseBlock.X, PulseBlockY = b.PulseBlock.Y};
 
         return true;
     }

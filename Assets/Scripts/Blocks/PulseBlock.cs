@@ -15,15 +15,13 @@ public class PulseBlock : Block
     public PulseBlock()
     {
         StepNumber = 0;
-        pulseBlock = this;
     }
 
     void OnEnable()
     {
-        pulseBlock = this;
         UpdateCoordsFromTransformPosition();
-
-        FieldMatrix.Add(X, Y, this);
+        PulseBlock = this;
+        FieldMatrix.Add(X, Y, this); 
         _bgRawImg = Background.GetComponent<RawImage>();
         GameManager.AfterServiceObjectsInitialized += PostEnableInit;
     }

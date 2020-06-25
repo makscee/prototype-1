@@ -14,7 +14,13 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public const float BlockSide = 1;
 
-    public PulseBlock pulseBlock;
+    PulseBlock _pulseBlock;
+    public PulseBlock PulseBlock
+    {
+        get => _pulseBlock;
+        set { _pulseBlock = value; SetupPalette(); }
+    }
+
     Painter _textPainter;
     public Painter painter, insidePainter;
     
@@ -52,27 +58,18 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         }
     }
 
-    void OnEnable()
-    {
-    }
-
     protected virtual void SetupPalette()
     {
-        painter.palette = pulseBlock.palette;
-        insidePainter.palette = pulseBlock.palette;
+        painter.palette = PulseBlock.palette;
+        insidePainter.palette = PulseBlock.palette;
         painter.NumInPalette = 3;
         if (_textPainter != null)
         {
-            _textPainter.palette = pulseBlock.palette;
+            _textPainter.palette = PulseBlock.palette;
             _textPainter.NumInPalette = 3;
         }
 
         RevertToDefaultColor();
-    }
-
-    protected virtual void Start()
-    {
-        SetupPalette();
     }
 
     public static Block Create()
@@ -83,12 +80,12 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public static Block Create(Block parent, int x, int y)
     {
         var b = Create();
-        b.pulseBlock = parent.pulseBlock;
         var newBlockOffset = new Vector2(x - parent.X, y - parent.Y);
         b.transform.position = parent.transform.position + (Vector3)newBlockOffset * .8f;
         b.SetCoords(x, y);
         b.RevertToDefaultColor();
         FieldMatrix.Add(x, y, b);
+        b.PulseBlock = parent.PulseBlock;
         BindMatrix.AddBind(parent, b, newBlockOffset, Bind.BlockBindStrength);
         return b;
     }
@@ -97,9 +94,9 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         var b = Create();
         FieldMatrix.Get(pulseBlockX, pulseBlockY, out var pulseBlock);
-        b.pulseBlock = (PulseBlock) pulseBlock;
         b.transform.position = new Vector3(x, y, 0f);
         b.SetCoords(x, y);
+        b.PulseBlock = (PulseBlock) pulseBlock;
         b.RevertToDefaultColor();
         return b;
     }
@@ -260,13 +257,13 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 var y = Y - last.Y;
                 transform.position += v;
                 if (x > 0)
-                    pulseBlock.OnPulseDeadEnd(1);
+                    PulseBlock.OnPulseDeadEnd(1);
                 else if (x < 0)
-                    pulseBlock.OnPulseDeadEnd(3);
+                    PulseBlock.OnPulseDeadEnd(3);
                 else if (y > 0)
-                    pulseBlock.OnPulseDeadEnd(0);
+                    PulseBlock.OnPulseDeadEnd(0);
                 else if (y < 0)
-                    pulseBlock.OnPulseDeadEnd(2);
+                    PulseBlock.OnPulseDeadEnd(2);
             }
         }
         _lastPulseFrom.Clear();
@@ -372,7 +369,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             _fieldCircle = FieldCircle.Create(transform);
             var p = _fieldCircle.GetComponent<Painter>();
             p.NumInPalette = 1;
-            p.palette = pulseBlock.palette;
+            p.palette = PulseBlock.palette;
         } else if (!show && _fieldCircle != null)
         {
             Destroy(_fieldCircle.gameObject);

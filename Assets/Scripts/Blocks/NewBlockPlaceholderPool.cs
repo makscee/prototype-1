@@ -38,7 +38,7 @@ public static class NewBlockPlaceholderPool
             else
             {
                 newBlock.Parent = parent;
-                newBlock.Painter.palette = parent.pulseBlock.palette;
+                newBlock.Painter.palette = parent.PulseBlock.palette;
                 
                 newBlock.X = x;
                 newBlock.Y = y;
