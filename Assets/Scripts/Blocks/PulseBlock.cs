@@ -91,7 +91,20 @@ public class PulseBlock : Block
     protected override void OnLeftClick()
     {
         base.OnLeftClick();
-        SoundsPlayer.ConfigRacksSetActive(true);
+        HideAllConfigRacks();
+        var cam = SharedObjects.Instance.Camera.transform;
+        Animator.Invoke(() => SoundsPlayer.ConfigRacksSetActive(true)).In(0.2f);
+        Animator.Interpolate(cam.position, transform.position, 0.3f)
+            .PassDelta(v => cam.position += (Vector3)v).Type(InterpolationType.InvSquare);
+    }
+
+    public static void HideAllConfigRacks()
+    {
+        foreach (var pulseBlock in PulseBlockCenter.Instance.PulseBlocks)
+        {
+            if (pulseBlock == null) break;
+            pulseBlock.SoundsPlayer.ConfigRacksSetActive(false);
+        }
     }
 
     protected override bool TryCreateBlock()

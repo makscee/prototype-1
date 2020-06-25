@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         GlobalPulse.Update();
+        Animator.Update();
         CheckServiceObjectsInit();
     }
 

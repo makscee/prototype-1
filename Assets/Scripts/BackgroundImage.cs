@@ -45,10 +45,6 @@ public class BackgroundImage : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     public void OnPointerClick(PointerEventData eventData)
     {
         if (_dragging) return;
-        foreach (var pulseBlock in PulseBlockCenter.Instance.PulseBlocks)
-        {
-            if (pulseBlock == null) break;
-            pulseBlock.SoundsPlayer.ConfigRacksSetActive(false);
-        }
+        PulseBlock.HideAllConfigRacks();
     }
 }
