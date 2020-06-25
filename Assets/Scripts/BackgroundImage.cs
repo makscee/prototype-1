@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class BackgroundImage : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class BackgroundImage : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
     Camera _camera;
 
@@ -25,18 +25,30 @@ public class BackgroundImage : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     }
 
     Vector2 _start;
+    bool _dragging;
     public void OnBeginDrag(PointerEventData eventData)
     {
         RefreshStart(eventData.pressPosition);
+        _dragging = true;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        
+        _dragging = false;
     }
 
     void RefreshStart(Vector2 screenPos)
     {
         _start = _camera.ScreenToWorldPoint(screenPos);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (_dragging) return;
+        foreach (var pulseBlock in PulseBlockCenter.Instance.PulseBlocks)
+        {
+            if (pulseBlock == null) break;
+            pulseBlock.SoundsPlayer.ConfigRacksSetActive(false);
+        }
     }
 }

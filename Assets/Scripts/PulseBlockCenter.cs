@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class PulseBlockCenter : Block
 {
     public static PulseBlockCenter Instance;
+    public PulseBlock[] PulseBlocks = new PulseBlock[4];
     
     public AudioClip Clip;
     void OnEnable()

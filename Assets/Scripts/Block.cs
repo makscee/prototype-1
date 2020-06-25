@@ -253,11 +253,20 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         {
             OnMiddleClick();
         }
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnLeftClick();
+        }
     }
 
     protected virtual void OnMiddleClick()
     {
         Destroy();
+    }
+
+    protected virtual void OnLeftClick()
+    {
+        
     }
     
     void OnTriggerStay2D(Collider2D other)

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public static class Utils
 {
@@ -25,6 +26,12 @@ public static class Utils
             default:
                 throw new Exception($"Wrong dir passed: {dir}");
         }
+    }
+
+    public static Vector2 CoordsFromDir(int dir)
+    {
+        CoordsFromDir(dir, out var x, out var y);
+        return new Vector2(x, y);
     }
 
     public static int DirFromCoords(int x, int y)

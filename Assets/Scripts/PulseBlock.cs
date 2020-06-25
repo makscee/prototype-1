@@ -39,6 +39,7 @@ public class PulseBlock : Block
         BindMatrix.AddBind(this, StaticAnchor.Create(GetPosition()), Vector2.zero, Bind.PulseBlockBindStrength);
         var v = new Vector2(X, Y) - new Vector2(PulseBlockCenter.Instance.X, PulseBlockCenter.Instance.Y);
         BindMatrix.AddBind(PulseBlockCenter.Instance, this, v, Bind.BlockBindStrength);
+        PulseBlockCenter.Instance.PulseBlocks[Utils.DirFromCoords(X, Y)] = this;
     }
 
     float _bgDesiredAlpha = 0f, _bgAlphaChangeSpeed = 1.5f;
@@ -80,6 +81,12 @@ public class PulseBlock : Block
         {
             ColorPalette.SubscribeGameObject(inside, 2);
         }
+    }
+
+    protected override void OnLeftClick()
+    {
+        base.OnLeftClick();
+        SoundsPlayer.ConfigRacksSetActive(true);
     }
 
     protected override bool TryCreateBlock()

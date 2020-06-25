@@ -9,6 +9,7 @@ public class Prefabs : MonoBehaviour
     public GameObject BindVisual;
     public GameObject FieldCircle;
     public GameObject NewBlockPlaceholder;
+    public GameObject ConfigRack;
     
     
     public static Prefabs Instance;

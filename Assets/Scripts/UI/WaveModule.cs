@@ -107,14 +107,32 @@ public class WaveModule : MonoBehaviour
     const float MinRate = 1000, MaxRate = 87000;
     public void Play()
     {
+        AudioSource.clip = GetClip();
+        UpdateVolume();
+        AudioSource.Play();
+    }
+
+    AudioClip _clipCache;
+
+    public AudioClip GetClip()
+    {
+        if (_clipCache != null) return _clipCache;
         var mainClip = PulseBlockCenter.Instance.Clip;
-        var sampleStart = (int)(mainClip.samples * _selectLeft);
-        var sampleAmount = (int)(mainClip.samples * _selectRight) - sampleStart;
+        var sampleStart = (int) (mainClip.samples * _selectLeft);
+        var sampleAmount = (int) (mainClip.samples * _selectRight) - sampleStart;
         var sampleRate = (int) Mathf.Lerp(MinRate, MaxRate, 1 - SliderRate.value);
         var newClip = ClipMaker.Make(mainClip, sampleStart, sampleAmount, sampleRate);
-        AudioSource.clip = newClip;
+        _clipCache = newClip;
+        return _clipCache;
+    }
+    public void SetDirty()
+    {
+        _clipCache = null;
+    }
+
+    public void UpdateVolume()
+    {
         AudioSource.volume = 1 - SliderVolume.value;
-        AudioSource.Play();
     }
 
     void ApplyTexture()
