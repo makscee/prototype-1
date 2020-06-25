@@ -84,11 +84,11 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         var b = Create();
         b.pulseBlock = parent.pulseBlock;
-        b.transform.position = parent.transform.position;
+        var newBlockOffset = new Vector2(x - parent.X, y - parent.Y);
+        b.transform.position = parent.transform.position + (Vector3)newBlockOffset * .8f;
         b.SetCoords(x, y);
         b.RevertToDefaultColor();
         FieldMatrix.Add(x, y, b);
-        var newBlockOffset = new Vector2(x - parent.X, y - parent.Y);
         BindMatrix.AddBind(parent, b, newBlockOffset, Bind.BlockBindStrength);
         return b;
     }
