@@ -6,25 +6,28 @@ public class PulseBlockCenter : Block
 {
     public static PulseBlockCenter Instance;
     public PulseBlock[] PulseBlocks = new PulseBlock[4];
-    
+    public Palette Palette;
     public AudioClip Clip;
     void OnEnable()
     {
-        // ColorPalette.SubscribeGameObject(gameObject, 3);
-        // ColorPalette.SubscribeGameObject(inside, 2);
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
         Instance = this;
         GameManager.AfterServiceObjectsInitialized += PostEnableInit;
     }
 
+    protected override void SetupPalette()
+    {
+        Palette = new Palette(4);
+        painter.palette = Palette;
+        insidePainter.palette = Palette;
+        painter.NumInPalette = 3;
+        insidePainter.NumInPalette = 2;
+    }
+
     void PostEnableInit()
     {
         BindMatrix.AddBind(this, StaticAnchor.Create(GetPosition()), Vector2.zero, Bind.PulseBlockBindStrength);
-    }
-    
-    protected override void Start()
-    {
     }
 
     public override bool IsAnchor()
@@ -42,7 +45,7 @@ public class PulseBlockCenter : Block
         base.OnBeginDrag(eventData);
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            // ColorPalette.SubscribeGameObject(inside, 3);
+            insidePainter.NumInPalette = 3;
         }
     }
 
@@ -51,7 +54,7 @@ public class PulseBlockCenter : Block
         base.OnEndDrag(eventData); // todo forbid block creation
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            // ColorPalette.SubscribeGameObject(inside, 2);
+            insidePainter.NumInPalette = 2;
             PassPulse();
         }
     }
@@ -86,7 +89,7 @@ public class PulseBlockCenter : Block
                 block.ReceivePulse(this);
             }
         }
-        // ColorPalette.SubscribeGameObject(inside, 2);
+        insidePainter.NumInPalette = 2;
     }
 
     public override void RefreshStepNumber()

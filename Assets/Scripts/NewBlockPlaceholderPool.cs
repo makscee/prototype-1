@@ -37,9 +37,9 @@ public static class NewBlockPlaceholderPool
             }
             else
             {
-                newBlock.Parent.PulseBlock.ColorPalette.UnsubscribeFromPalette(newBlock.gameObject);
                 newBlock.Parent = parent;
-                newBlock.Parent.PulseBlock.ColorPalette.SubscribeGameObject(newBlock.gameObject, 1);
+                newBlock.Painter.palette = parent.pulseBlock.palette;
+                
                 newBlock.X = x;
                 newBlock.Y = y;
                 newBlock.UpdatePosition();

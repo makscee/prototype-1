@@ -5,9 +5,6 @@ public class SoundsPlayer : MonoBehaviour
 {
     public AudioSource[] AudioSources = new AudioSource[4];
 
-    public string[] Code = new string[4];
-
-    PlayCode _playCode;
     public WaveModule[] WaveModules = new WaveModule[4];
     public GameObject[] ConfigRacks = new GameObject[4];
 
@@ -23,7 +20,6 @@ public class SoundsPlayer : MonoBehaviour
         
         for (var i = 0; i < 4; i++)
         {
-            _playCode = new PlayCode(Code[i]);
             var newSource = gameObject.AddComponent<AudioSource>(); 
             newSource.playOnAwake = false;
             newSource.clip = WaveModules[i].GetClip();

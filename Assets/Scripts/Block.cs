@@ -14,7 +14,10 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public const float BlockSide = 1;
 
-    public PulseBlock PulseBlock;
+    public PulseBlock pulseBlock;
+    Painter _textPainter;
+    public Painter painter, insidePainter;
+    
 
     public int X => _x;
     public int Y => _y;
@@ -35,19 +38,41 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         var xt = _x + 1000000;
         var yt = _y + 1000000;
-        PulseBlock.ColorPalette.SubscribeGameObject(inside, 1 - (xt + yt) % 2);
+        insidePainter.NumInPalette = 1 - (xt + yt) % 2;
+    }
+
+    protected virtual void Awake()
+    {
+        painter = GetComponent<Painter>();
+        insidePainter = inside.GetComponent<Painter>();
+        if (text != null)
+        {
+            _textPainter = text.GetComponent<Painter>();
+            _text = text.GetComponent<Text>();
+        }
     }
 
     void OnEnable()
     {
-        _text = text.GetComponent<Text>();
+    }
+
+    protected virtual void SetupPalette()
+    {
+        painter.palette = pulseBlock.palette;
+        insidePainter.palette = pulseBlock.palette;
+        painter.NumInPalette = 3;
+        if (_textPainter != null)
+        {
+            _textPainter.palette = pulseBlock.palette;
+            _textPainter.NumInPalette = 3;
+        }
+
+        RevertToDefaultColor();
     }
 
     protected virtual void Start()
     {
-        PulseBlock.ColorPalette.SubscribeGameObject(gameObject, 3);
-        PulseBlock.ColorPalette.SubscribeGameObject(text, 3);
-        RevertToDefaultColor();
+        SetupPalette();
     }
 
     public static Block Create()
@@ -58,7 +83,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public static Block Create(Block parent, int x, int y)
     {
         var b = Create();
-        b.PulseBlock = parent.PulseBlock;
+        b.pulseBlock = parent.pulseBlock;
         b.transform.position = parent.transform.position;
         b.SetCoords(x, y);
         b.RevertToDefaultColor();
@@ -72,7 +97,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         var b = Create();
         FieldMatrix.Get(pulseBlockX, pulseBlockY, out var pulseBlock);
-        b.PulseBlock = (PulseBlock) pulseBlock;
+        b.pulseBlock = (PulseBlock) pulseBlock;
         b.transform.position = new Vector3(x, y, 0f);
         b.SetCoords(x, y);
         b.RevertToDefaultColor();
@@ -209,7 +234,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public virtual void ReceivePulse(Block from)
     {
         _lastPulseFrom.Add(from);
-        PulseBlock.ColorPalette.SubscribeGameObject(inside, 3);
+        insidePainter.NumInPalette = 3;
         GlobalPulse.SubscribeToNext(PassPulse);
     }
 
@@ -235,13 +260,13 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
                 var y = Y - last.Y;
                 transform.position += v;
                 if (x > 0)
-                    PulseBlock.OnPulseDeadEnd(1);
+                    pulseBlock.OnPulseDeadEnd(1);
                 else if (x < 0)
-                    PulseBlock.OnPulseDeadEnd(3);
+                    pulseBlock.OnPulseDeadEnd(3);
                 else if (y > 0)
-                    PulseBlock.OnPulseDeadEnd(0);
+                    pulseBlock.OnPulseDeadEnd(0);
                 else if (y < 0)
-                    PulseBlock.OnPulseDeadEnd(2);
+                    pulseBlock.OnPulseDeadEnd(2);
             }
         }
         _lastPulseFrom.Clear();
@@ -345,7 +370,9 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         if (show && _fieldCircle == null && SharedObjects.Instance.MidCanvas != null)
         {
             _fieldCircle = FieldCircle.Create(transform);
-            PulseBlock.ColorPalette.SubscribeGameObject(_fieldCircle.gameObject, 1);
+            var p = _fieldCircle.GetComponent<Painter>();
+            p.NumInPalette = 1;
+            p.palette = pulseBlock.palette;
         } else if (!show && _fieldCircle != null)
         {
             Destroy(_fieldCircle.gameObject);

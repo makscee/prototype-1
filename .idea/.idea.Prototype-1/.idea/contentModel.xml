@@ -20,7 +20,6 @@
           <e p="Block.cs" t="Include" />
           <e p="CameraScript.cs" t="Include" />
           <e p="ClipMaker.cs" t="Include" />
-          <e p="ColorPalette.cs" t="Include" />
           <e p="FieldCircle.cs" t="Include" />
           <e p="FieldMatrix.cs" t="Include" />
           <e p="FileStorage.cs" t="Include" />
@@ -29,6 +28,8 @@
           <e p="InputHandler.cs" t="Include" />
           <e p="NewBlockPlaceholder.cs" t="Include" />
           <e p="NewBlockPlaceholderPool.cs" t="Include" />
+          <e p="Painter.cs" t="Include" />
+          <e p="Palette.cs" t="Include" />
           <e p="PlayCode.cs" t="Include" />
           <e p="Prefabs.cs" t="Include" />
           <e p="PulseBlock.cs" t="Include" />

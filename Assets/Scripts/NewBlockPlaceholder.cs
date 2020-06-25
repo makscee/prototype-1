@@ -5,6 +5,12 @@ public class NewBlockPlaceholder : MonoBehaviour, IPointerClickHandler
 {
     public int X, Y;
     public Block Parent;
+    public Painter Painter;
+
+    void Awake()
+    {
+        Painter = GetComponent<Painter>();
+    }
 
     public static NewBlockPlaceholder Create(Block parent, int x, int y)
     {
@@ -12,7 +18,8 @@ public class NewBlockPlaceholder : MonoBehaviour, IPointerClickHandler
         nbp.Parent = parent;
         nbp.X = x;
         nbp.Y = y;
-        parent.PulseBlock.ColorPalette.SubscribeGameObject(nbp.gameObject, 1);
+        nbp.Painter.palette = parent.pulseBlock.palette;
+        nbp.Painter.NumInPalette = 1;
         return nbp;
     }
     void Start()

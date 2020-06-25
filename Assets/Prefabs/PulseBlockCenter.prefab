@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1870955685763798501}
   - component: {fileID: 305416304618141312}
   - component: {fileID: 8030432020169413196}
+  - component: {fileID: -7947656739403173764}
   m_Layer: 5
   m_Name: PulseBlockCenter
   m_TagString: Untagged
@@ -86,12 +87,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Movable: 1
+  DesiredVelocity: {x: 0, y: 0}
   _x: 0
   _y: 0
   inside: {fileID: 4820953025721466534}
   text: {fileID: 0}
   PulseBlock: {fileID: 0}
+  Painter: {fileID: 0}
   stepNumber: 1073741823
+  PulseBlocks:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  Clip: {fileID: 0}
+--- !u!114 &-7947656739403173764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2614203169328268816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numInPalette: 0
+  subscribedTo: {fileID: 0}
 --- !u!1 &4820953025721466534
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,6 +126,7 @@ GameObject:
   - component: {fileID: 5140979834738409662}
   - component: {fileID: 7193561583857925682}
   - component: {fileID: 5366203107615765967}
+  - component: {fileID: 6286824250898902219}
   m_Layer: 5
   m_Name: Inside
   m_TagString: Untagged
@@ -163,3 +187,17 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &6286824250898902219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4820953025721466534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numInPalette: 0
+  subscribedTo: {fileID: 0}

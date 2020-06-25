@@ -7,31 +7,37 @@ using UnityEngine.UI;
 public class PulseBlock : Block
 {
     public SoundsPlayer SoundsPlayer;
-    public ColorPalette ColorPalette;
+    public Palette palette;
     public GameObject Background;
+    Painter _backgroundPainter;
     public int Dir;
     RawImage _bgRawImg;
     public PulseBlock()
     {
         StepNumber = 0;
-        PulseBlock = this;
+        pulseBlock = this;
     }
 
     void OnEnable()
     {
-        PulseBlock = this;
+        pulseBlock = this;
         UpdateCoordsFromTransformPosition();
-        ColorPalette = new ColorPalette(Utils.DirFromCoords(X, Y));
-        ColorPalette.SubscribeGameObject(Background, 0);
-        ColorPalette.SubscribeGameObject(gameObject, 3);
-        ColorPalette.SubscribeGameObject(inside, 2); 
+
         FieldMatrix.Add(X, Y, this);
         _bgRawImg = Background.GetComponent<RawImage>();
         GameManager.AfterServiceObjectsInitialized += PostEnableInit;
     }
 
-    protected override void Start()
+    protected override void SetupPalette()
     {
+        palette = new Palette(Utils.DirFromCoords(X, Y));
+        _backgroundPainter = Background.GetComponent<Painter>();
+        _backgroundPainter.palette = palette;
+        painter.palette = palette;
+        insidePainter.palette = palette;
+        _backgroundPainter.NumInPalette = 0;
+        painter.NumInPalette = 3;
+        insidePainter.NumInPalette = 2;
     }
 
     void PostEnableInit()
@@ -46,7 +52,6 @@ public class PulseBlock : Block
     protected override void Update()
     {
         base.Update();
-        ColorPalette.Update();
         var c = _bgRawImg.color;
         if (c.a > _bgDesiredAlpha)
         {
@@ -70,7 +75,7 @@ public class PulseBlock : Block
         base.OnBeginDrag(eventData);
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ColorPalette.SubscribeGameObject(inside, 3);
+            insidePainter.NumInPalette = 3;
         }
     }
 
@@ -79,7 +84,7 @@ public class PulseBlock : Block
         base.OnEndDrag(eventData);
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ColorPalette.SubscribeGameObject(inside, 2);
+            insidePainter.NumInPalette = 2;
         }
     }
 
@@ -113,7 +118,7 @@ public class PulseBlock : Block
 
     public override void ReceivePulse(Block from)
     {
-        ColorPalette.SubscribeGameObject(inside, 3);
+        insidePainter.NumInPalette = 3;
         GlobalPulse.SubscribeToNext(PassPulse);
     }
 
@@ -126,7 +131,7 @@ public class PulseBlock : Block
                 block.ReceivePulse(this);
             }
         }
-        ColorPalette.SubscribeGameObject(inside, 2);
+        insidePainter.NumInPalette = 2;
     }
 
     void Pulse()

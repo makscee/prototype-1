@@ -11,11 +11,17 @@ public class BindVisual : MonoBehaviour
 
     public Bind bind;
 
+    Painter _painter;
+    void Awake()
+    {
+        _painter = GetComponent<Painter>();
+    }
+
     public static void Create(Bind bind)
     {
-        ColorPalette palette;
-        if (bind.First is Block t && t.PulseBlock != null)
-            palette = t.PulseBlock.ColorPalette;
+        Palette palette;
+        if (bind.First is Block block && block.pulseBlock != null)
+            palette = block.pulseBlock.palette;
         else return;
         
         var b = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.FrontCanvas.transform).GetComponent<BindVisual>();
@@ -24,14 +30,7 @@ public class BindVisual : MonoBehaviour
         b.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 3;
         b.bind = bind;
         
-        if (b.first is Block block)
-        {
-            palette.SubscribeToGameObject(block.inside.gameObject, b.gameObject);
-        }
-        else
-        {
-            palette.SubscribeGameObject(b.gameObject, 3);
-        }
+        b._painter.subscribedTo = block.insidePainter;
     }
 
     void OnEnable()

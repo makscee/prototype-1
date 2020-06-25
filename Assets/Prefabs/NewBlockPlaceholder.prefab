@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8101609773833569888}
   - component: {fileID: 7900797950190445829}
   - component: {fileID: 1442463196587730382}
+  - component: {fileID: 6854682398071452503}
   m_Layer: 5
   m_Name: NewBlockPlaceholder
   m_TagString: Untagged
@@ -87,3 +88,18 @@ MonoBehaviour:
   X: 0
   Y: 0
   Parent: {fileID: 0}
+  Painter: {fileID: 0}
+--- !u!114 &6854682398071452503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5611424165838919061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numInPalette: 0
+  subscribedTo: {fileID: 0}
