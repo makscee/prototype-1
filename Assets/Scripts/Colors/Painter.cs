@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class Painter : MonoBehaviour
     public Palette palette;
     [SerializeField]int numInPalette;
     public Painter subscribedTo;
+    public Vector3 MultiplyBy = new Vector3(1, 1, 1);
 
     public int NumInPalette
     {
@@ -19,16 +21,16 @@ public class Painter : MonoBehaviour
         set => numInPalette = value;
     }
 
-
-    void Awake()
+    void OnEnable()
     {
         ObtainPaintAction();
+        GameManager.InvokeAfterServiceObjectsInitialized(() => Gallery.Register(this));
     }
 
     void Update()
     {
         if (palette == null && subscribedTo == null) return;
-        ColorRefresh();
+        PaintRefresh();
     }
 
     Color _colorBefore;
@@ -39,14 +41,17 @@ public class Painter : MonoBehaviour
         {
             if (subscribedTo != null)
                 return subscribedTo.Color;
-            return palette.GetColor(numInPalette);
+            var galleryMultiplier = Gallery.Get(this);
+            return palette.GetColor(numInPalette)
+                   * new Color(MultiplyBy.x, MultiplyBy.y, MultiplyBy.z, 1)
+                   * new Color(galleryMultiplier.x, galleryMultiplier.y, galleryMultiplier.z, 1);
         }
     }
 
-    void ColorRefresh()
+    void PaintRefresh()
     {
         if (_colorBefore == Color) return;
-        _paint(Color);
+        _paint?.Invoke(Color); 
         _colorBefore = Color;
     }
 
@@ -55,28 +60,55 @@ public class Painter : MonoBehaviour
         var rawImg = GetComponent<RawImage>();
         if (rawImg != null)
         {
-            _paint = c => rawImg.color = c;
+            _paint = c =>
+            {
+                c.a = rawImg.color.a;
+                rawImg.color = c;
+            };
             return;
         }
 
         var img = GetComponent<Image>();
         if (img != null)
         {
-            _paint = c => img.color = c;
+            _paint = c => 
+            {
+                c.a = img.color.a;
+                img.color = c;
+            };
             return;
         }
 
         var text = GetComponent<Text>();
         if (text != null)
         {
-            _paint = c => text.color = c;
+            _paint = c => 
+            {
+                c.a = text.color.a;
+                text.color = c;
+            };
             return;
         }
 
         var sr = GetComponent<SpriteRenderer>();
         if (sr != null)
         {
-            _paint = c => sr.color = c;
+            _paint = c => 
+            {
+                c.a = sr.color.a;
+                sr.color = c;
+            };
+            return;
+        }
+
+        var cam = GetComponent<Camera>();
+        if (cam != null)
+        {
+            _paint = c => 
+            {
+                c.a = cam.backgroundColor.a;
+                cam.backgroundColor = c;
+            };
             return;
         }
         

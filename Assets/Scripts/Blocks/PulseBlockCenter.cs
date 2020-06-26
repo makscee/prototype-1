@@ -14,7 +14,7 @@ public class PulseBlockCenter : Block
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
         Instance = this;
-        GameManager.AfterServiceObjectsInitialized += PostEnableInit;
+        GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
     }
 
     protected override void SetupPalette()

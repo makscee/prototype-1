@@ -5,10 +5,17 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     Camera _camera;
+    
+    [SerializeField]Painter painter;
 
     void OnEnable()
     {
         _camera = GetComponent<Camera>();
+        painter.palette = new Palette();
+        for (var i = 0; i < 4; i++)
+        {
+            painter.palette.Colors[i] = Color.white;
+        }
     }
 
     void Update()

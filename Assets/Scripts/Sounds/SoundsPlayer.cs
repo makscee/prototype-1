@@ -10,8 +10,8 @@ public class SoundsPlayer : MonoBehaviour
 
     void OnEnable()
     {
-        GameManager.AfterServiceObjectsInitialized += CreateConfigRacks;
-        GameManager.AfterServiceObjectsInitialized += Init;
+        GameManager.InvokeAfterServiceObjectsInitialized(CreateConfigRacks);
+        GameManager.InvokeAfterServiceObjectsInitialized(Init);
     }
 
     void Init()
@@ -47,6 +47,27 @@ public class SoundsPlayer : MonoBehaviour
         {
             configRack.SetActive(value);
         }
+    }
+
+    public void ConfigRacksAnimatedSetActive(bool value, float over = 0.15f)
+    {
+        foreach (var configRack in ConfigRacks)
+        {
+            if (value) configRack.SetActive(true);
+            else Animator.Invoke(() => configRack.SetActive(false)).In(over);
+            configRack.transform.localScale = value ? Vector3.zero : Vector3.one;
+            Animator.Interpolate(0f, 1f, over)
+                .PassDelta(v =>
+                {
+                    v = value ? v : -v;
+                    configRack.transform.localScale += new Vector3(v, v, v);
+                }).Type(InterpolationType.InvSquare);
+        }
+    }
+
+    public bool IsConfigRacksShown()
+    {
+        return ConfigRacks[0].activeInHierarchy;
     }
     void Update()
     {

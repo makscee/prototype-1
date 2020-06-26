@@ -42,7 +42,7 @@ public class Interpolator<T> : IUpdateable
         return this;
     }
 
-    InterpolationType _interpolationType = InterpolationType.Linear;
+    InterpolationType _interpolationType = InterpolationType.InvSquare;
     public Interpolator<T> Type(InterpolationType type)
     {
         _interpolationType = type;

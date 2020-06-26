@@ -6,17 +6,24 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     static readonly string GameStateFileName = "game";
     [SerializeField] string JsonGameState;
-    public static Action AfterServiceObjectsInitialized;
+    static Action _afterServiceObjectsInitialized;
+
+    public static void InvokeAfterServiceObjectsInitialized(Action action)
+    {
+        if (ServiceObjectsInitialized) action();
+        else _afterServiceObjectsInitialized += action;
+    }
+
     void OnEnable()
     {
         Instance = this;
         if (JsonGameState.Length > 0)
         {
-            AfterServiceObjectsInitialized += LoadSavedState;
+            InvokeAfterServiceObjectsInitialized(LoadSavedState);
         }
         else
         {
-            AfterServiceObjectsInitialized += LoadGameFromFile;
+            InvokeAfterServiceObjectsInitialized(LoadGameFromFile);
         }
     }
     void OnDisable()
@@ -40,7 +47,7 @@ public class GameManager : MonoBehaviour
         if (SharedObjects.Instance != null && Prefabs.Instance != null)
         {
             ServiceObjectsInitialized = true;
-            AfterServiceObjectsInitialized();
+            _afterServiceObjectsInitialized?.Invoke();
         }
     }
 

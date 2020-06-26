@@ -23,7 +23,7 @@ public class PulseBlock : Block
         PulseBlock = this;
         FieldMatrix.Add(X, Y, this); 
         _bgRawImg = Background.GetComponent<RawImage>();
-        GameManager.AfterServiceObjectsInitialized += PostEnableInit;
+        GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
     }
 
     protected override void SetupPalette()
@@ -89,20 +89,34 @@ public class PulseBlock : Block
     protected override void OnLeftClick()
     {
         base.OnLeftClick();
-        HideAllConfigRacks();
-        var cam = SharedObjects.Instance.Camera.transform;
-        Animator.Invoke(() => SoundsPlayer.ConfigRacksSetActive(true)).In(0.2f);
-        Animator.Interpolate(cam.position, transform.position, 0.3f)
-            .PassDelta(v => cam.position += (Vector3)v).Type(InterpolationType.InvSquare);
+        ShowConfigRack();
     }
 
-    public static void HideAllConfigRacks()
+    public void ShowConfigRack()
     {
-        foreach (var pulseBlock in PulseBlockCenter.Instance.PulseBlocks)
+        if (SoundsPlayer.IsConfigRacksShown()) return;
+        HideAllConfigRacks();
+        var cam = SharedObjects.Instance.Camera.transform;
+        Animator.Invoke(() => SoundsPlayer.ConfigRacksAnimatedSetActive(true)).In(0.05f);
+        Animator.Interpolate(cam.position, transform.position, 0.25f)
+            .PassDelta(v => cam.position += (Vector3)v).Type(InterpolationType.InvSquare);
+        Animator.Interpolate(0f, 0.5f, 0.25f).PassDelta(v => Gallery.AddByMask(-v, Gallery.AllExceptUiMask));
+    }
+
+    public static void HideAllConfigRacks(bool animation = true)
+    {
+        PulseBlock pulseBlock = null;
+        foreach (var pb in PulseBlockCenter.Instance.PulseBlocks)
         {
-            if (pulseBlock == null) break;
-            pulseBlock.SoundsPlayer.ConfigRacksSetActive(false);
+            if (pb == null) break;
+            if (pb.SoundsPlayer.IsConfigRacksShown()) pulseBlock = pb;
         }
+        if (pulseBlock == null) return;
+        if (animation)
+        {
+            pulseBlock.SoundsPlayer.ConfigRacksAnimatedSetActive(false);
+            Animator.Interpolate(0f, 0.5f, 0.25f).PassDelta(v => Gallery.AddByMask(v, Gallery.AllExceptUiMask));
+        } else pulseBlock.SoundsPlayer.ConfigRacksSetActive(false);
     }
 
     protected override bool TryCreateBlock()
