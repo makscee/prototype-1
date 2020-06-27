@@ -8,6 +8,13 @@ public class SoundsPlayer : MonoBehaviour
     public WaveModule[] WaveModules = new WaveModule[4];
     public GameObject[] ConfigRacks = new GameObject[4];
 
+    Painter _painter;
+
+    void Awake()
+    {
+        _painter = GetComponent<Painter>();
+    }
+
     void OnEnable()
     {
         GameManager.InvokeAfterServiceObjectsInitialized(CreateConfigRacks);
@@ -37,6 +44,8 @@ public class SoundsPlayer : MonoBehaviour
             var waveModule = configRack.transform.GetComponentInChildren<WaveModule>();
             WaveModules[i] = waveModule;
             ConfigRacks[i] = configRack;
+            foreach (var painter in configRack.GetComponentsInChildren<Painter>())
+                painter.palette = _painter.palette;
             configRack.SetActive(false);
         }
     }

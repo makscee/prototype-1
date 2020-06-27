@@ -7,7 +7,7 @@ public class Painter : MonoBehaviour
 {
     Action<Color> _paint;
     public Palette palette;
-    [SerializeField]int numInPalette;
+    [SerializeField, Range(0, 3)]int numInPalette;
     public Painter subscribedTo;
     public Vector3 MultiplyBy = new Vector3(1, 1, 1);
 
