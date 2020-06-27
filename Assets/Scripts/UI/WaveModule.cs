@@ -59,7 +59,7 @@ public class WaveModule : MonoBehaviour
             var maxY = (int)Mathf.Round(max * halfSizeY) + halfSizeY;
             maxY = Math.Min(maxY, texSizeY - 1);
             var minY = (int)Mathf.Round(min * halfSizeY) + halfSizeY;
-            for (var j = minY; j <= maxY; j++)
+            for (var j = minY - 2; j <= maxY + 2; j++)
             {
                 texData[Index(i, j)] = new Color32(255, 255, 255, 255);
             }
@@ -76,12 +76,14 @@ public class WaveModule : MonoBehaviour
         if (_sliderBeforeLeft != SliderLeft.value)
         {
             SelectLeft = Mathf.Lerp(0f, _selectRight, SliderLeft.value);
-            SliderRight.SetValueWithoutNotify(1f - (_selectRight - SelectLeft) / (1 - SelectLeft));
+            var otherVal = 1f - (_selectRight - SelectLeft) / (1 - SelectLeft);
+            SliderRight.SetValueWithoutNotify(otherVal);
         }
         else if (_sliderBeforeRight != SliderRight.value)
         {
             SelectRight = Mathf.Lerp(_selectLeft, 1f, 1f - SliderRight.value);
-            SliderLeft.SetValueWithoutNotify(_selectLeft / SelectRight);
+            var otherVal = _selectLeft / SelectRight;
+            SliderLeft.SetValueWithoutNotify(otherVal);
         }
         _sliderBeforeLeft = SliderLeft.value;
         _sliderBeforeRight = SliderRight.value;
@@ -144,6 +146,8 @@ public class WaveModule : MonoBehaviour
 
     int Index(int x, int y)
     {
+        x = Mathf.Clamp(x, 0, _width - 1);
+        y = Mathf.Clamp(y, 0, _heigth - 1);
         return x + _width * y;
     }
 }
