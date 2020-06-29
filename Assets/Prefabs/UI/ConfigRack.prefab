@@ -655,21 +655,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8610954695423125883}
     m_Modifications:
-    - target: {fileID: 831502743621316943, guid: 93ccceb7c64a37a4f8876cf700cb86ad,
-        type: 3}
-      propertyPath: numInPalette
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 837533995452376368, guid: 93ccceb7c64a37a4f8876cf700cb86ad,
-        type: 3}
-      propertyPath: numInPalette
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5169971470336817910, guid: 93ccceb7c64a37a4f8876cf700cb86ad,
-        type: 3}
-      propertyPath: numInPalette
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5486346620361052158, guid: 93ccceb7c64a37a4f8876cf700cb86ad,
         type: 3}
       propertyPath: m_Name
@@ -800,11 +785,6 @@ PrefabInstance:
       propertyPath: SliderVolume
       value: 
       objectReference: {fileID: 5081343407839714458}
-    - target: {fileID: 7445529653053089347, guid: 93ccceb7c64a37a4f8876cf700cb86ad,
-        type: 3}
-      propertyPath: numInPalette
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93ccceb7c64a37a4f8876cf700cb86ad, type: 3}
 --- !u!224 &4297325210957750399 stripped

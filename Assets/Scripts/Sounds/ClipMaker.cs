@@ -44,7 +44,6 @@ public static class ClipMaker
             sampleAmount = rightBorder - leftBorder + 1;
             data = new float[sampleAmount];
             Array.Copy(fullData, leftBorder, data, 0, sampleAmount);
-            Debug.Log($"left = {leftBorder} right = {rightBorder}");
 
             //clip.GetData(data, sampleStart); todo: why does this not work but Array.Copy does?
         }
