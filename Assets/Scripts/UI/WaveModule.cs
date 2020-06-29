@@ -106,7 +106,7 @@ public class WaveModule : MonoBehaviour
         ApplyTexture();
     }
 
-    const float MinRate = 1000, MaxRate = 87000;
+    const float MinRate = 1000, MaxRate = 87200;
     public void Play()
     {
         AudioSource.clip = GetClip();
