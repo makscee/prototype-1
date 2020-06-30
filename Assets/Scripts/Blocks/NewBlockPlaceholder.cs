@@ -18,7 +18,7 @@ public class NewBlockPlaceholder : MonoBehaviour, IPointerClickHandler
         nbp.Parent = parent;
         nbp.X = x;
         nbp.Y = y;
-        nbp.Painter.palette = parent.PulseBlock.palette;
+        nbp.Painter.palette = parent.pulseBlock.palette;
         nbp.Painter.NumInPalette = 1;
         return nbp;
     }

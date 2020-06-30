@@ -20,8 +20,8 @@ public class BindVisual : MonoBehaviour
     public static void Create(Bind bind)
     {
         Palette palette;
-        if (bind.First is Block block && block.PulseBlock != null)
-            palette = block.PulseBlock.palette;
+        if (bind.First is Block block && block.pulseBlock != null)
+            palette = block.pulseBlock.palette;
         else return;
         
         var b = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.FrontCanvas.transform).GetComponent<BindVisual>();

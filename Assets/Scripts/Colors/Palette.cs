@@ -11,7 +11,9 @@ new[]
 },
 
  */
-public class Palette
+
+[ExecuteInEditMode]
+public class Palette : MonoBehaviour
 {
     static readonly Color[][] Palettes = {
         new[]
@@ -52,13 +54,28 @@ public class Palette
     };
 
     public readonly Color[] Colors = new Color[4];
-    public Palette(int num)
+    
+    [SerializeField, Range(0, 4)] public int initWithPaletteNumber;
+
+    public int InitWithPaletteNumber
     {
-        Palettes[num].CopyTo(Colors, 0);
+        get => initWithPaletteNumber;
+        set
+        {
+            Palettes[value].CopyTo(Colors, 0);
+            initWithPaletteNumber = value;
+        }
     }
 
-    public Palette()
+    void OnValidate()
     {
+        Palettes[InitWithPaletteNumber].CopyTo(Colors, 0);
+    }
+
+
+    void OnEnable()
+    {
+        Palettes[InitWithPaletteNumber].CopyTo(Colors, 0);
     }
 
     public Color GetColor(int numInPalette)

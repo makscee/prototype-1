@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9411765, g: 0.9411765, b: 0.9411765, a: 1}
+  m_Color: {r: 0.65, g: 0.69, b: 0.88, a: 1}
   m_RaycastTarget: 0
   m_Maskable: 0
   m_OnCullStateChanged:
@@ -84,8 +84,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numInPalette: 0
+  palette: {fileID: -3464444138524148452}
+  numInPalette: 2
   subscribedTo: {fileID: 0}
+  MultiplyBy: {x: 1, y: 1, z: 1}
 --- !u!1 &5419607776513826146
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,6 +102,7 @@ GameObject:
   - component: {fileID: 970950226850876637}
   - component: {fileID: 1361374172}
   - component: {fileID: 1478567600327953426}
+  - component: {fileID: -3464444138524148452}
   m_Layer: 5
   m_Name: PulseBlock
   m_TagString: Untagged
@@ -148,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
+  m_Color: {r: 0.26, g: 0.28, b: 0.45, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -177,12 +180,13 @@ MonoBehaviour:
   DesiredVelocity: {x: 0, y: 0}
   _x: 0
   _y: 0
-  inside: {fileID: 3284993695328691668}
   text: {fileID: 0}
-  PulseBlock: {fileID: 0}
-  Painter: {fileID: 0}
+  pulseBlock: {fileID: 970950226850876637}
+  painter: {fileID: 1478567600327953426}
+  insidePainter: {fileID: 8264910984229042466}
   stepNumber: 0
   SoundsPlayer: {fileID: 1361374172}
+  palette: {fileID: -3464444138524148452}
   Background: {fileID: 0}
   Dir: 0
 --- !u!114 &1361374172
@@ -224,5 +228,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numInPalette: 0
+  palette: {fileID: -3464444138524148452}
+  numInPalette: 3
   subscribedTo: {fileID: 0}
+  MultiplyBy: {x: 1, y: 1, z: 1}
+--- !u!114 &-3464444138524148452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5419607776513826146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64da8c26b33044c49f5ba7fa982e1124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initWithPaletteNumber: 0

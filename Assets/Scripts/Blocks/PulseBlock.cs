@@ -20,22 +20,9 @@ public class PulseBlock : Block
     void OnEnable()
     {
         UpdateCoordsFromTransformPosition();
-        PulseBlock = this;
         FieldMatrix.Add(X, Y, this); 
         _bgRawImg = Background.GetComponent<RawImage>();
         GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
-    }
-
-    protected override void SetupPalette()
-    {
-        palette = new Palette(Utils.DirFromCoords(X, Y));
-        _backgroundPainter = Background.GetComponent<Painter>();
-        _backgroundPainter.palette = palette;
-        painter.palette = palette;
-        insidePainter.palette = palette;
-        _backgroundPainter.NumInPalette = 0;
-        painter.NumInPalette = 3;
-        insidePainter.NumInPalette = 2;
     }
 
     void PostEnableInit()

@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
+[ExecuteInEditMode]
 public class Painter : MonoBehaviour
 {
     Action<Color> _paint;
@@ -24,7 +25,8 @@ public class Painter : MonoBehaviour
     void OnEnable()
     {
         ObtainPaintAction();
-        GameManager.InvokeAfterServiceObjectsInitialized(() => Gallery.Register(this));
+        if (Application.isPlaying)
+            GameManager.InvokeAfterServiceObjectsInitialized(() => Gallery.Register(this));
     }
 
     void Update()

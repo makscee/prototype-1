@@ -10,20 +10,10 @@ public class PulseBlockCenter : Block
     public AudioClip Clip;
     void OnEnable()
     {
-        SetupPalette();
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
         Instance = this;
         GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
-    }
-
-    protected override void SetupPalette()
-    {
-        Palette = new Palette(4);
-        painter.palette = Palette;
-        insidePainter.palette = Palette;
-        painter.NumInPalette = 3;
-        insidePainter.NumInPalette = 2;
     }
 
     void PostEnableInit()

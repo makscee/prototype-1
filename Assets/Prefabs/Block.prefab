@@ -91,8 +91,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numInPalette: 0
+  palette: {fileID: 0}
+  numInPalette: 3
   subscribedTo: {fileID: 0}
+  MultiplyBy: {x: 1, y: 1, z: 1}
 --- !u!1 &3284993695328691668
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,8 +180,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numInPalette: 0
+  palette: {fileID: 0}
+  numInPalette: 1
   subscribedTo: {fileID: 0}
+  MultiplyBy: {x: 1, y: 1, z: 1}
 --- !u!1 &5419607776513826146
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,10 +250,10 @@ MonoBehaviour:
   DesiredVelocity: {x: 0, y: 0}
   _x: 0
   _y: 0
-  inside: {fileID: 3284993695328691668}
-  text: {fileID: 1768653401}
-  PulseBlock: {fileID: 0}
-  Painter: {fileID: 0}
+  text: {fileID: 1768653403}
+  pulseBlock: {fileID: 0}
+  painter: {fileID: 5287511738864566310}
+  insidePainter: {fileID: 277609817671175824}
   stepNumber: 1073741823
 --- !u!114 &-1491573410832159246
 MonoBehaviour:
@@ -326,5 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numInPalette: 0
+  palette: {fileID: 0}
+  numInPalette: 3
   subscribedTo: {fileID: 0}
+  MultiplyBy: {x: 1, y: 1, z: 1}
