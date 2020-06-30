@@ -24,6 +24,7 @@ public class Painter : MonoBehaviour
 
     void OnEnable()
     {
+        if (palette == null) TryObtainPalette();
         ObtainPaintAction();
         if (Application.isPlaying)
             GameManager.InvokeAfterServiceObjectsInitialized(() => Gallery.Register(this));
@@ -55,6 +56,11 @@ public class Painter : MonoBehaviour
         if (_colorBefore == Color) return;
         _paint?.Invoke(Color); 
         _colorBefore = Color;
+    }
+
+    void TryObtainPalette()
+    {
+        palette = GetComponentInParent<Palette>();
     }
 
     void ObtainPaintAction()

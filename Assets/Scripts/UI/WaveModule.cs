@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+[ExecuteInEditMode]
 public class WaveModule : MonoBehaviour
 {
     [Range(0f, 1f)] public float SelectLeft = 0f;
@@ -9,6 +10,7 @@ public class WaveModule : MonoBehaviour
     public RawImage WaveImage;
     public Slider SliderLeft, SliderRight, SliderRate, SliderVolume;
     public AudioSource AudioSource;
+    public PulseBlockCenter GetClipFrom;
     
     Texture2D _texture;
     int _width, _heigth;
@@ -38,8 +40,10 @@ public class WaveModule : MonoBehaviour
         int texSizeX = width, texSizeY = height;
         _texture = new Texture2D(texSizeX, texSizeY, TextureFormat.RGBA32, false);
         _texture.filterMode = FilterMode.Point;
-        
-        var clip = PulseBlockCenter.Instance.Clip;
+
+        AudioClip clip;
+        if (GetClipFrom == null) clip = PulseBlockCenter.Instance.Clip;
+        else clip = GetClipFrom.Clip;
         var clipData = new float[clip.samples];
         clip.GetData(clipData, 0);
         var texData = new Color32[texSizeX * texSizeY];

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  palette: {fileID: 0}
   numInPalette: 0
   subscribedTo: {fileID: 0}
   MultiplyBy: {x: 1, y: 1, z: 1}
@@ -27,6 +28,7 @@ GameObject:
   - component: {fileID: 8610954695423125885}
   - component: {fileID: 8610954695423125884}
   - component: {fileID: 1166484762964983078}
+  - component: {fileID: 27338105230031850}
   m_Layer: 5
   m_Name: ConfigRack
   m_TagString: Untagged
@@ -101,9 +103,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  palette: {fileID: 27338105230031850}
   numInPalette: 0
   subscribedTo: {fileID: 0}
   MultiplyBy: {x: 1, y: 1, z: 1}
+--- !u!114 &27338105230031850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8610954695423125882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64da8c26b33044c49f5ba7fa982e1124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CopyOf: {fileID: 0}
+  initWithPaletteNumber: 0
 --- !u!1001 &7345709731071240381
 PrefabInstance:
   m_ObjectHideFlags: 0

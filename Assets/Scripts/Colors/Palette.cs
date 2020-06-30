@@ -53,7 +53,11 @@ public class Palette : MonoBehaviour
         },
     };
 
-    public readonly Color[] Colors = new Color[4];
+    public Color[] colors = new Color[4];
+    public bool useOwnColors;
+    public Color[] ownColors = new Color[4];
+
+    public Palette copyOf;
     
     [SerializeField, Range(0, 4)] public int initWithPaletteNumber;
 
@@ -62,24 +66,30 @@ public class Palette : MonoBehaviour
         get => initWithPaletteNumber;
         set
         {
-            Palettes[value].CopyTo(Colors, 0);
+            Palettes[value].CopyTo(colors, 0);
             initWithPaletteNumber = value;
         }
     }
 
     void OnValidate()
     {
-        Palettes[InitWithPaletteNumber].CopyTo(Colors, 0);
+        PrepareColors();
     }
 
 
     void OnEnable()
     {
-        Palettes[InitWithPaletteNumber].CopyTo(Colors, 0);
+        PrepareColors();
+    }
+
+    void PrepareColors()
+    {
+        if (useOwnColors) ownColors.CopyTo(colors, 0);
+        else Palettes[InitWithPaletteNumber].CopyTo(colors, 0);
     }
 
     public Color GetColor(int numInPalette)
     {
-        return Colors[numInPalette];
+        return copyOf != null ? copyOf.GetColor(numInPalette) : colors[numInPalette];
     }
 }
