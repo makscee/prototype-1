@@ -10,7 +10,7 @@ public static class ClipMaker
         if (clickCutOut)
         {
             var fullData = new float[clip.samples];
-            clip.GetData(fullData, sampleStart);
+            clip.GetData(fullData, 0);
 
             var leftBorderStart = sampleStart;
             var rightBorderStart = sampleStart + sampleAmount - 1;
@@ -43,9 +43,14 @@ public static class ClipMaker
             sampleStart = leftBorder;
             sampleAmount = rightBorder - leftBorder + 1;
             data = new float[sampleAmount];
-            Array.Copy(fullData, leftBorder, data, 0, sampleAmount);
+            Array.Copy(fullData, sampleStart, data, 0, sampleAmount);
+            // for (var i = leftBorder; i <= rightBorder; i++)
+            // {
+                // data[i - leftBorder] = fullData[i];
+            // }
 
-            //clip.GetData(data, sampleStart); todo: why does this not work but Array.Copy does?
+            // clip.GetData(data, sampleStart);
+            // Debug.Log($"end: left = {leftBorder} right = {rightBorder}");
         }
         else
         {
@@ -55,7 +60,7 @@ public static class ClipMaker
         
         var newClip = AudioClip.Create(clip.name + "-sub", sampleAmount, 1, sampleRate, false);
         newClip.SetData(data, 0);
-        //Debug.Log($"end: sampleStart = {sampleStart} sampleAmount = {sampleAmount}");
+        // Debug.Log($"end: sampleStart = {sampleStart} sampleAmount = {sampleAmount}");
         return newClip;
     }
 }
