@@ -29,12 +29,12 @@ public class CameraScript : MonoBehaviour
     {
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
-            ZoomOrthoCamera(_camera.ScreenToWorldPoint(Input.mousePosition), 1);
+            ZoomOrthoCamera(_camera.ScreenToWorldPoint(Input.mousePosition), 0.2f);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
-            ZoomOrthoCamera(_camera.ScreenToWorldPoint(Input.mousePosition), -1);
+            ZoomOrthoCamera(_camera.ScreenToWorldPoint(Input.mousePosition), -0.2f);
         }
     }
 

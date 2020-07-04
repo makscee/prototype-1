@@ -52,6 +52,7 @@
           <e p="SharedObjects.cs" t="Include" />
           <e p="Sounds" t="Include">
             <e p="ClipMaker.cs" t="Include" />
+            <e p="Recorder.cs" t="Include" />
             <e p="SoundsPlayer.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
