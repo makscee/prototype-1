@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
         {
             ServiceObjectsInitialized = true;
             _afterServiceObjectsInitialized?.Invoke();
+            _afterServiceObjectsInitialized = null; 
         }
     }
 

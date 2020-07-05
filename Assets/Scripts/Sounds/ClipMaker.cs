@@ -63,4 +63,23 @@ public static class ClipMaker
         // Debug.Log($"end: sampleStart = {sampleStart} sampleAmount = {sampleAmount}");
         return newClip;
     }
+
+    public static AudioClip Add(AudioClip clipA, AudioClip clipB)
+    {
+        var samples = clipA.samples + clipB.samples;
+        var data = new float[samples];
+        clipA.GetData(data, 0);
+        var dataB = new float[clipB.samples];
+        clipB.GetData(dataB, 0);
+        var j = 0;
+        for (var i = clipA.samples; i < samples; i++)
+        {
+            data[i] = dataB[j];
+            j++;
+        }
+
+        var result = AudioClip.Create("A+B", samples, 1, clipA.frequency, false);
+        result.SetData(data, 0);
+        return result;
+    }
 }

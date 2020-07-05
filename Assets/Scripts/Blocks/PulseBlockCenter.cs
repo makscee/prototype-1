@@ -8,6 +8,7 @@ public class PulseBlockCenter : Block
     public PulseBlock[] PulseBlocks = new PulseBlock[4];
     public Palette Palette;
     public AudioClip Clip;
+    public GameObject CentralRack;
     void OnEnable()
     {
         UpdateCoordsFromTransformPosition();
@@ -55,10 +56,6 @@ public class PulseBlockCenter : Block
         return false;
     }
 
-    public override void OnPointerClick(PointerEventData eventData)
-    {
-    }
-
     public override void ReceivePulse(Block from)
     {
     }
@@ -81,6 +78,19 @@ public class PulseBlockCenter : Block
             }
         }
         insidePainter.NumInPalette = 2;
+    }
+
+    public void ShowCentralRack(bool value)
+    {
+        CentralRack.SetActive(value);
+        Gallery.Helpers.DarkenAllExceptUi(value);
+    }
+
+    protected override void OnLeftClick()
+    {
+        Debug.Log($"left click");
+        base.OnLeftClick();
+        ShowCentralRack(true);
     }
 
     public override void RefreshStepNumber()

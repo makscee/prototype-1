@@ -8,22 +8,29 @@ public class WaveModule : MonoBehaviour
     [Range(0f, 1f)] public float SelectLeft = 0f;
     [Range(0f, 1f)] public float SelectRight = 1f;
     public RawImage WaveImage;
-    public Slider SliderLeft, SliderRight, SliderRate, SliderVolume;
-    public AudioSource AudioSource;
-    public PulseBlockCenter GetClipFrom;
-    
+    public Slider sliderLeft, sliderRight, sliderRate, sliderVolume;
+    public AudioSource audioSource;
+    public PulseBlockCenter getClipFrom;
+    public Recorder recorder;
+
     Texture2D _texture;
     int _width, _heigth;
     Color32[] _texData;
     float _selectLeft = 0f, _selectRight = 1f, _sliderBeforeLeft, _sliderBeforeRight;
+    AudioClip _ownClip, _lastInClip;
     void Start()
     {
-        GenerateTexture(512, 256);
+        GenerateTexture();
         ApplySelectFromSliders();
     }
 
     void Update()
     {
+        if (GetInClip() != _lastInClip)
+        {
+            _lastInClip = GetInClip();
+            RefreshTexture();
+        }
         if (_selectLeft != SelectLeft || _selectRight != SelectRight)
         {
             _selectLeft = SelectLeft;
@@ -32,8 +39,18 @@ public class WaveModule : MonoBehaviour
         }
     }
 
-    public void GenerateTexture(int width, int height)
+    AudioClip GetInClip()
     {
+        if (_ownClip != null) return _ownClip;
+        if (getClipFrom != null) return getClipFrom.Clip;
+        if (recorder != null) return recorder.GetLastRecording();
+        return null;
+    }
+    public void GenerateTexture(int width = 512, int height = 256)
+    {
+        var clip = GetInClip();
+        if (clip == null) return;
+
         _width = width;
         _heigth = height;
         
@@ -41,9 +58,6 @@ public class WaveModule : MonoBehaviour
         _texture = new Texture2D(texSizeX, texSizeY, TextureFormat.RGBA32, false);
         _texture.filterMode = FilterMode.Point;
 
-        AudioClip clip;
-        if (GetClipFrom == null) clip = PulseBlockCenter.Instance.Clip;
-        else clip = GetClipFrom.Clip;
         var clipData = new float[clip.samples];
         clip.GetData(clipData, 0);
         var texData = new Color32[texSizeX * texSizeY];
@@ -75,22 +89,22 @@ public class WaveModule : MonoBehaviour
 
     public void ApplySelectFromSliders()
     {
-        if (SliderLeft == null || SliderRight == null) return;
+        if (sliderLeft == null || sliderRight == null) return;
 
-        if (_sliderBeforeLeft != SliderLeft.value)
+        if (_sliderBeforeLeft != sliderLeft.value)
         {
-            SelectLeft = Mathf.Lerp(0f, _selectRight, SliderLeft.value);
+            SelectLeft = Mathf.Lerp(0f, _selectRight, sliderLeft.value);
             var otherVal = 1f - (_selectRight - SelectLeft) / (1 - SelectLeft);
-            SliderRight.SetValueWithoutNotify(otherVal);
+            sliderRight.SetValueWithoutNotify(otherVal);
         }
-        else if (_sliderBeforeRight != SliderRight.value)
+        else if (_sliderBeforeRight != sliderRight.value)
         {
-            SelectRight = Mathf.Lerp(_selectLeft, 1f, 1f - SliderRight.value);
+            SelectRight = Mathf.Lerp(_selectLeft, 1f, 1f - sliderRight.value);
             var otherVal = _selectLeft / SelectRight;
-            SliderLeft.SetValueWithoutNotify(otherVal);
+            sliderLeft.SetValueWithoutNotify(otherVal);
         }
-        _sliderBeforeLeft = SliderLeft.value;
-        _sliderBeforeRight = SliderRight.value;
+        _sliderBeforeLeft = sliderLeft.value;
+        _sliderBeforeRight = sliderRight.value;
     }
     public void ApplySelect()
     {
@@ -110,23 +124,50 @@ public class WaveModule : MonoBehaviour
         ApplyTexture();
     }
 
+    public void CutSelected()
+    {
+        _ownClip = GetOutClip();
+        RefreshTexture();
+    }
+
+    public void CutAndSetGlobalClip()
+    {
+        PulseBlockCenter.Instance.Clip = GetOutClip();
+    }
+
+    void RefreshTexture()
+    {
+        sliderLeft.SetValueWithoutNotify(0);
+        sliderRight.SetValueWithoutNotify(0);
+        SelectLeft = 0f;
+        SelectRight = 1f;
+        SetDirty();
+        GenerateTexture();
+    }
+
+    public void ClearOwn()
+    {
+        _ownClip = null;
+    }
+
     const float MinRate = 1000, MaxRate = 87200;
     public void Play()
     {
-        AudioSource.clip = GetClip();
+        audioSource.clip = GetOutClip();
         UpdateVolume();
-        AudioSource.Play();
+        audioSource.Play();
     }
 
     AudioClip _clipCache;
 
-    public AudioClip GetClip()
+    public AudioClip GetOutClip()
     {
         if (_clipCache != null) return _clipCache;
-        var mainClip = PulseBlockCenter.Instance.Clip;
+        var mainClip = GetInClip();
+        if (mainClip == null) return null;
         var sampleStart = (int) (mainClip.samples * _selectLeft);
         var sampleAmount = (int) (mainClip.samples * _selectRight) - sampleStart;
-        var sampleRate = (int) Mathf.Lerp(MinRate, MaxRate, 1 - SliderRate.value);
+        var sampleRate = sliderRate == null ? 44100 : (int) Mathf.Lerp(MinRate, MaxRate, 1 - sliderRate.value);
         var newClip = ClipMaker.Make(mainClip, sampleStart, sampleAmount, sampleRate);
         _clipCache = newClip;
         return _clipCache;
@@ -138,7 +179,8 @@ public class WaveModule : MonoBehaviour
 
     public void UpdateVolume()
     {
-        AudioSource.volume = 1 - SliderVolume.value;
+        if (sliderVolume == null || audioSource == null) return;
+        audioSource.volume = 1 - sliderVolume.value;
     }
 
     void ApplyTexture()

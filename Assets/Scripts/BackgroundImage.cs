@@ -46,5 +46,6 @@ public class BackgroundImage : MonoBehaviour, IDragHandler, IBeginDragHandler, I
     {
         if (_dragging) return;
         PulseBlock.HideAllConfigRacks();
+        PulseBlockCenter.Instance.ShowCentralRack(false);
     }
 }

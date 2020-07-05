@@ -87,7 +87,7 @@ public class PulseBlock : Block
         Animator.Invoke(() => SoundsPlayer.ConfigRacksAnimatedSetActive(true)).In(0.05f);
         Animator.Interpolate(cam.position, transform.position, 0.25f)
             .PassDelta(v => cam.position += (Vector3)v).Type(InterpolationType.InvSquare);
-        Animator.Interpolate(0f, 0.5f, 0.25f).PassDelta(v => Gallery.AddByMask(-v, Gallery.AllExceptUiMask));
+        Gallery.Helpers.DarkenAllExceptUi(true);
     }
 
     public static void HideAllConfigRacks(bool animation = true)
@@ -102,7 +102,7 @@ public class PulseBlock : Block
         if (animation)
         {
             pulseBlock.SoundsPlayer.ConfigRacksAnimatedSetActive(false);
-            Animator.Interpolate(0f, 0.5f, 0.25f).PassDelta(v => Gallery.AddByMask(v, Gallery.AllExceptUiMask));
+            Gallery.Helpers.DarkenAllExceptUi(false);
         } else pulseBlock.SoundsPlayer.ConfigRacksSetActive(false);
     }
 

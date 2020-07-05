@@ -22,8 +22,8 @@ public class SoundsPlayer : MonoBehaviour
         {
             var newSource = gameObject.AddComponent<AudioSource>(); 
             newSource.playOnAwake = false;
-            newSource.clip = WaveModules[i].GetClip();
-            newSource.volume = WaveModules[i].AudioSource.volume;
+            newSource.clip = WaveModules[i].GetOutClip();
+            newSource.volume = WaveModules[i].audioSource.volume;
             AudioSources[i] = newSource;
         }
     }
@@ -36,6 +36,7 @@ public class SoundsPlayer : MonoBehaviour
             var configRack = Instantiate(Prefabs.Instance.ConfigRack, SharedObjects.Instance.UICanvas.transform);
             configRack.transform.position = transform.position + (Vector3)Utils.CoordsFromDir(i) * 2;
             var waveModule = configRack.transform.GetComponentInChildren<WaveModule>();
+            waveModule.getClipFrom = PulseBlockCenter.Instance;
             WaveModules[i] = waveModule;
             ConfigRacks[i] = configRack;
             foreach (var painter in configRack.GetComponentsInChildren<Painter>())
@@ -79,8 +80,8 @@ public class SoundsPlayer : MonoBehaviour
 
     public void Play(int dir)
     {
-        AudioSources[dir].clip = WaveModules[dir].GetClip();
-        AudioSources[dir].volume = WaveModules[dir].AudioSource.volume;
+        AudioSources[dir].clip = WaveModules[dir].GetOutClip();
+        AudioSources[dir].volume = WaveModules[dir].audioSource.volume;
         AudioSources[dir].Play();
     }
 

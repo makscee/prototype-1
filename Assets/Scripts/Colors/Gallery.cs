@@ -11,8 +11,6 @@ public static class Gallery
 
     public static readonly int LayersCount = Enum.GetValues(typeof(CanvasMask)).Length;
 
-    public static readonly int AllExceptUiMask = ~(-1 << LayersCount) ^ 1 << (int)CanvasMask.UiCanvas;
-
     static HashSet<Painter>[] _painters = new HashSet<Painter>[LayersCount];
     public static Vector3[] Multipliers;
 
@@ -28,6 +26,7 @@ public static class Gallery
 
     public static void Register(Painter painter)
     {
+        if (painter == null) return;
         var canvas = painter.GetComponentInParent<Canvas>()?.gameObject;
         if (canvas == null)
         {
@@ -88,5 +87,18 @@ public static class Gallery
     public static void AddByMask(float value, int mask)
     {
         AddByMask(value, value, value, mask);
+    }
+
+    public static class Helpers
+    {
+        static readonly int AllExceptUiMask = ~(-1 << LayersCount) ^ 1 << (int)CanvasMask.UiCanvas;
+        static bool _uiDark;
+        public static void DarkenAllExceptUi(bool value)
+        {
+            if (_uiDark == value) return;
+            if (value) Animator.Interpolate(0f, 0.5f, 0.25f).PassDelta(v => AddByMask(-v, AllExceptUiMask));
+            else Animator.Interpolate(0f, 0.5f, 0.25f).PassDelta(v => Gallery.AddByMask(v, AllExceptUiMask)); 
+            _uiDark = value;
+        }
     }
 }
