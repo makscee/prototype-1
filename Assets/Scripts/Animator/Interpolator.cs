@@ -11,7 +11,7 @@ public enum InterpolationType
 [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
 public class Interpolator<T> : IUpdateable
 {
-    float _over, _t;
+    float _over, _t, _delay;
     T _from, _to, _cur;
     Dictionary<Type, int> _types = new Dictionary<Type, int>();
     Func<T, T, T> _addFunc, _subtractFunc;
@@ -41,8 +41,13 @@ public class Interpolator<T> : IUpdateable
         _passValue = action;
         return this;
     }
+    public Interpolator<T> Delay(float t)
+    {
+        _delay = t;
+        return this;
+    }
 
-    InterpolationType _interpolationType = InterpolationType.InvSquare;
+    InterpolationType _interpolationType = InterpolationType.Linear;
     public Interpolator<T> Type(InterpolationType type)
     {
         _interpolationType = type;
@@ -52,6 +57,13 @@ public class Interpolator<T> : IUpdateable
     bool _isDone;
     public void Update()
     {
+        var delta = Time.deltaTime;
+        if (_delay > 0f)
+        {
+            _delay -= delta;
+            if (_delay > 0f) return;
+            delta = -_delay;
+        }
         var before = _cur;
         var tUnit = _t / _over;
 
@@ -76,7 +88,7 @@ public class Interpolator<T> : IUpdateable
             return;
         }
 
-        _t += Time.deltaTime;
+        _t += delta;
         if (_t > _over)
         {
             _t = _over;

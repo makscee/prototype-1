@@ -9,8 +9,10 @@ public class PulseBlockCenter : Block
     public Palette Palette;
     public AudioClip Clip;
     public GameObject CentralRack;
+    CentralRack _centralRack;
     void OnEnable()
     {
+        _centralRack = CentralRack.GetComponent<CentralRack>();
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
         Instance = this;
@@ -82,7 +84,8 @@ public class PulseBlockCenter : Block
 
     public void ShowCentralRack(bool value)
     {
-        CentralRack.SetActive(value);
+        if (value) _centralRack.Show();
+        else _centralRack.Hide();
         Gallery.Helpers.DarkenAllExceptUi(value);
     }
 
