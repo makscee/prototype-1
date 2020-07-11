@@ -91,7 +91,6 @@ public class PulseBlockCenter : Block
 
     protected override void OnLeftClick()
     {
-        Debug.Log($"left click");
         base.OnLeftClick();
         ShowCentralRack(true);
     }
