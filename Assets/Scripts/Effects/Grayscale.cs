@@ -22,10 +22,8 @@ public sealed class GrayscaleRenderer : PostProcessEffectRenderer<Grayscale>
     {
         var sheet = context.propertySheets.Get(Shader.Find("Hidden/Custom/Grayscale"));
         sheet.properties.SetFloat("_Blend", settings.blend);
-        var desc = new RenderTextureDescriptor(Screen.width, Screen.height);
-        var tex = new RenderTexture(desc);
-        Graphics.Blit(PostFxTexture.Texture, tex);
-        sheet.properties.SetTexture("_Mask", tex);
+        if (ShadowCamera.Instance != null)
+            sheet.properties.SetTexture("_Mask", ShadowCamera.Instance.renderTexture);
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
     }
 }

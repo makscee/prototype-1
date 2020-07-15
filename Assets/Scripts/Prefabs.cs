@@ -10,6 +10,7 @@ public class Prefabs : MonoBehaviour
     public GameObject FieldCircle;
     public GameObject NewBlockPlaceholder;
     public GameObject ConfigRack;
+    public GameObject ShadowBlock;
     
     
     public static Prefabs Instance;

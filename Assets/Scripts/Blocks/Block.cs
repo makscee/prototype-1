@@ -20,6 +20,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public int X => _x;
     public int Y => _y;
 
+    public bool Masked;
     void SetCoords(int x, int y)
     {
         if (x != _x || y != _y)
@@ -41,7 +42,9 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public static Block Create()
     {
-        return Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.FrontCanvas.transform).GetComponent<Block>();
+        var block = Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.FrontCanvas.transform).GetComponent<Block>();
+        ShadowBlock.Create(block);
+        return block;
     }
 
     public static Block Create(Block parent, int x, int y)
