@@ -30,6 +30,7 @@
           </e>
           <e p="Blocks" t="Include">
             <e p="Block.cs" t="Include" />
+            <e p="BlockEditor.cs" t="Include" />
             <e p="FieldCircle.cs" t="Include" />
             <e p="FieldMatrix.cs" t="Include" />
             <e p="NewBlockPlaceholder.cs" t="Include" />

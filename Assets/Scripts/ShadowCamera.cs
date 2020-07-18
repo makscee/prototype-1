@@ -10,8 +10,11 @@ public class ShadowCamera : MonoBehaviour
     public static ShadowCamera Instance;
     void OnEnable()
     {
-        renderTexture.width = mainCamera.pixelWidth;
-        renderTexture.height = mainCamera.pixelHeight;
+        if (!renderTexture.IsCreated())
+        {
+            renderTexture.width = mainCamera.pixelWidth;
+            renderTexture.height = mainCamera.pixelHeight;
+        }
         Instance = this;
     }
 

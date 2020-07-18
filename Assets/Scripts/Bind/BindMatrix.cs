@@ -77,6 +77,17 @@ public static class BindMatrix
         return Matrix[obj].Values;
     }
 
+    public static int GetOutBindsCount(IBindable obj)
+    {
+        if (!Matrix.ContainsKey(obj)) return 0;
+        var counter = 0;
+        foreach (var bind in Matrix[obj].Values)
+        {
+            if (bind.First == obj) counter++;
+        }
+        return counter;
+    }
+
     // ReSharper disable once ReturnTypeCanBeEnumerable.Global
     public static List<IBindable> CollectAllBoundObjects(IBindable obj)
     {

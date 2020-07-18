@@ -121,7 +121,9 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         _dragging = true;
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength, 1.5f);
+            if (!Masked)
+                BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
+            else BlockEditor.OnBlockDragStart(this, eventData);
         }
     }
 
@@ -130,14 +132,16 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         _dragging = false;
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            TryCreateBlock();
-            BindMatrix.RemoveBind(this, MouseBind.Get());
+            // TryCreateBlock();
+            if (!Masked)
+                BindMatrix.RemoveBind(this, MouseBind.Get());
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        
+        if (Masked) 
+            BlockEditor.OnBlockDrag(eventData);
     }
 
     // true if something affected
@@ -253,6 +257,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        if (_dragging) return;
         if (eventData.button == PointerEventData.InputButton.Middle)
         {
             OnMiddleClick();
@@ -270,11 +275,12 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     protected virtual void OnLeftClick()
     {
-        
+        BlockEditor.OnBlockClick(this);
     }
     
     void OnTriggerStay2D(Collider2D other)
     {
+        return;
         var away = (Vector2)(transform.position - other.transform.position);
         if (other is CircleCollider2D circle)
         {
