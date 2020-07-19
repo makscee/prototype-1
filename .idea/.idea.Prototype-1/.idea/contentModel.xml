@@ -37,7 +37,6 @@
             <e p="NewBlockPlaceholderPool.cs" t="Include" />
             <e p="PulseBlock.cs" t="Include" />
             <e p="PulseBlockCenter.cs" t="Include" />
-            <e p="ShadowBlock.cs" t="Include" />
           </e>
           <e p="CameraScript.cs" t="Include" />
           <e p="Colors" t="Include">
@@ -51,6 +50,11 @@
           <e p="GameManager.cs" t="Include" />
           <e p="GlobalPulse.cs" t="Include" />
           <e p="InputHandler.cs" t="Include" />
+          <e p="Pixel" t="Include">
+            <e p="Pixel.cs" t="Include" />
+            <e p="PixelFieldMatrix.cs" t="Include" />
+            <e p="PixelPool.cs" t="Include" />
+          </e>
           <e p="Prefabs.cs" t="Include" />
           <e p="Serialization" t="Include">
             <e p="BindSerialized.cs" t="Include" />

@@ -13,7 +13,7 @@ public static class BlockEditor
         if (_currentCluster != null)
         {
             foreach (var b in _currentCluster)
-                b.Masked = false;
+                b.SetMasked(false);
             
             if (_currentCluster.Contains(block))
             {
@@ -26,7 +26,7 @@ public static class BlockEditor
             if (obj is Block b)
             {
                 cluster.Add(b);
-                b.Masked = true;
+                b.SetMasked(true);
             }
         _currentCluster = cluster;
     }
@@ -61,13 +61,13 @@ public static class BlockEditor
                 bind.Break();
 
             _hovered = blockOnInput;
-            _hovered.Masked = true;
+            _hovered.SetMasked(true);
             return;
         }
 
         var newBlock = Block.Create(_hovered, x, y);
         _hovered = newBlock;
-        newBlock.Masked = true;
+        newBlock.SetMasked(true);
         _currentCluster.Add(newBlock);
     }
 

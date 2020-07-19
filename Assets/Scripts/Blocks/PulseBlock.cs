@@ -31,7 +31,6 @@ public class PulseBlock : Block
         var v = new Vector2(X, Y) - new Vector2(PulseBlockCenter.Instance.X, PulseBlockCenter.Instance.Y);
         BindMatrix.AddBind(PulseBlockCenter.Instance, this, v, Bind.BlockBindStrength);
         PulseBlockCenter.Instance.PulseBlocks[Utils.DirFromCoords(X, Y)] = this;
-        ShadowBlock.Create(this);
     }
 
     float _bgDesiredAlpha = 0f, _bgAlphaChangeSpeed = 1.5f;
@@ -67,7 +66,7 @@ public class PulseBlock : Block
 
     public override void OnEndDrag(PointerEventData eventData)
     {
-        if (!Masked) Pulse();
+        if (!_masked) Pulse();
         base.OnEndDrag(eventData);
         if (eventData.button == PointerEventData.InputButton.Left)
         {
@@ -77,7 +76,7 @@ public class PulseBlock : Block
 
     protected override void OnLeftClick()
     {
-        if (Masked)
+        if (_masked)
         {
             if (SoundsPlayer.IsConfigRacksShown())
             {

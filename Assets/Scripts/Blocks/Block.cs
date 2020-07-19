@@ -19,8 +19,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public int X => _x;
     public int Y => _y;
-
-    public bool Masked;
     void SetCoords(int x, int y)
     {
         if (x != _x || y != _y)
@@ -43,7 +41,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public static Block Create()
     {
         var block = Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.FrontCanvas.transform).GetComponent<Block>();
-        ShadowBlock.Create(block);
         return block;
     }
 
@@ -121,7 +118,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         _dragging = true;
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (!Masked)
+            if (!_masked)
                 BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
             else BlockEditor.OnBlockDragStart(this, eventData);
         }
@@ -133,14 +130,14 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             // TryCreateBlock();
-            if (!Masked)
+            if (!_masked)
                 BindMatrix.RemoveBind(this, MouseBind.Get());
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (Masked) 
+        if (_masked) 
             BlockEditor.OnBlockDrag(eventData);
     }
 
@@ -306,6 +303,21 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         if (s.Length > 3) s = "";
         if (text)
             text.text = s;
+    }
+
+    protected bool _masked;
+    public void SetMasked(bool value)
+    {
+        _masked = value;
+        if (value)
+        {
+            PixelFieldMatrix.Show(X, Y, Color.red).SetShadow(true);
+            transform.position = new Vector3(X, Y);
+        }
+        else
+        {
+            PixelFieldMatrix.Hide(X, Y);
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
