@@ -22,7 +22,7 @@ public static class BlockEditor
             }
         }
         var cluster = new HashSet<Block>();
-        foreach (var obj in BindMatrix.CollectAllBoundObjects(block))
+        foreach (var obj in BindMatrix.CollectBoundCluster(block))
             if (obj is Block b)
             {
                 cluster.Add(b);

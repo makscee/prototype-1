@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -202,7 +203,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     IEnumerable<Block> CollectBoundBlocks()
     {
         var result = new List<Block>();
-        foreach (var obj in BindMatrix.CollectAllBoundObjects(this))
+        foreach (var obj in BindMatrix.CollectBoundCluster(this))
         {
             if (obj is Block block) result.Add(block);
         }
@@ -313,6 +314,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         {
             PixelFieldMatrix.Show(X, Y, Color.red).SetShadow(true);
             transform.position = new Vector3(X, Y);
+            RefreshMaskSqueeze();
         }
         else
         {
@@ -381,6 +383,8 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         {
             RefreshStepNumber();
         }
+
+        RefreshMaskSqueeze();
         RefreshFieldCircle();
     }
 
@@ -388,6 +392,25 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         if (b.Second == this && b.First is Block) RefreshStepNumber();
         RefreshFieldCircle();
+        RefreshMaskSqueeze();
+    }
+
+    protected virtual void RefreshMaskSqueeze()
+    {
+        if (!_masked) return;
+        if (!PixelFieldMatrix.Get(X, Y, out var pixel)) return;
+        var binds = BindMatrix.GetAllAdjacentBinds(this).ToArray();
+        if (binds.Length != 2)
+        {
+            pixel.ResetScale();
+            return;
+        }
+        if (binds[0].First != binds[1].First &&
+            binds[0].Second != binds[1].Second &&
+            binds[0].Offset == binds[1].Offset)
+        {
+            pixel.Squeeze(binds[0].Offset.x == 0f);
+        }
     }
 
     public virtual void RefreshStepNumber()

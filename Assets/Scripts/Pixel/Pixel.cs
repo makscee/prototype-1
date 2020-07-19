@@ -13,6 +13,7 @@ public class Pixel : MonoBehaviour
         Y = 0;
         _spriteRenderer.color = Color.magenta;
         SetShadow(false);
+        ResetScale();
         return this;
     }
 
@@ -33,6 +34,22 @@ public class Pixel : MonoBehaviour
     public Pixel SetShadow(bool value)
     {
         gameObject.layer = value ? 12 : 0;
+        return this;
+    }
+
+    public Pixel Squeeze(bool vertical)
+    {
+        const float squeezedValue = 0.5f;
+        var scale = transform.localScale;
+        if (vertical) scale.x = squeezedValue;
+        else scale.y = squeezedValue;
+        transform.localScale = scale;
+        return this;
+    }
+
+    public Pixel ResetScale()
+    {
+        transform.localScale = Vector3.one;
         return this;
     }
 }

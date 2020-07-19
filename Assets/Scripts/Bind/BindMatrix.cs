@@ -21,7 +21,7 @@ public static class BindMatrix
         Matrix[second][first] = b;
 
         if (first.IsAnchored() != second.IsAnchored())
-            foreach (var obj in CollectAllBoundObjects(first))
+            foreach (var obj in CollectBoundCluster(first))
                 obj.SetAnchored(true);
 
         if (first is IBindHandler firstH)
@@ -89,7 +89,7 @@ public static class BindMatrix
     }
 
     // ReSharper disable once ReturnTypeCanBeEnumerable.Global
-    public static List<IBindable> CollectAllBoundObjects(IBindable obj)
+    public static List<IBindable> CollectBoundCluster(IBindable obj, bool jumpCenter = false)
     {
         var result = new List<IBindable>();
         var queue = new Queue<IBindable>();
@@ -98,6 +98,7 @@ public static class BindMatrix
         {
             var next = queue.Dequeue();
             next.Used = true;
+            if (next is PulseBlockCenter) continue;
             result.Add(next);
             foreach (var bind in GetAllAdjacentBinds(next))
             {
@@ -116,7 +117,7 @@ public static class BindMatrix
 
     static void RefreshAnchored(IBindable obj)
     {
-        var bound = CollectAllBoundObjects(obj);
+        var bound = CollectBoundCluster(obj);
         var hasAnchor = bound.Any(o => o.IsAnchor());
         foreach (var o in bound)
         {
