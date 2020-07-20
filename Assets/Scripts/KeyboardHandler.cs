@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class KeyboardHandler : MonoBehaviour
 {
-    public static bool BlockClicked;
     void Update()
     {
         if (Input.GetMouseButtonDown(0))

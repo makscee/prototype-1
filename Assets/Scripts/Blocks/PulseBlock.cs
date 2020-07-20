@@ -66,12 +66,24 @@ public class PulseBlock : Block
 
     public override void OnEndDrag(PointerEventData eventData)
     {
-        if (!masked) Pulse();
+        if (cancelDrag)
+        {
+            base.OnEndDrag(eventData);
+            return;
+        }
         base.OnEndDrag(eventData);
+
+        if (!masked) Pulse();
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             insidePainter.NumInPalette = 2;
         }
+    }
+
+    public override void CancelDrag()
+    {
+        base.CancelDrag();
+        insidePainter.NumInPalette = 2;
     }
 
     protected override void OnLeftClick()

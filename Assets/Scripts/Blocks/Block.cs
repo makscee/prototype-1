@@ -127,6 +127,11 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public virtual void OnEndDrag(PointerEventData eventData)
     {
         _dragging = false;
+        if (cancelDrag)
+        {
+            cancelDrag = false;
+            return;
+        }
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             // TryCreateBlock();
@@ -135,8 +140,20 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         }
     }
 
+    protected bool cancelDrag;
     public void OnDrag(PointerEventData eventData)
     {
+        if (Input.touchCount > 1)
+        {
+            CancelDrag();
+        }
+    }
+
+    public virtual void CancelDrag()
+    {
+        cancelDrag = true;
+        if (!masked)
+            BindMatrix.RemoveBind(this, MouseBind.Get());
     }
 
     // true if something affected
@@ -323,12 +340,10 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        KeyboardHandler.BlockClicked = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        KeyboardHandler.BlockClicked = false;
     }
 
     [SerializeField]

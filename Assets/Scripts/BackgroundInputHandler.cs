@@ -15,7 +15,7 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
         if (Input.touchCount < 2)
         {
             if (_draggedBlock != null)
-                BlockEditor.OnBlockDrag();
+                _draggedBlock = BlockEditor.OnBlockDrag();
             else _camera.transform.position -= _camera.ScreenToWorldPoint(eventData.delta) - _camera.ScreenToWorldPoint(Vector3.zero);
         }
     }

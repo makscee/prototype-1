@@ -43,27 +43,10 @@ public class CameraScript : MonoBehaviour
 
     void ZoomOrthoCamera(Vector3 zoomTowards, float amount)
     {
-        if (_camera.orthographicSize < MinZoom && amount > 0 ||
-            _camera.orthographicSize > MaxZoom && amount < 0) return;
-        
         var orthographicSize = _camera.orthographicSize;
         var multiplier = (1.0f / orthographicSize * amount);
         transform.position += (zoomTowards - transform.position) * multiplier;
         _camera.orthographicSize = Mathf.Clamp(orthographicSize - amount, MinZoom, MaxZoom);
-    }
-    
-    Vector3 lastDragPosition;
-
-    void UpdateDrag()
-    {
-        if (!KeyboardHandler.BlockClicked && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2)))
-            lastDragPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-        if (!KeyboardHandler.BlockClicked && (Input.GetMouseButton(1) || Input.GetMouseButton(2)))
-        {
-            var delta = lastDragPosition - _camera.ScreenToWorldPoint(Input.mousePosition);
-            transform.Translate(delta);
-            lastDragPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-        }
     }
 
     static readonly float PanSpeed = 20f;
@@ -113,10 +96,13 @@ public class CameraScript : MonoBehaviour
                     // distance between the previous positions.
                     var newDistance = Vector2.Distance(newPositions[0], newPositions[1]);
                     var oldDistance = Vector2.Distance(lastZoomPositions[0], lastZoomPositions[1]);
+                    var towardsVec =
+                        _camera.ScreenToWorldPoint((newPositions[1] - newPositions[0]) / 2 + newPositions[0]);
+                    Debug.DrawLine(_camera.ScreenToWorldPoint(newPositions[0]), towardsVec);
                     var offset = newDistance - oldDistance;
 
                     // ZoomCamera(offset, ZoomSpeedTouch);
-                    ZoomOrthoCamera(transform.position, offset / 80);
+                    ZoomOrthoCamera(towardsVec, offset / 120);
 
                     lastZoomPositions = newPositions;
                 }

@@ -45,12 +45,23 @@ public class PulseBlockCenter : Block
 
     public override void OnEndDrag(PointerEventData eventData)
     {
-        base.OnEndDrag(eventData); // todo forbid block creation
+        if (cancelDrag)
+        {
+            base.OnEndDrag(eventData);
+            return;
+        }
+        base.OnEndDrag(eventData);
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             insidePainter.NumInPalette = 2;
             PassPulse();
         }
+    }
+
+    public override void CancelDrag()
+    {
+        base.CancelDrag();
+        insidePainter.NumInPalette = 2;
     }
 
     protected override bool TryCreateBlock()
