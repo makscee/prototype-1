@@ -119,9 +119,8 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         _dragging = true;
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (!_masked)
+            if (!masked)
                 BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
-            else BlockEditor.OnBlockDragStart(this, eventData);
         }
     }
 
@@ -131,15 +130,13 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             // TryCreateBlock();
-            if (!_masked)
+            if (!masked)
                 BindMatrix.RemoveBind(this, MouseBind.Get());
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (_masked) 
-            BlockEditor.OnBlockDrag(eventData);
     }
 
     // true if something affected
@@ -306,30 +303,32 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             text.text = s;
     }
 
-    protected bool _masked;
+    public bool masked;
     public void SetMasked(bool value)
     {
-        _masked = value;
+        masked = value;
         if (value)
         {
             PixelFieldMatrix.Show(X, Y, Color.red).SetShadow(true);
             transform.position = new Vector3(X, Y);
             RefreshMaskSqueeze();
+            gameObject.SetActive(false);
         }
         else
         {
             PixelFieldMatrix.Hide(X, Y);
+            gameObject.SetActive(true);
         }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        InputHandler.BlockClicked = true;
+        KeyboardHandler.BlockClicked = true;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        InputHandler.BlockClicked = false;
+        KeyboardHandler.BlockClicked = false;
     }
 
     [SerializeField]
@@ -397,7 +396,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     protected virtual void RefreshMaskSqueeze()
     {
-        if (!_masked) return;
+        if (!masked) return;
         if (!PixelFieldMatrix.Get(X, Y, out var pixel)) return;
         var binds = BindMatrix.GetAllAdjacentBinds(this).ToArray();
         if (binds.Length != 2)

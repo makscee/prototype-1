@@ -56,9 +56,9 @@ public class CameraScript : MonoBehaviour
 
     void UpdateDrag()
     {
-        if (!InputHandler.BlockClicked && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2)))
+        if (!KeyboardHandler.BlockClicked && (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2)))
             lastDragPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-        if (!InputHandler.BlockClicked && (Input.GetMouseButton(1) || Input.GetMouseButton(2)))
+        if (!KeyboardHandler.BlockClicked && (Input.GetMouseButton(1) || Input.GetMouseButton(2)))
         {
             var delta = lastDragPosition - _camera.ScreenToWorldPoint(Input.mousePosition);
             transform.Translate(delta);

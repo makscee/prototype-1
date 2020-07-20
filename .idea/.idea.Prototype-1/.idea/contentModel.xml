@@ -16,7 +16,7 @@
             <e p="Invoker.cs" t="Include" />
             <e p="IUpdatable.cs" t="Include" />
           </e>
-          <e p="BackgroundImage.cs" t="Include" />
+          <e p="BackgroundInputHandler.cs" t="Include" />
           <e p="Bind" t="Include">
             <e p="Bind.cs" t="Include" />
             <e p="BindableAnchor.cs" t="Include" />
@@ -49,7 +49,7 @@
           </e>
           <e p="GameManager.cs" t="Include" />
           <e p="GlobalPulse.cs" t="Include" />
-          <e p="InputHandler.cs" t="Include" />
+          <e p="KeyboardHandler.cs" t="Include" />
           <e p="Pixel" t="Include">
             <e p="Pixel.cs" t="Include" />
             <e p="PixelFieldMatrix.cs" t="Include" />

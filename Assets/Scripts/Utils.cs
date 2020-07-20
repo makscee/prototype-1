@@ -55,4 +55,11 @@ public static class Utils
             a[ind1] = t;
         }
     }
+    
+    public static void GetInputCoords(out int x, out int y)
+    {
+        var worldPos = SharedObjects.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
+        x = (int) Math.Round(worldPos.x);
+        y = (int) Math.Round(worldPos.y);
+    }
 }

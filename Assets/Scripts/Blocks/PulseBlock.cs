@@ -66,7 +66,7 @@ public class PulseBlock : Block
 
     public override void OnEndDrag(PointerEventData eventData)
     {
-        if (!_masked) Pulse();
+        if (!masked) Pulse();
         base.OnEndDrag(eventData);
         if (eventData.button == PointerEventData.InputButton.Left)
         {
@@ -76,7 +76,7 @@ public class PulseBlock : Block
 
     protected override void OnLeftClick()
     {
-        if (_masked)
+        if (masked)
         {
             if (SoundsPlayer.IsConfigRacksShown())
             {

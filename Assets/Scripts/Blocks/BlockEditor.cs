@@ -31,14 +31,14 @@ public static class BlockEditor
         _currentCluster = cluster;
     }
 
-    public static void OnBlockDragStart(Block block, PointerEventData eventData)
+    public static void OnBlockDragStart(Block block)
     {
         _hovered = block;
     }
 
-    public static void OnBlockDrag(PointerEventData eventData)
+    public static void OnBlockDrag()
     {
-        GetInputCoords(out var x, out var y);
+        Utils.GetInputCoords(out var x, out var y);
         if (FieldMatrix.Get(x, y, out var blockOnInput))
         {
             if (blockOnInput == _hovered) return;
@@ -69,12 +69,5 @@ public static class BlockEditor
         _hovered = newBlock;
         newBlock.SetMasked(true);
         _currentCluster.Add(newBlock);
-    }
-
-    static void GetInputCoords(out int x, out int y)
-    {
-        var worldPos = SharedObjects.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
-        x = (int) Math.Round(worldPos.x);
-        y = (int) Math.Round(worldPos.y);
     }
 }

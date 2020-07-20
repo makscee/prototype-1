@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BindVisual : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class BindVisual : MonoBehaviour
     public Bind bind;
 
     Painter _painter;
+    Image _image;
     void Awake()
     {
+        _image = GetComponent<Image>();
         _painter = GetComponent<Painter>();
     }
 
@@ -50,6 +53,12 @@ public class BindVisual : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        var imageActive = true;
+        if (bind.First is BindableMonoBehavior mFirst) imageActive = mFirst.isActiveAndEnabled;
+        if (bind.Second is BindableMonoBehavior mSecond) imageActive = imageActive && mSecond.isActiveAndEnabled;
+        _image.enabled = imageActive;
+        
         
         bind.Update();
         

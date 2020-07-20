@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InputHandler : MonoBehaviour
+public class KeyboardHandler : MonoBehaviour
 {
     public static bool BlockClicked;
     void Update()
