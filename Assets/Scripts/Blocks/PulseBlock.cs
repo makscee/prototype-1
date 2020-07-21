@@ -17,7 +17,7 @@ public class PulseBlock : Block
         StepNumber = 0;
     }
 
-    void OnEnable()
+    protected override void Init()
     {
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this); 
@@ -31,6 +31,13 @@ public class PulseBlock : Block
         var v = new Vector2(X, Y) - new Vector2(PulseBlockCenter.Instance.X, PulseBlockCenter.Instance.Y);
         BindMatrix.AddBind(PulseBlockCenter.Instance, this, v, Bind.BlockBindStrength);
         PulseBlockCenter.Instance.PulseBlocks[Utils.DirFromCoords(X, Y)] = this;
+        var button = RollingButton.Create(transform);
+        button.OnClick = () =>
+        {
+            ShowConfigRack();
+            BlockEditor.UnmaskCurrent();
+        };
+        onTap += button.Show;
     }
 
     float _bgDesiredAlpha = 0f, _bgAlphaChangeSpeed = 1.5f;
@@ -86,52 +93,15 @@ public class PulseBlock : Block
         insidePainter.NumInPalette = 2;
     }
 
-    protected override void OnLeftClick()
-    {
-        if (masked)
-        {
-            if (SoundsPlayer.IsConfigRacksShown())
-            {
-                HideAllConfigRacks();
-                return;
-            }
-            ShowConfigRack();
-        }
-        base.OnLeftClick();
-    }
-
     public void ShowConfigRack()
     {
         if (SoundsPlayer.IsConfigRacksShown()) return;
-        HideAllConfigRacks();
+        DarkOverlay.OnNextTap += () => SoundsPlayer.ConfigRacksAnimatedSetActive(false);
         var cam = SharedObjects.Instance.Camera.transform;
         Animator.Invoke(() => SoundsPlayer.ConfigRacksAnimatedSetActive(true)).In(0.05f);
         Animator.Interpolate(cam.position, transform.position, 0.25f)
             .PassDelta(v => cam.position += (Vector3)v).Type(InterpolationType.InvSquare);
-        Gallery.Helpers.DarkenAllExceptUi(true);
-    }
-
-    public static void HideAllConfigRacks(bool animation = true)
-    {
-        PulseBlock pulseBlock = null;
-        foreach (var pb in PulseBlockCenter.Instance.PulseBlocks)
-        {
-            if (pb == null) break;
-            if (pb.SoundsPlayer.IsConfigRacksShown()) pulseBlock = pb;
-        }
-        if (pulseBlock == null) return;
-        if (animation)
-        {
-            pulseBlock.SoundsPlayer.ConfigRacksAnimatedSetActive(false);
-            Gallery.Helpers.DarkenAllExceptUi(false);
-        } else pulseBlock.SoundsPlayer.ConfigRacksSetActive(false);
-    }
-
-    protected override bool TryCreateBlock()
-    {
-        var result = base.TryCreateBlock();
-        if (!result) Pulse();
-        return result;
+        DarkOverlay.Enable();
     }
 
     protected override void OnMiddleClick()

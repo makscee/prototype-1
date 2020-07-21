@@ -88,17 +88,4 @@ public static class Gallery
     {
         AddByMask(value, value, value, mask);
     }
-
-    public static class Helpers
-    {
-        static readonly int AllExceptUiMask = ~(-1 << LayersCount) ^ 1 << (int)CanvasMask.UiCanvas;
-        static bool _uiDark;
-        public static void DarkenAllExceptUi(bool value)
-        {
-            if (_uiDark == value) return;
-            if (value) Animator.Interpolate(0f, 0.5f, 0.25f).PassDelta(v => AddByMask(-v, AllExceptUiMask));
-            else Animator.Interpolate(0f, 0.5f, 0.25f).PassDelta(v => Gallery.AddByMask(v, AllExceptUiMask)); 
-            _uiDark = value;
-        }
-    }
 }

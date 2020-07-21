@@ -184,6 +184,7 @@ MonoBehaviour:
   pulseBlock: {fileID: 970950226850876637}
   painter: {fileID: 1478567600327953426}
   insidePainter: {fileID: 8264910984229042466}
+  masked: 0
   stepNumber: 0
   SoundsPlayer: {fileID: 1361374172}
   palette: {fileID: -3464444138524148452}
@@ -244,4 +245,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64da8c26b33044c49f5ba7fa982e1124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colors:
+  - {r: 0.96, g: 0.93, b: 1, a: 1}
+  - {r: 0.86, g: 0.84, b: 0.97, a: 1}
+  - {r: 0.65, g: 0.69, b: 0.88, a: 1}
+  - {r: 0.26, g: 0.28, b: 0.45, a: 1}
+  useOwnColors: 0
+  ownColors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  copyOf: {fileID: 0}
   initWithPaletteNumber: 0

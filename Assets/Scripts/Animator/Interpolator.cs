@@ -41,9 +41,27 @@ public class Interpolator<T> : IUpdateable
         _passValue = action;
         return this;
     }
+
+    Action _whenDone;
+
+    public Interpolator<T> WhenDone(Action action)
+    {
+        _whenDone = action;
+        return this;
+    }
     public Interpolator<T> Delay(float t)
     {
         _delay = t;
+        return this;
+    }
+
+    GameObject _nullCheck;
+    bool _haveToNullCheck;
+
+    public Interpolator<T> NulLCheck(GameObject gameObject)
+    {
+        _haveToNullCheck = true;
+        _nullCheck = gameObject;
         return this;
     }
 
@@ -82,9 +100,15 @@ public class Interpolator<T> : IUpdateable
         _cur = _addFunc(_from, _multiplyFunc(_subtractFunc(_to, _from), tUnit));
         _passDelta?.Invoke(_subtractFunc(_cur, before));
         _passValue?.Invoke(_cur);
+        if (_haveToNullCheck && _nullCheck == null)
+        {
+            _isDone = true;
+            return;
+        }
         if (_t == _over)
         {
             _isDone = true;
+            _whenDone?.Invoke();
             return;
         }
 

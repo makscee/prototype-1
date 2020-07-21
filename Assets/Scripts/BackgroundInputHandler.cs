@@ -46,8 +46,5 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
         Utils.GetInputCoords(out var x, out var y);
         if (FieldMatrix.Get(x, y, out var block))
             BlockEditor.OnBlockClick(block);
-        
-        PulseBlock.HideAllConfigRacks();
-        PulseBlockCenter.Instance.ShowCentralRack(false);
     }
 }

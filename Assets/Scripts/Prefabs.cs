@@ -12,6 +12,7 @@ public class Prefabs : MonoBehaviour
     public GameObject ConfigRack;
     public GameObject ShadowBlock;
     public GameObject Pixel;
+    public GameObject RollingButton;
     
     
     public static Prefabs Instance;

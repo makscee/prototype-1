@@ -10,7 +10,7 @@ public class PulseBlockCenter : Block
     public AudioClip Clip;
     public GameObject CentralRack;
     CentralRack _centralRack;
-    void OnEnable()
+    protected override void Init()
     {
         _centralRack = CentralRack.GetComponent<CentralRack>();
         UpdateCoordsFromTransformPosition();
@@ -64,20 +64,11 @@ public class PulseBlockCenter : Block
         insidePainter.NumInPalette = 2;
     }
 
-    protected override bool TryCreateBlock()
-    {
-        return false;
-    }
-
     public override void ReceivePulse(Block from)
     {
     }
     
     protected override void RefreshFieldCircle()
-    {
-    }
-
-    protected override void ShowNewBlockPlaceholders(bool value)
     {
     }
 
@@ -93,17 +84,12 @@ public class PulseBlockCenter : Block
         insidePainter.NumInPalette = 2;
     }
 
-    public void ShowCentralRack(bool value)
-    {
-        if (value) _centralRack.Show();
-        else _centralRack.Hide();
-        Gallery.Helpers.DarkenAllExceptUi(value);
-    }
-
     protected override void OnLeftClick()
     {
         base.OnLeftClick();
-        ShowCentralRack(true);
+        _centralRack.Show();
+        DarkOverlay.Enable();
+        DarkOverlay.OnNextTap += _centralRack.Hide;
     }
 
     public override void RefreshStepNumber()

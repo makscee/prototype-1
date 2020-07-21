@@ -16,7 +16,22 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public Text text;
     public PulseBlock pulseBlock;
     public Painter painter, insidePainter;
-    
+
+    public Action onTap;
+
+    bool _initialized;
+    void OnEnable()
+    {
+        if (_initialized) return;
+        Init();
+        _initialized = true;
+    }
+
+    protected virtual void Init()
+    {
+        
+    }
+
 
     public int X => _x;
     public int Y => _y;
@@ -88,7 +103,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             UpdateCoordsFromTransformPosition();
         }
         base.Update();
-        TryDrawPlaceholdersOnDrag();
     }
 
     protected void UpdateCoordsFromTransformPosition()
@@ -98,22 +112,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     }
 
     bool _dragging, _placeholdersShown;
-    void TryDrawPlaceholdersOnDrag()
-    {
-        if (!_dragging)
-        {
-            ShowNewBlockPlaceholders(false);
-            return;
-        }
-        var bind = BindMatrix.GetBind(this, MouseBind.Get());
-        if (bind == null)
-        {
-            ShowNewBlockPlaceholders(false);
-            return;
-        }
-        if (bind.IsLoose()) ShowNewBlockPlaceholders(true);
-        else ShowNewBlockPlaceholders(false);
-    }
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         _dragging = true;
@@ -154,64 +152,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         cancelDrag = true;
         if (!masked)
             BindMatrix.RemoveBind(this, MouseBind.Get());
-    }
-
-    // true if something affected
-    protected virtual bool TryCreateBlock()
-    {
-        var selfPos = GetPosition();
-        var pos = MouseBind.Get().GetPosition();
-        var size = new Vector2(BlockSide, BlockSide);
-        var up = new Rect(selfPos + new Vector2(0, BlockSide) - size / 2, size);
-        var down = new Rect(selfPos + new Vector2(0, -BlockSide) - size / 2, size);
-        var left = new Rect(selfPos + new Vector2(-BlockSide, 0) - size / 2, size);
-        var right = new Rect(selfPos+ new Vector2(BlockSide, 0) - size / 2, size);
-
-        int x, y;
-        if (up.Contains(pos))
-        {
-            x = X;
-            y = Y + 1;
-        }
-        else if (down.Contains(pos))
-        {
-            x = X;
-            y = Y - 1;
-        }
-        else if (left.Contains(pos))
-        {
-            x = X - 1;
-            y = Y;
-        }
-        else if (right.Contains(pos))
-        {
-            x = X + 1;
-            y = Y;
-        }
-        else
-        {
-            BindMatrix.RemoveBind(this, MouseBind.Get());
-            return false;
-        }
-        var newBlockOffset = new Vector2(x - X, y - Y);
- 
-        if (FieldMatrix.Get(x, y, out var existingBlock))
-        {
-            var bind = BindMatrix.GetBind(this, existingBlock);
-            if (bind == null)
-                BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
-            else if (bind.First != this)
-            {
-                bind.Break();
-                BindMatrix.AddBind(this, existingBlock, newBlockOffset, Bind.BlockBindStrength);
-            } else if (bind.First == this)
-            {
-                bind.Break();
-            }
-            return true;
-        }
-        var b = Create(this, x, y);
-        return true;
     }
 
     IEnumerable<Block> CollectBoundBlocks()
@@ -287,6 +227,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     protected virtual void OnLeftClick()
     {
+        onTap?.Invoke();
         BlockEditor.OnBlockClick(this);
     }
     
@@ -298,14 +239,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         {
             DesiredVelocity +=  (circle.radius * 2 - away.magnitude) * 120 * away.normalized;
         }
-    }
-
-    protected virtual void ShowNewBlockPlaceholders(bool value)
-    {
-        if (_placeholdersShown == value) return;
-        _placeholdersShown = value;
-        NewBlockPlaceholderPool.ClearAll();
-        if (value) NewBlockPlaceholderPool.CreateAround(this);
     }
 
     public void Destroy()

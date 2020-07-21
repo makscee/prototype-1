@@ -7,6 +7,7 @@
         TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
         TEXTURE2D_SAMPLER2D(_Mask, sampler_Mask);
         float _Blend;
+        float _Offset;
 
         float4 Frag(VaryingsDefault i) : SV_Target
         {
@@ -21,6 +22,8 @@
             if (maskColor.r == 1) 
             {
                 color.rgb = 0;
+                coords.x += _Offset;
+                coords.y += _Offset / 4;
                 if (floor(coords.x * 100) % 10 == 0 && floor(coords.y * 100) % 10 == 0) color.rgb = 1;
             }
             return color;

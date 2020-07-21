@@ -24,6 +24,7 @@ public sealed class GrayscaleRenderer : PostProcessEffectRenderer<Grayscale>
         sheet.properties.SetFloat("_Blend", settings.blend);
         if (ShadowCamera.Instance != null)
             sheet.properties.SetTexture("_Mask", ShadowCamera.Instance.renderTexture);
+        sheet.properties.SetFloat("_Offset", Time.time / 20);
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
     }
 }

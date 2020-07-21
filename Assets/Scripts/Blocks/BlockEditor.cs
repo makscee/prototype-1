@@ -71,6 +71,13 @@ public static class BlockEditor
         return _hovered;
     }
 
+    public static void UnmaskCurrent()
+    {
+        foreach (var b in _currentCluster)
+            if (b != null)
+                b.SetMasked(false);
+    }
+
     static Block CreatePath(Block block, int x, int y)
     {
         var xTotal = Mathf.Abs(x - block.X);
