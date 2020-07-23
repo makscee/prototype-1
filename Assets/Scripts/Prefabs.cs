@@ -13,6 +13,7 @@ public class Prefabs : MonoBehaviour
     public GameObject ShadowBlock;
     public GameObject Pixel;
     public GameObject RollingButton;
+    public GameObject BindShadowParticles;
     
     
     public static Prefabs Instance;

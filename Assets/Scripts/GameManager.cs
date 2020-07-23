@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         SaveState();
+        BlockEditor.DeselectCurrent();
         ClearField();
         ServiceObjectsInitialized = false; 
     }

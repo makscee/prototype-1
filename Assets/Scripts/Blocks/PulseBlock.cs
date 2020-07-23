@@ -17,10 +17,15 @@ public class PulseBlock : Block
         StepNumber = 0;
     }
 
-    protected override void Init()
+    protected override void OnEnable()
     {
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this); 
+        base.OnEnable();
+    }
+
+    protected override void Init()
+    {
         _bgRawImg = Background.GetComponent<RawImage>();
         GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
     }
@@ -35,7 +40,7 @@ public class PulseBlock : Block
         button.OnClick = () =>
         {
             ShowConfigRack();
-            BlockEditor.UnmaskCurrent();
+            BlockEditor.DeselectCurrent();
         };
         onTap += button.Show;
     }

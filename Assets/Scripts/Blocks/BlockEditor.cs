@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public static class BlockEditor
 {
     static HashSet<Block> _currentCluster;
     static Block _hovered;
+    public static PulseBlock ClusterPulseBlock;
 
     public static void OnBlockClick(Block block)
     {
@@ -28,6 +27,8 @@ public static class BlockEditor
             {
                 cluster.Add(b);
                 b.SetMasked(true);
+                if (obj is PulseBlock pulseBlock)
+                    ClusterPulseBlock = pulseBlock;
             }
         _currentCluster = cluster;
     }
@@ -71,11 +72,15 @@ public static class BlockEditor
         return _hovered;
     }
 
-    public static void UnmaskCurrent()
+    public static bool HasActiveCluster => _currentCluster != null;
+
+    public static void DeselectCurrent()
     {
+        if (_currentCluster == null) return;
         foreach (var b in _currentCluster)
             if (b != null)
                 b.SetMasked(false);
+        _currentCluster = null;
     }
 
     static Block CreatePath(Block block, int x, int y)

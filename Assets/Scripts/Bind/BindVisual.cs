@@ -14,18 +14,33 @@ public class BindVisual : MonoBehaviour
 
     Painter _painter;
     Image _image;
+    GameObject _shadowParticles;
     void Awake()
     {
         _image = GetComponent<Image>();
         _painter = GetComponent<Painter>();
+        _rectTransform = GetComponent<RectTransform>();
+    }
+
+    void Start()
+    {
+        InitShadowParticles();
+    }
+
+    void InitShadowParticles()
+    {
+        if (!(bind.First is Block block) || !(bind.Second is Block))
+            return;
+        _shadowParticles = Instantiate(Prefabs.Instance.BindShadowParticles);
+        _shadowParticles.transform.position = new Vector3(block.X, block.Y);
+        var dir = Utils.DirFromCoords(bind.Offset);
+        _shadowParticles.transform.Rotate(Vector3.right, dir * 90);
     }
 
     public static void Create(Bind bind)
     {
-        Palette palette;
-        if (bind.First is Block block && block.pulseBlock != null)
-            palette = block.pulseBlock.palette;
-        else return;
+        if (!(bind.First is Block block) || block.pulseBlock == null)
+            return;
         
         var b = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.FrontCanvas.transform).GetComponent<BindVisual>();
         b.first = bind.First;
@@ -36,14 +51,10 @@ public class BindVisual : MonoBehaviour
         b._painter.subscribedTo = block.insidePainter;
     }
 
-    void OnEnable()
-    {
-        _rectTransform = GetComponent<RectTransform>();
-    }
-
     void OnDisable()
     {
         Destroy(gameObject);
+        Destroy(_shadowParticles);
     }
 
     void Update()
@@ -57,8 +68,12 @@ public class BindVisual : MonoBehaviour
         var imageActive = true;
         if (bind.First is BindableMonoBehavior mFirst) imageActive = mFirst.isActiveAndEnabled;
         if (bind.Second is BindableMonoBehavior mSecond) imageActive = imageActive && mSecond.isActiveAndEnabled;
-        _image.enabled = imageActive;
-        
+        if (_image.enabled != imageActive)
+        {
+            _image.enabled = imageActive;
+            if (_shadowParticles != null)
+                _shadowParticles.SetActive(!imageActive);
+        }
         
         bind.Update();
         

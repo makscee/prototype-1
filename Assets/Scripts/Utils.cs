@@ -44,6 +44,12 @@ public static class Utils
         throw new Exception($"Wrong coords for dir passed {x} {y}");
     }
 
+    public static int DirFromCoords(Vector2 v)
+    {
+        int x = (int) v.x, y = (int) v.y;
+        return DirFromCoords(x, y);
+    }
+
     public static void Shuffle<T>(ref T[] a)
     {
         for (var i = 0; i < a.Length; i++)

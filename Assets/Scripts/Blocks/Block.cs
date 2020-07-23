@@ -20,7 +20,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public Action onTap;
 
     bool _initialized;
-    void OnEnable()
+    protected virtual void OnEnable()
     {
         if (_initialized) return;
         Init();
@@ -82,7 +82,11 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public static Block Create(int x, int y, int pulseBlockX, int pulseBlockY)
     {
         var b = Create();
-        FieldMatrix.Get(pulseBlockX, pulseBlockY, out var pulseBlock);
+        if (!FieldMatrix.Get(pulseBlockX, pulseBlockY, out var pulseBlock))
+        {
+            Debug.LogError($"No pulse block {pulseBlockX} {pulseBlockY}");  
+            return b;
+        }
         b.transform.position = new Vector3(x, y, 0f);
         b.SetCoords(x, y);
         b.pulseBlock = (PulseBlock) pulseBlock;

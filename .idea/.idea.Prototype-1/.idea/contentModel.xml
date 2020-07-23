@@ -43,7 +43,8 @@
             <e p="Palette.cs" t="Include" />
           </e>
           <e p="Effects" t="Include">
-            <e p="Grayscale.cs" t="Include" />
+            <e p="NoiseGenerator.cs" t="Include" />
+            <e p="PostFx.cs" t="Include" />
           </e>
           <e p="GameManager.cs" t="Include" />
           <e p="GlobalPulse.cs" t="Include" />
