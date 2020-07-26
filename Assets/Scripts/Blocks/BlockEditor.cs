@@ -35,7 +35,7 @@ public static class BlockEditor
 
     public static void OnBlockDragStart(Block block)
     {
-        _hovered = block;
+        Hovered = block;
     }
 
     public static Block OnBlockDrag()
@@ -43,36 +43,49 @@ public static class BlockEditor
         Utils.GetInputCoords(out var x, out var y);
         if (FieldMatrix.Get(x, y, out var blockOnInput))
         {
-            if (blockOnInput == _hovered) return _hovered;
-            var bind = BindMatrix.GetBind(_hovered, blockOnInput);
-            var newBlockOffset = new Vector2(x - _hovered.X, y - _hovered.Y);
+            if (blockOnInput == Hovered) return Hovered;
+            var bind = BindMatrix.GetBind(Hovered, blockOnInput);
+            var newBlockOffset = new Vector2(x - Hovered.X, y - Hovered.Y);
             if (bind == null)
-                BindMatrix.AddBind(_hovered, blockOnInput, newBlockOffset, Bind.BlockBindStrength);
-            else if (bind.First != _hovered)
+                BindMatrix.AddBind(Hovered, blockOnInput, newBlockOffset, Bind.BlockBindStrength);
+            else if (bind.First != Hovered)
             {
-                if (BindMatrix.GetOutBindsCount(_hovered) == 0)
+                if (BindMatrix.GetOutBindsCount(Hovered) == 0)
                 {
-                    _hovered.SetMasked(false);
-                    _hovered.Destroy();
-                    _hovered = blockOnInput;
-                    return _hovered;
+                    Hovered.SetMasked(false);
+                    Hovered.Destroy();
+                    Hovered = blockOnInput;
+                    return Hovered;
                 }
                 
                 bind.Break();
-                BindMatrix.AddBind(_hovered, blockOnInput, newBlockOffset, Bind.BlockBindStrength);
-            } else if (bind.First == _hovered)
+                BindMatrix.AddBind(Hovered, blockOnInput, newBlockOffset, Bind.BlockBindStrength);
+            } else if (bind.First == Hovered)
                 bind.Break();
 
-            _hovered = blockOnInput;
-            _hovered.SetMasked(true);
-            return _hovered;
+            Hovered = blockOnInput;
+            Hovered.SetMasked(true);
+            return Hovered;
         }
 
-        _hovered = CreatePath(_hovered, x, y);
-        return _hovered;
+        Hovered = CreatePath(Hovered, x, y);
+        return Hovered;
     }
 
     public static bool HasActiveCluster => _currentCluster != null;
+
+    static Block Hovered
+    {
+        get => _hovered;
+        set
+        {
+            if (_hovered != null)
+                PixelFieldMatrix.Show(_hovered.X, _hovered.Y, Color.red);
+            _hovered = value;
+            if (_hovered != null)
+                PixelFieldMatrix.Show(_hovered.X, _hovered.Y, Color.blue);
+        }
+    }
 
     public static void DeselectCurrent()
     {

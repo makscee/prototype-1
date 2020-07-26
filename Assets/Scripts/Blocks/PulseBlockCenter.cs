@@ -10,6 +10,7 @@ public class PulseBlockCenter : Block
     public AudioClip Clip;
     public GameObject CentralRack;
     CentralRack _centralRack;
+
     protected override void Init()
     {
         _centralRack = CentralRack.GetComponent<CentralRack>();
@@ -17,6 +18,12 @@ public class PulseBlockCenter : Block
         FieldMatrix.Add(X, Y, this);
         Instance = this;
         GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
+        onTap = () =>
+            {
+                _centralRack.Show();
+                DarkOverlay.Enable();
+                DarkOverlay.OnNextTap += _centralRack.Hide;
+            };
     }
 
     void PostEnableInit()
@@ -82,14 +89,6 @@ public class PulseBlockCenter : Block
             }
         }
         insidePainter.NumInPalette = 2;
-    }
-
-    protected override void OnLeftClick()
-    {
-        base.OnLeftClick();
-        _centralRack.Show();
-        DarkOverlay.Enable();
-        DarkOverlay.OnNextTap += _centralRack.Hide;
     }
 
     public override void RefreshStepNumber()

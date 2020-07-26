@@ -42,7 +42,7 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (_dragging) return;
+        if (_dragging || Input.touchCount > 1) return;
         Utils.GetInputCoords(out var x, out var y);
         if (FieldMatrix.Get(x, y, out var block))
             BlockEditor.OnBlockClick(block);

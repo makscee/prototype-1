@@ -15,6 +15,7 @@
 
         float4 Frag(VaryingsDefault i) : SV_Target
         {
+            float4 result;
             float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
             float4 maskColor = SAMPLE_TEXTURE2D(_Mask, sampler_Mask, i.texcoord);
             float noise = SAMPLE_TEXTURE2D(_Noise, sampler_Noise, i.texcoord);
@@ -38,9 +39,10 @@
             //    }
             //}
             
-            color = color + (_ColorPrimary * noise - color) * maskColor.r;
-            color = color + (_ColorSecondary - color) * maskColor.g;
-            return color;
+            result = color + (_ColorPrimary * noise * 0.5 - color) * maskColor.r;
+            result = result + (_ColorSecondary - result) * maskColor.g * maskColor.r;
+            result = result + (_ColorSecondary * noise * 1.5 - result) * maskColor.b;
+            return result;
         }
 
     ENDHLSL

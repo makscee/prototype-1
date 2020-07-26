@@ -8,7 +8,7 @@ public class SoundsPlayer : MonoBehaviour
     public WaveModule[] WaveModules = new WaveModule[4];
     public GameObject[] ConfigRacks = new GameObject[4];
 
-    void OnEnable()
+    void Awake()
     {
         GameManager.InvokeAfterServiceObjectsInitialized(CreateConfigRacks);
         GameManager.InvokeAfterServiceObjectsInitialized(Init);
@@ -87,9 +87,9 @@ public class SoundsPlayer : MonoBehaviour
 
     void OnDisable()
     {
-        foreach (var audioSource in AudioSources)
-        {
-            Destroy(audioSource);
-        }
+        // foreach (var audioSource in AudioSources)
+        // {
+        //     Destroy(audioSource);
+        // }
     }
 }

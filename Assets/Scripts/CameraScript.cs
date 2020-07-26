@@ -56,7 +56,7 @@ public class CameraScript : MonoBehaviour
     Vector2 lastPanPosition;
     Vector3 startCameraPos;
     int panFingerId; // Touch mode only
-    bool wasZoomingLastFrame; // Touch mode only
+    public static bool WasZoomingLastFrame; // Touch mode only
     Vector2[] lastZoomPositions; // Touch mode only
 
     void HandleTouch()
@@ -85,10 +85,10 @@ public class CameraScript : MonoBehaviour
 
             case 2: // Zooming
                 var newPositions = new Vector2[] {Input.GetTouch(0).position, Input.GetTouch(1).position};
-                if (!wasZoomingLastFrame)
+                if (!WasZoomingLastFrame)
                 {
                     lastZoomPositions = newPositions;
-                    wasZoomingLastFrame = true;
+                    WasZoomingLastFrame = true;
                 }
                 else
                 {
@@ -110,7 +110,7 @@ public class CameraScript : MonoBehaviour
                 break;
 
             default:
-                wasZoomingLastFrame = false;
+                WasZoomingLastFrame = false;
                 break;
         }
     }

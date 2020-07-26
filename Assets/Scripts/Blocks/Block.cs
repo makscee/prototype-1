@@ -23,6 +23,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     protected virtual void OnEnable()
     {
         if (_initialized) return;
+        onTap = () => BlockEditor.OnBlockClick(this);
         Init();
         _initialized = true;
     }
@@ -213,7 +214,8 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        if (_dragging) return;
+        if (_dragging || Input.touchCount > 1) return;
+        Debug.Log($"pointer click {Input.touchCount}");
         if (eventData.button == PointerEventData.InputButton.Middle)
         {
             OnMiddleClick();
@@ -232,7 +234,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     protected virtual void OnLeftClick()
     {
         onTap?.Invoke();
-        BlockEditor.OnBlockClick(this);
     }
     
     void OnTriggerStay2D(Collider2D other)
