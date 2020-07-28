@@ -51,12 +51,16 @@ public class WaveTextureProvider
         var pixels = new Color32[_width * _height];
         for (var i = 0; i < _height; i++)
         {
-            var from = (int) ((_chunks[i][0] + 1) / 2 * (_width - 1));
-            var to = (int) ((_chunks[i][1] + 1) / 2 * (_width - 1));
-            Debug.Log($"{from} {to}");
-            for (var j = from; j < to; j++)
+            const int addWidth = 1;
+            var from = Mathf.Clamp((int) ((_chunks[i][0] + 1) / 2 * (_width - 1)) - addWidth, 0, _width);
+            var to = Mathf.Clamp((int) ((_chunks[i][1] + 1) / 2 * (_width - 1)) + addWidth, 0, _width);
+            var onColor = new Color32(255, 255, 255, 255);
+            const byte offVal = 0;
+            var offColor = new Color32(offVal, offVal, offVal, offVal);
+            for (var j = 0; j < _width; j++)
             {
-                pixels[Index(j, i)] = new Color32(255, 255, 255, 255);
+                var color = j >= from && j < to ? onColor : offColor;
+                pixels[Index(j, _height - (i + 1))] = color;
             }
         }
         texture.SetPixelData(pixels, 0);

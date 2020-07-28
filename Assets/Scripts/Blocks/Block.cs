@@ -105,6 +105,10 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         if (!IsAnchored())
         {
+            if (BindMatrix.GetBindsCount(this) == 0)
+            {
+                Destroy();
+            }
             UpdateCoordsFromTransformPosition();
         }
         base.Update();

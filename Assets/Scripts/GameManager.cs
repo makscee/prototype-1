@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
     public void SaveState()
     {
         JsonGameState = GameSerialized.Create().ToJson();
+        Debug.Log($"Save state: {JsonGameState}");
     }
 
     public void SaveGameToFile()

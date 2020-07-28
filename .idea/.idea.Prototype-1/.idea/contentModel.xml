@@ -61,12 +61,14 @@
             <e p="FileStorage.cs" t="Include" />
             <e p="GameSerialized.cs" t="Include" />
             <e p="JsonUtilitySerializable.cs" t="Include" />
+            <e p="SoundsPlayerSerialized.cs" t="Include" />
           </e>
           <e p="ShadowCamera.cs" t="Include" />
           <e p="SharedObjects.cs" t="Include" />
           <e p="Sounds" t="Include">
             <e p="ClipMaker.cs" t="Include" />
             <e p="Recorder.cs" t="Include" />
+            <e p="SoundConfig.cs" t="Include" />
             <e p="SoundsPlayer.cs" t="Include" />
           </e>
           <e p="UI" t="Include">

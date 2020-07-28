@@ -24,7 +24,7 @@ public static class Gallery
         }
     }
 
-    public static void Register(Painter painter)
+    static void Register(Painter painter)
     {
         if (painter == null) return;
         var canvas = painter.GetComponentInParent<Canvas>()?.gameObject;

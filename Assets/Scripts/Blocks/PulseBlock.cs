@@ -35,13 +35,13 @@ public class PulseBlock : Block
         var v = new Vector2(X, Y) - new Vector2(PulseBlockCenter.Instance.X, PulseBlockCenter.Instance.Y);
         BindMatrix.AddBind(PulseBlockCenter.Instance, this, v, Bind.BlockBindStrength);
         PulseBlockCenter.Instance.PulseBlocks[Utils.DirFromCoords(X, Y)] = this;
-        var button = RollingButton.Create(transform);
-        button.OnClick = () =>
-        {
-            ShowConfigRack();
-            BlockEditor.DeselectCurrent();
-        };
-        onTap += button.Show;
+        // var button = RollingButton.Create(transform);
+        // button.OnClick = () =>
+        // {
+        //     ShowConfigRack();
+        //     BlockEditor.DeselectCurrent();
+        // };
+        // onTap += button.Show;
     }
 
     float _bgDesiredAlpha = 0f, _bgAlphaChangeSpeed = 1.5f;
@@ -95,17 +95,6 @@ public class PulseBlock : Block
     {
         base.CancelDrag();
         insidePainter.NumInPalette = 2;
-    }
-
-    public void ShowConfigRack()
-    {
-        if (SoundsPlayer.IsConfigRacksShown()) return;
-        DarkOverlay.OnNextTap += () => SoundsPlayer.ConfigRacksAnimatedSetActive(false);
-        var cam = SharedObjects.Instance.Camera.transform;
-        Animator.Invoke(() => SoundsPlayer.ConfigRacksAnimatedSetActive(true)).In(0.05f);
-        Animator.Interpolate(cam.position, transform.position, 0.25f)
-            .PassDelta(v => cam.position += (Vector3)v).Type(InterpolationType.InvSquare);
-        DarkOverlay.Enable();
     }
 
     protected override void OnMiddleClick()

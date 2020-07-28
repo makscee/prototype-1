@@ -26,8 +26,6 @@ public class Painter : MonoBehaviour
     {
         if (palette == null) TryObtainPalette();
         ObtainPaintAction();
-        if (Application.isPlaying)
-            GameManager.InvokeAfterServiceObjectsInitialized(() => Gallery.Register(this));
     }
 
     void Update()
@@ -44,17 +42,15 @@ public class Painter : MonoBehaviour
         {
             if (subscribedTo != null)
                 return subscribedTo.Color;
-            var galleryMultiplier = Gallery.Get(this);
             return palette.GetColor(numInPalette)
-                   * new Color(MultiplyBy.x, MultiplyBy.y, MultiplyBy.z, 1)
-                   * new Color(galleryMultiplier.x, galleryMultiplier.y, galleryMultiplier.z, 1);
+                   * new Color(MultiplyBy.x, MultiplyBy.y, MultiplyBy.z, 1);
         }
     }
 
     void PaintRefresh()
     {
         if (_colorBefore == Color) return;
-        _paint?.Invoke(Color); 
+        _paint?.Invoke(Color);
         _colorBefore = Color;
     }
 

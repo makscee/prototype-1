@@ -88,6 +88,12 @@ public static class BindMatrix
         return counter;
     }
 
+    public static int GetBindsCount(IBindable obj)
+    {
+        if (!Matrix.ContainsKey(obj)) return 0;
+        return Matrix[obj].Values.Count;
+    }
+
     // ReSharper disable once ReturnTypeCanBeEnumerable.Global
     public static List<IBindable> CollectBoundCluster(IBindable obj, bool jumpCenter = false)
     {
