@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class SoundConfig
 {
-    float _selectFrom = 0.23f, _selectTo = 0.77f;
+    float _selectFrom = 0.23f, _selectTo = 0.77f, _volume;
+    int _rate;
 
     public float SelectFrom
     {
@@ -13,13 +14,30 @@ public class SoundConfig
             _clipCache = null;
         }
     }
-
     public float SelectTo
     {
         get => _selectTo;
         set
         {
             _selectTo = value;
+            _clipCache = null;
+        }
+    }
+    public int Rate
+    {
+        get => _rate;
+        set
+        {
+            _rate = value;
+            _clipCache = null;
+        }
+    }
+    public float Volume
+    {
+        get => _volume;
+        set
+        {
+            _volume = value;
             _clipCache = null;
         }
     }
@@ -34,8 +52,7 @@ public class SoundConfig
             var start = (int)(SelectFrom * clip.samples);
             var amount = (int) ((SelectTo - SelectFrom) * clip.samples);
             if (amount == 0) return null;
-            const int rate = 44100;
-            var newClip = ClipMaker.Make(clip, start, amount, rate);
+            var newClip = ClipMaker.Make(clip, start, amount, Rate);
             _clipCache = newClip;
             return newClip;
         }

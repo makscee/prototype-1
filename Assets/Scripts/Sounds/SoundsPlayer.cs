@@ -26,6 +26,7 @@ public class SoundsPlayer : MonoBehaviour
     public void Play(int dir)
     {
         AudioSources[dir].clip = Configs[dir].Clip;
+        AudioSources[dir].volume = Configs[dir].Volume;
         AudioSources[dir].Play();
     }
 

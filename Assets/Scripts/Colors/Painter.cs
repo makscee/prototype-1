@@ -2,15 +2,19 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 [ExecuteInEditMode]
 public class Painter : MonoBehaviour
 {
     Action<Color> _paint;
     public Palette palette;
+    public Color Default;
+    public bool ForceDefault;
     [SerializeField, Range(0, 3)]int numInPalette;
     public Painter subscribedTo;
     public Vector3 MultiplyBy = new Vector3(1, 1, 1);
+    public Object PaintOn;
 
     public int NumInPalette
     {
@@ -30,7 +34,6 @@ public class Painter : MonoBehaviour
 
     void Update()
     {
-        if (palette == null && subscribedTo == null) return;
         PaintRefresh();
     }
 
@@ -42,6 +45,7 @@ public class Painter : MonoBehaviour
         {
             if (subscribedTo != null)
                 return subscribedTo.Color;
+            if (palette == null) return Default;
             return palette.GetColor(numInPalette)
                    * new Color(MultiplyBy.x, MultiplyBy.y, MultiplyBy.z, 1);
         }
@@ -56,12 +60,13 @@ public class Painter : MonoBehaviour
 
     void TryObtainPalette()
     {
+        if (ForceDefault) return;
         palette = GetComponentInParent<Palette>();
     }
 
     void ObtainPaintAction()
     {
-        var rawImg = GetComponent<RawImage>();
+        var rawImg = PaintOn == null ? GetComponent<RawImage>() : PaintOn as RawImage;
         if (rawImg != null)
         {
             _paint = c =>
@@ -72,7 +77,7 @@ public class Painter : MonoBehaviour
             return;
         }
 
-        var img = GetComponent<Image>();
+        var img = PaintOn == null ? GetComponent<Image>() : PaintOn as Image;
         if (img != null)
         {
             _paint = c => 
@@ -83,7 +88,7 @@ public class Painter : MonoBehaviour
             return;
         }
 
-        var text = GetComponent<Text>();
+        var text = PaintOn == null ? GetComponent<Text>() : PaintOn as Text;
         if (text != null)
         {
             _paint = c => 
@@ -94,7 +99,7 @@ public class Painter : MonoBehaviour
             return;
         }
 
-        var sr = GetComponent<SpriteRenderer>();
+        var sr = PaintOn == null ? GetComponent<SpriteRenderer>() : PaintOn as SpriteRenderer;
         if (sr != null)
         {
             _paint = c => 
@@ -105,7 +110,18 @@ public class Painter : MonoBehaviour
             return;
         }
 
-        var cam = GetComponent<Camera>();
+        var outline = PaintOn == null ? GetComponent<Outline>() : PaintOn as Outline;
+        if (outline != null)
+        {
+            _paint = c => 
+            {
+                c.a = outline.effectColor.a;
+                outline.effectColor = c;
+            };
+            return;
+        }
+
+        var cam = PaintOn == null ? GetComponent<Camera>() : PaintOn as Camera;
         if (cam != null)
         {
             _paint = c => 

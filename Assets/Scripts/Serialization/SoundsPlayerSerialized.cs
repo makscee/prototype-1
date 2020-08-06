@@ -8,6 +8,8 @@ public class SoundsPlayerSerialized : JsonUtilitySerializable
     public int PulseBlockX, PulseBlockY;
     public List<float> selectFrom = new List<float>(4);
     public List<float> selectTo = new List<float>(4);
+    public List<int> rate = new List<int>(4);
+    public List<float> volume = new List<float>(4);
     
     public static bool Create(SoundsPlayer soundsPlayer, int pulseBlockX, int pulseBlockY, out SoundsPlayerSerialized result)
     {
@@ -18,6 +20,8 @@ public class SoundsPlayerSerialized : JsonUtilitySerializable
         {
             result.selectFrom.Add(soundsPlayer.Configs[i].SelectFrom);
             result.selectTo.Add(soundsPlayer.Configs[i].SelectTo);
+            result.rate.Add(soundsPlayer.Configs[i].Rate);
+            result.volume.Add(soundsPlayer.Configs[i].Volume);
         }
 
         return true;
@@ -35,6 +39,8 @@ public class SoundsPlayerSerialized : JsonUtilitySerializable
         {
             pulseBlock.SoundsPlayer.Configs[i].SelectFrom = selectFrom[i];
             pulseBlock.SoundsPlayer.Configs[i].SelectTo = selectTo[i];
+            pulseBlock.SoundsPlayer.Configs[i].Rate = rate[i];
+            pulseBlock.SoundsPlayer.Configs[i].Volume = volume[i];
         }
     }
 }

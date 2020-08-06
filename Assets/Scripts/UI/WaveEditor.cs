@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,16 +10,16 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     
     public RawImage Top, Mid, Bot;
     public RectTransform TopRect, MidRect, BotRect;
+    public SplitSlider Volume, Rate;
     
     AudioSource _audioSource;
     public AudioClip clip;
-    [SerializeField] Painter[] arrowBackgrounds;
     [SerializeField] Painter[] pbBackgrounds;
     [SerializeField] PulseBlock[] pulseBlocks;
     WaveTextureProvider _textureProvider;
     RectTransform _rect;
     Palette _palette;
-    int width, height;
+    [SerializeField]int width, height;
 
     float _topPicker = 0.4f, _bottomPicker = 0.7f;
 
@@ -39,6 +40,8 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         _rect = GetComponent<RectTransform>();
         _audioSource = GetComponent<AudioSource>();
         transform.parent.gameObject.GetComponent<Canvas>().enabled = true;
+        Volume.onClick = Play;
+        Rate.onClick = Play;
     }
 
     void Start()
@@ -51,7 +54,10 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         Instance = this;
         var rect = _rect.rect;
         width = Mathf.RoundToInt(rect.width);
-        height = Mathf.RoundToInt(rect.height);
+        var parentHeight = transform.parent.GetComponent<RectTransform>().rect.height; 
+        height = Mathf.RoundToInt(parentHeight);
+        _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, parentHeight);
+        
         _textureProvider = new WaveTextureProvider(clip, width, height);
         Top.texture = _textureProvider.GetTexture();
         Mid.texture = _textureProvider.GetTexture();
@@ -85,6 +91,8 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         var botRect = Bot.uvRect;
         botRect.height = 1 - BottomPicker;
         Bot.uvRect = botRect;
+        
+        Apply();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -111,8 +119,8 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void OnEndDrag(PointerEventData eventData)
     {
         _dragging = false;
-        _currentPulseBlock.SoundsPlayer.Play(_currentDirection);
         Apply();
+        Play();
     }
 
     PulseBlock _currentPulseBlock;
@@ -132,24 +140,28 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void SelectDirection(int num)
     {
         _currentDirection = num;
-        for (var i = 0; i < 4; i++)
-        {
-            arrowBackgrounds[i].MultiplyBy = i == num ? Vector3.one : Vector3.zero;
-        }
-
         _topPicker = _currentPulseBlock.SoundsPlayer.Configs[num].SelectFrom;
         _bottomPicker = _currentPulseBlock.SoundsPlayer.Configs[num].SelectTo;
+        Volume.value = _currentPulseBlock.SoundsPlayer.Configs[num].Volume;
+        Rate.value = (_currentPulseBlock.SoundsPlayer.Configs[num].Rate - Rate.Min) / (Rate.Max - Rate.Min);
     }
 
     void Apply()
     {
         _currentPulseBlock.SoundsPlayer.Configs[_currentDirection].SelectFrom = _topPicker;
         _currentPulseBlock.SoundsPlayer.Configs[_currentDirection].SelectTo = _bottomPicker;
+        _currentPulseBlock.SoundsPlayer.Configs[_currentDirection].Volume = Volume.value;
+        _currentPulseBlock.SoundsPlayer.Configs[_currentDirection].Rate = Rate.MultipliedValueInt;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!_dragging)
-            _audioSource.PlayOneShot(_currentPulseBlock.SoundsPlayer.AudioSources[_currentDirection].clip);
+            Play();
+    }
+
+    void Play()
+    {
+        _currentPulseBlock.SoundsPlayer.Play(_currentDirection);
     }
 }

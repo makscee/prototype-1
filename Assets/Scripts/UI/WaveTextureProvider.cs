@@ -5,8 +5,7 @@ public class WaveTextureProvider
 {
     AudioClip _clip;
     float[] _data;
-    static int chunkSize; // how many samples in pixel (samples / height)
-    static int valueRange = 128;
+    static float _chunkSize; // how many samples in pixel (samples / height)
     static int _width, _height;
 
     List<float[]> _chunks;
@@ -15,7 +14,6 @@ public class WaveTextureProvider
     {
         _width = width;
         _height = height;
-        valueRange = width;
         Clip = clip;
     }
 
@@ -25,7 +23,7 @@ public class WaveTextureProvider
         set
         {
             _clip = value;
-            chunkSize = _clip.samples / _height;
+            _chunkSize = (float)_clip.samples / _height;
             GenerateChunks();
         }
     }
@@ -37,17 +35,17 @@ public class WaveTextureProvider
         _chunks = new List<float[]>(_height);
         for (var i = 0; i < _height; i++)
             _chunks.Add(new []{1f, -1f});
-        for (var i = 0; i < _height * chunkSize; i++)
+        for (var i = 0; i < Clip.samples; i++)
         {
-            var chunkInd = i / chunkSize;
+            var chunkInd = (int)(i / _chunkSize);
             _chunks[chunkInd][0] = Mathf.Min(_data[i], _chunks[chunkInd][0]);
             _chunks[chunkInd][1] = Mathf.Max(_data[i], _chunks[chunkInd][1]);
         }
     }
 
-    public Texture GetTexture()
+    public Texture2D GetTexture()
     {
-        var texture = new Texture2D(_width, _height, TextureFormat.RGBA32, false) {filterMode = FilterMode.Trilinear};
+        var texture = new Texture2D(_width, _height, TextureFormat.RGBA32, false) {filterMode = FilterMode.Point};
         var pixels = new Color32[_width * _height];
         for (var i = 0; i < _height; i++)
         {
