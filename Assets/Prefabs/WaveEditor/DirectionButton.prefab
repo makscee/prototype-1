@@ -342,6 +342,7 @@ GameObject:
   - component: {fileID: 2448627429582983115}
   - component: {fileID: 1190509045439552782}
   - component: {fileID: 2953698271760767534}
+  - component: {fileID: 1340442562723443690}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -402,3 +403,22 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &1340442562723443690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7075622460801018101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 145ce8758d8c4ebbaf61c1acb0a66634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  palette: {fileID: 0}
+  Default: {r: 0, g: 0, b: 0, a: 0}
+  ForceDefault: 0
+  numInPalette: 0
+  subscribedTo: {fileID: 0}
+  MultiplyBy: {x: 1, y: 1, z: 1}
+  PaintOn: {fileID: 0}

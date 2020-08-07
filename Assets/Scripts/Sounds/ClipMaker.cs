@@ -3,9 +3,11 @@ using UnityEngine;
 
 public static class ClipMaker
 {
-    public static AudioClip Make(AudioClip clip, int sampleStart, int sampleAmount, int sampleRate, bool clickCutOut = true)
+    public static AudioClip Make(AudioClip clip, int sampleStart, int sampleEnd, int sampleRate, bool clickCutOut = true)
     {
-        //Debug.Log($"start: sampleStart = {sampleStart} sampleAmount = {sampleAmount}");
+        if (sampleStart >= sampleEnd) return null;
+        var sampleAmount = 0;
+        // Debug.Log($"start: sampleStart = {sampleStart} sampleEnd = {sampleEnd} total = {clip.samples}");
         float[] data;
         if (clickCutOut)
         {
@@ -13,7 +15,7 @@ public static class ClipMaker
             clip.GetData(fullData, 0);
 
             var leftBorderStart = sampleStart;
-            var rightBorderStart = sampleStart + sampleAmount - 1;
+            var rightBorderStart = sampleEnd - 1;
             var leftBorder = leftBorderStart;
             var rightBorder = rightBorderStart;
             
@@ -54,6 +56,7 @@ public static class ClipMaker
         }
         else
         {
+            sampleAmount = sampleEnd - sampleStart;
             data = new float[sampleAmount];
             clip.GetData(data, sampleStart);
         }
@@ -66,6 +69,8 @@ public static class ClipMaker
 
     public static AudioClip Add(AudioClip clipA, AudioClip clipB)
     {
+        if (clipA == null) return clipB;
+        if (clipB == null) return clipA;
         var samples = clipA.samples + clipB.samples;
         var data = new float[samples];
         clipA.GetData(data, 0);

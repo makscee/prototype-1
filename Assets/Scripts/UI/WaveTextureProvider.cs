@@ -6,36 +6,32 @@ public class WaveTextureProvider
     AudioClip _clip;
     float[] _data;
     static float _chunkSize; // how many samples in pixel (samples / height)
-    static int _width, _height;
+    int _width, _height;
 
     List<float[]> _chunks;
+    
+    public static Texture2D TextureFrom(AudioClip clip, int width, int height)
+    {
+        return new WaveTextureProvider(clip, width, height).GetTexture();
+    }
 
-    public WaveTextureProvider(AudioClip clip, int width, int height)
+    WaveTextureProvider(AudioClip clip, int width, int height)
     {
         _width = width;
         _height = height;
-        Clip = clip;
-    }
-
-    public AudioClip Clip
-    {
-        get => _clip;
-        set
-        {
-            _clip = value;
-            _chunkSize = (float)_clip.samples / _height;
-            GenerateChunks();
-        }
+        _clip = clip;
+        _chunkSize = (float)_clip.samples / _height;
+        GenerateChunks();
     }
 
     void GenerateChunks()
     {
-        _data = new float[Clip.samples];
-        Clip.GetData(_data, 0);
+        _data = new float[_clip.samples];
+        _clip.GetData(_data, 0);
         _chunks = new List<float[]>(_height);
         for (var i = 0; i < _height; i++)
             _chunks.Add(new []{1f, -1f});
-        for (var i = 0; i < Clip.samples; i++)
+        for (var i = 0; i < _clip.samples; i++)
         {
             var chunkInd = (int)(i / _chunkSize);
             _chunks[chunkInd][0] = Mathf.Min(_data[i], _chunks[chunkInd][0]);
@@ -43,7 +39,7 @@ public class WaveTextureProvider
         }
     }
 
-    public Texture2D GetTexture()
+    Texture2D GetTexture()
     {
         var texture = new Texture2D(_width, _height, TextureFormat.RGBA32, false) {filterMode = FilterMode.Point};
         var pixels = new Color32[_width * _height];
@@ -66,7 +62,7 @@ public class WaveTextureProvider
         return texture;
     }
 
-    static int Index(int x, int y)
+    int Index(int x, int y)
     {
         x = Mathf.Clamp(x, 0, _width - 1);
         y = Mathf.Clamp(y, 0, _height - 1);

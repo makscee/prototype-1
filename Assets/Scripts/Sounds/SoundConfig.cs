@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class SoundConfig
 {
-    float _selectFrom = 0.23f, _selectTo = 0.77f, _volume;
-    int _rate;
+    int _selectFrom, _selectTo, _rate;
+    float _volume;
 
-    public float SelectFrom
+    public int SelectFrom
     {
         get => _selectFrom;
         set
@@ -14,7 +14,7 @@ public class SoundConfig
             _clipCache = null;
         }
     }
-    public float SelectTo
+    public int SelectTo
     {
         get => _selectTo;
         set
@@ -42,6 +42,44 @@ public class SoundConfig
         }
     }
 
+    public void CutoutAdjust(int from, int to)
+    {
+        var length = to - from;
+        if (from > _selectTo) return;
+        if (_selectFrom >= to)
+        {
+            _selectFrom -= length;
+            _selectTo -= length;
+            return;
+        }
+
+        if (from <= _selectFrom && to >= _selectTo)
+        {
+            _selectFrom = from;
+            _selectTo = from;
+            return;
+        }
+        
+        if (_selectFrom <= from && _selectTo >= to)
+        {
+            _selectTo -= length;
+            return;
+        }
+
+        if (from < _selectFrom && _selectFrom < to)
+        {
+            _selectFrom = from;
+            _selectTo -= length;
+            return;
+        }
+
+        if (from < _selectTo && _selectTo < to)
+        {
+            _selectTo = from;
+            return;
+        }
+    }
+
     AudioClip _clipCache;
     public AudioClip Clip
     {
@@ -49,10 +87,9 @@ public class SoundConfig
         {
             if (_clipCache != null) return _clipCache;
             var clip = WaveEditor.Instance.clip;
-            var start = (int)(SelectFrom * clip.samples);
-            var amount = (int) ((SelectTo - SelectFrom) * clip.samples);
+            var amount = SelectTo - SelectFrom;
             if (amount == 0) return null;
-            var newClip = ClipMaker.Make(clip, start, amount, Rate);
+            var newClip = ClipMaker.Make(clip, _selectFrom, _selectTo, Rate);
             _clipCache = newClip;
             return newClip;
         }

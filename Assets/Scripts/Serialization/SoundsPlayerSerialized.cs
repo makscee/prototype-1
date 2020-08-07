@@ -6,8 +6,8 @@ using UnityEngine;
 public class SoundsPlayerSerialized : JsonUtilitySerializable
 {
     public int PulseBlockX, PulseBlockY;
-    public List<float> selectFrom = new List<float>(4);
-    public List<float> selectTo = new List<float>(4);
+    public List<int> selectFrom = new List<int>(4);
+    public List<int> selectTo = new List<int>(4);
     public List<int> rate = new List<int>(4);
     public List<float> volume = new List<float>(4);
     
