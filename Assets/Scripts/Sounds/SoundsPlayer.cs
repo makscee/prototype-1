@@ -13,7 +13,6 @@ public class SoundsPlayer : MonoBehaviour
 
     void Init()
     {
-        
         for (var i = 0; i < 4; i++)
         {
             var newSource = gameObject.AddComponent<AudioSource>(); 

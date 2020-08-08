@@ -32,7 +32,7 @@ public static class ClipMaker
             }
             while (true)
             {
-                if (rightBorder == fullData.Length - 1) break;
+                if (rightBorder >= fullData.Length - 1) break;
                 if (fullData[rightBorderStart] > 0 != fullData[rightBorder] > 0)
                 {
                     rightBorder--;
@@ -71,6 +71,7 @@ public static class ClipMaker
     {
         if (clipA == null) return clipB;
         if (clipB == null) return clipA;
+        Debug.Log($"Clip add {clipA} {clipB}");
         var samples = clipA.samples + clipB.samples;
         var data = new float[samples];
         clipA.GetData(data, 0);

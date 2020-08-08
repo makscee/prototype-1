@@ -8,12 +8,10 @@ public class PulseBlockCenter : Block
     public PulseBlock[] PulseBlocks = new PulseBlock[4];
     public Palette Palette;
     public AudioClip Clip;
-    public GameObject CentralRack;
     CentralRack _centralRack;
 
     protected override void Init()
     {
-        _centralRack = CentralRack.GetComponent<CentralRack>();
         UpdateCoordsFromTransformPosition();
         FieldMatrix.Add(X, Y, this);
         Instance = this;

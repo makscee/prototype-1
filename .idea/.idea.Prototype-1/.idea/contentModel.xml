@@ -74,11 +74,10 @@
           <e p="UI" t="Include">
             <e p="CentralRack.cs" t="Include" />
             <e p="DarkOverlay.cs" t="Include" />
-            <e p="RecordAppendModule.cs" t="Include" />
             <e p="RollingButton.cs" t="Include" />
             <e p="SplitSlider.cs" t="Include" />
             <e p="WaveEditor.cs" t="Include" />
-            <e p="WaveModule.cs" t="Include" />
+            <e p="WaveEditorAddRecordButton.cs" t="Include" />
             <e p="WaveTextureProvider.cs" t="Include" />
           </e>
           <e p="Utils.cs" t="Include" />

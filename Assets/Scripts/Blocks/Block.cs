@@ -199,10 +199,13 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         {
             foreach (var last in _lastPulseFrom) // todo stop pulse propagation on 2 pulse sources
             {
-                var v = transform.position - last.transform.position;
                 var x = X - last.X;
                 var y = Y - last.Y;
-                transform.position += v;
+                if (!masked)
+                {
+                    var v = transform.position - last.transform.position;
+                    transform.position += v;
+                }
                 if (x > 0)
                     pulseBlock.OnPulseDeadEnd(1);
                 else if (x < 0)
@@ -219,7 +222,6 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (_dragging || Input.touchCount > 1) return;
-        Debug.Log($"pointer click {Input.touchCount}");
         if (eventData.button == PointerEventData.InputButton.Middle)
         {
             OnMiddleClick();

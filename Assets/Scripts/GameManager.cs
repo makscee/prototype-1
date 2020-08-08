@@ -7,6 +7,12 @@ public class GameManager : MonoBehaviour
     static readonly string GameStateFileName = "game";
     [SerializeField] string JsonGameState;
     static Action _afterServiceObjectsInitialized;
+    public enum StartState
+    {
+        Game, WaveEditor
+    }
+
+    public StartState startState;
 
     public static void InvokeAfterServiceObjectsInitialized(Action action)
     {
@@ -16,6 +22,14 @@ public class GameManager : MonoBehaviour
 
     void OnEnable()
     {
+        switch (startState)
+        {
+            case StartState.Game:
+                WaveEditor.Instance.transform.parent.gameObject.SetActive(false);
+                break;
+            case StartState.WaveEditor:
+                break;
+        }
         Instance = this;
         if (JsonGameState.Length > 0)
         {
