@@ -21,7 +21,7 @@ public class Bind
 
     public readonly IBindable First, Second;
     
-    // from first to second
+    // first -> second
     public readonly Vector2 Offset;
 
     public readonly int Strength;

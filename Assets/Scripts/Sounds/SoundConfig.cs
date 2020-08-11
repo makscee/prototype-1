@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SoundConfig
 {
-    int _selectFrom = 0, _selectTo = 2000, _rate = 44100;
+    int _selectFrom = 0, _selectTo = 1488, _rate = 44100;
     float _volume = 1f;
 
     public int SelectFrom
@@ -86,7 +86,7 @@ public class SoundConfig
         get
         {
             if (_clipCache != null) return _clipCache;
-            var clip = WaveEditor.Instance.Clip;
+            var clip = SharedObjects.Instance.WaveEditor.Clip;
             var amount = SelectTo - SelectFrom;
             if (amount == 0) return null;
             var newClip = ClipMaker.Make(clip, _selectFrom, _selectTo, Rate);

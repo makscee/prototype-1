@@ -30,10 +30,10 @@ public static class FieldMatrix
         if (Matrix.ContainsKey(x)) Matrix[x].Remove(y);
     }
 
-    public static void ClearMeDaddy(Block block)
+    public static void ClearMe(Block block)
     {
-        var x = block.X;
-        var y = block.Y;
+        var x = block.logic.X;
+        var y = block.logic.Y;
         if (Matrix.ContainsKey(x) && Matrix[x].ContainsKey(y) && Matrix[x][y] == block)
         {
             Matrix[x].Remove(y);

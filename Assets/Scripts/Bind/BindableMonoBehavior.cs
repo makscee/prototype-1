@@ -19,7 +19,7 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
 
             DesiredVelocity += f;
         }
-        if (!IsAnchored())
+        if (!IsAnchored)
         {
             const float radius = 0.1f;
             const float speed = 1f;
@@ -43,20 +43,13 @@ public class BindableMonoBehavior : MonoBehaviour, IBindable
         return false;
     }
 
-    bool _anchored;
-    public virtual bool IsAnchored()
-    {
-        return _anchored;
-    }
-
-    public virtual void SetAnchored(bool value)
-    {
-        _anchored = value;
-    }
+    public bool IsAnchored { get; set; }
 
     public bool Used { get; set; }
 
     bool _destroyed;
+    bool _isAnchored;
+
     protected virtual void OnDestroy()
     {
         _destroyed = true;

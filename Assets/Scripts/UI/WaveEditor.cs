@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
-    public static WaveEditor Instance;
-    
     public RawImage Top, Mid, Bot;
     public RectTransform TopRect, MidRect, BotRect;
     public SplitSlider Volume, Rate;
@@ -15,11 +13,10 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     [SerializeField]AudioClip clip;
     [SerializeField] Painter[] pbBackgrounds;
-    [SerializeField] PulseBlock[] pulseBlocks;
     Texture2D _currentTexture;
-    RectTransform _rect;
-    Palette _palette;
-    CanvasScaler _canvasScaler;
+    [SerializeField]RectTransform rect;
+    [SerializeField]Palette palette;
+    [SerializeField]CanvasScaler canvasScaler;
     [SerializeField]int width, height;
     float _maxHeight;
 
@@ -51,39 +48,31 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         }
     }
 
-    void Awake()
-    {
-        _canvasScaler = GetComponentInParent<CanvasScaler>();
-        _palette = GetComponent<Palette>();
-        _rect = GetComponent<RectTransform>();
-        transform.parent.gameObject.GetComponent<Canvas>().enabled = true;
-        Volume.onClick = Play;
-        Rate.onClick = Play;
-        AddRecordButton.OnDown += StartRecording;
-        AddRecordButton.OnUp += EndRecording;
-    }
-
     void OnEnable()
     {
-        Instance = this;
-        var rect = _rect.rect;
+        var rect = this.rect.rect;
         width = Mathf.RoundToInt(rect.width);
         _maxHeight = transform.parent.GetComponent<RectTransform>().rect.height;
         height = Mathf.RoundToInt(_maxHeight);
-        _rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _maxHeight);
+        this.rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _maxHeight);
+        
+        Volume.onClick = Play;
+        Rate.onClick = Play;
+        AddRecordButton.OnDown = StartRecording;
+        AddRecordButton.OnUp = EndRecording;
 
         _currentTexture = WaveTextureProvider.TextureFrom(Clip, width, height);
         Top.texture = _currentTexture;
         Mid.texture = _currentTexture;
         Bot.texture = _currentTexture;
-        GameManager.InvokeAfterServiceObjectsInitialized(() =>
+
+        GameManager.OnNextFrame += () =>
         {
-            SelectPulseBlock(0); 
+            SelectPulseBlock(0);
             SelectDirection(0);
-        });
+        };
     }
-
-
+    
     float _recordingLength;
     bool _isRecording;
     void StartRecording()
@@ -94,7 +83,7 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     void RecordingUpdate()
     {
-        if (!_isRecording) return;
+        if (!_isRecording) return; 
 
         height = Mathf.RoundToInt(_maxHeight * (Clip.length / (Clip.length + Recorder.RecordingLength)));
     }
@@ -106,8 +95,8 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         Recorder.EndRecording();
         Clip = ClipMaker.Add(Clip, Recorder.GetLastRecording());
         
-        var top = (float) currentPulseBlock.SoundsPlayer.Configs[currentDirection].SelectFrom / Clip.samples;
-        var bot = (float) currentPulseBlock.SoundsPlayer.Configs[currentDirection].SelectTo / Clip.samples;
+        var top = (float) currentRootBlock.soundsPlayer.Configs[currentDirection].SelectFrom / Clip.samples;
+        var bot = (float) currentRootBlock.soundsPlayer.Configs[currentDirection].SelectTo / Clip.samples;
         _topPicker = top;
         BottomPicker = bot;
     }
@@ -141,11 +130,8 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     }
 
     bool _dragBeganOnTop, _dragHorizontal;
-
     RectTransform _curDragged;
-
     int _cutFrom, _cutTo;
-
     float _dragStartTime;
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -179,7 +165,7 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         {
             var selectMiddle = 1 - (BottomPicker + TopPicker) / 2;
             var midPos = selectMiddle * height;
-            _dragBeganOnTop = eventData.position.y > midPos;
+            _dragBeganOnTop = ScaledScreenPos(eventData.position).y > midPos;
         }
     }
 
@@ -187,7 +173,7 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     {
         if (_dragHorizontal)
         {
-            _curDragged.anchoredPosition += new Vector2(eventData.delta.x * _canvasScaler.referenceResolution.x / Screen.width, 0);
+            _curDragged.anchoredPosition += new Vector2(eventData.delta.x * canvasScaler.referenceResolution.x / Screen.width, 0);
         }
         else
         {
@@ -223,18 +209,18 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
                             ClipMaker.Make(Clip, 0, _cutFrom, 44100),
                             ClipMaker.Make(Clip, _cutTo, Clip.samples - 1, 44100)
                         );
-                        // currentPulseBlock.SoundsPlayer.Configs[currentDirection].CutoutAdjust(_cutFrom, _cutTo);
-                        foreach (var pulseBlock in pulseBlocks)
+                        // currentRootBlock.soundsPlayer.Configs[currentDirection].CutoutAdjust(_cutFrom, _cutTo);
+                        foreach (var pulseBlock in SharedObjects.Instance.rootBlocks)
                         {
-                            foreach (var soundConfig in pulseBlock.SoundsPlayer.Configs)
+                            foreach (var soundConfig in pulseBlock.soundsPlayer.Configs)
                             {
                                 soundConfig.CutoutAdjust(_cutFrom, _cutTo);
                             }
                         }
 
                         _curDragged.position = new Vector3(0, _curDragged.position.y);
-                        var top = (float) currentPulseBlock.SoundsPlayer.Configs[currentDirection].SelectFrom / Clip.samples;
-                        var bot = (float) currentPulseBlock.SoundsPlayer.Configs[currentDirection].SelectTo / Clip.samples;
+                        var top = (float) currentRootBlock.soundsPlayer.Configs[currentDirection].SelectFrom / Clip.samples;
+                        var bot = (float) currentRootBlock.soundsPlayer.Configs[currentDirection].SelectTo / Clip.samples;
                         _topPicker = top;
                         BottomPicker = bot;
                     });
@@ -243,35 +229,34 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         Apply();
     }
 
-    [SerializeField]PulseBlock currentPulseBlock;
+    [SerializeField]RootBlock currentRootBlock;
     [SerializeField]int currentDirection;
 
     public void SelectPulseBlock(int num)
     {
-        currentPulseBlock = pulseBlocks[num];
-        _palette.copyOf = currentPulseBlock.palette;
+        currentRootBlock = SharedObjects.Instance.rootBlocks[num];
+        palette.copyOf = currentRootBlock.view.primaryPainter.palette;
         for (var i = 0; i < 4; i++)
         {
             pbBackgrounds[i].MultiplyBy = i == num ? Vector3.one : Vector3.zero;
         }
-        SelectDirection(currentDirection);
     }
 
     public void SelectDirection(int num)
     {
         currentDirection = num;
-        _topPicker = (float)currentPulseBlock.SoundsPlayer.Configs[num].SelectFrom / Clip.samples;
-        _bottomPicker = (float)currentPulseBlock.SoundsPlayer.Configs[num].SelectTo / Clip.samples;
-        Volume.value = currentPulseBlock.SoundsPlayer.Configs[num].Volume;
-        Rate.value = (currentPulseBlock.SoundsPlayer.Configs[num].Rate - Rate.Min) / (Rate.Max - Rate.Min);
+        _topPicker = (float)currentRootBlock.soundsPlayer.Configs[num].SelectFrom / Clip.samples;
+        _bottomPicker = (float)currentRootBlock.soundsPlayer.Configs[num].SelectTo / Clip.samples;
+        Volume.value = currentRootBlock.soundsPlayer.Configs[num].Volume;
+        Rate.value = (currentRootBlock.soundsPlayer.Configs[num].Rate - Rate.Min) / (Rate.Max - Rate.Min);
     }
 
     void Apply()
     {
-        currentPulseBlock.SoundsPlayer.Configs[currentDirection].SelectFrom = Mathf.RoundToInt(_topPicker * Clip.samples);
-        currentPulseBlock.SoundsPlayer.Configs[currentDirection].SelectTo = Mathf.RoundToInt(_bottomPicker * Clip.samples);
-        currentPulseBlock.SoundsPlayer.Configs[currentDirection].Volume = Volume.value;
-        currentPulseBlock.SoundsPlayer.Configs[currentDirection].Rate = Rate.MultipliedValueInt;
+        currentRootBlock.soundsPlayer.Configs[currentDirection].SelectFrom = Mathf.RoundToInt(_topPicker * Clip.samples);
+        currentRootBlock.soundsPlayer.Configs[currentDirection].SelectTo = Mathf.RoundToInt(_bottomPicker * Clip.samples);
+        currentRootBlock.soundsPlayer.Configs[currentDirection].Volume = Volume.value;
+        currentRootBlock.soundsPlayer.Configs[currentDirection].Rate = Rate.MultipliedValueInt;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -281,6 +266,13 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     void Play()
     {
-        currentPulseBlock.SoundsPlayer.Play(currentDirection);
+        currentRootBlock.soundsPlayer.Play(currentDirection);
+    }
+
+    Vector2 ScaledScreenPos(Vector2 v)
+    {
+        Debug.Log($"{canvasScaler == null}");
+        var scale = canvasScaler.referenceResolution / new Vector2(Screen.width, Screen.height);
+        return v * scale;
     }
 }

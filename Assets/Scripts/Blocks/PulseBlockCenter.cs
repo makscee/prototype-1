@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PulseBlockCenter : Block
+public class PulseBlockCenter : BlockOld
 {
     public static PulseBlockCenter Instance;
     public PulseBlock[] PulseBlocks = new PulseBlock[4];
@@ -13,9 +13,9 @@ public class PulseBlockCenter : Block
     protected override void Init()
     {
         UpdateCoordsFromTransformPosition();
-        FieldMatrix.Add(X, Y, this);
+        // FieldMatrix.Add(X, Y, this);
         Instance = this;
-        GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
+        // GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
         onTap = () =>
             {
                 _centralRack.Show();
@@ -32,11 +32,6 @@ public class PulseBlockCenter : Block
     public override bool IsAnchor()
     {
         return true; 
-    }
-
-    public override bool IsAnchored()
-    {
-        return true;
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
@@ -69,7 +64,7 @@ public class PulseBlockCenter : Block
         insidePainter.NumInPalette = 2;
     }
 
-    public override void ReceivePulse(Block from)
+    public override void ReceivePulse(BlockOld from)
     {
     }
     
@@ -81,7 +76,7 @@ public class PulseBlockCenter : Block
     {
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            if (bind.First == this && bind.Second is Block block)
+            if (bind.First == this && bind.Second is BlockOld block)
             {
                 block.ReceivePulse(this);
             }

@@ -7,14 +7,13 @@ public class BindVisual : MonoBehaviour
     public IBindable first, second;
     RectTransform _rectTransform;
 
-    const float MinWidth = 0.7f, MaxWidth = 0.9f;
+    const float MinWidth = 0.5f, MaxWidth = 0.7f;
     float MaxLength;
 
     public Bind bind;
 
     Painter _painter;
     Image _image;
-    GameObject _shadowParticles;
     void Awake()
     {
         _image = GetComponent<Image>();
@@ -22,59 +21,29 @@ public class BindVisual : MonoBehaviour
         _rectTransform = GetComponent<RectTransform>();
     }
 
-    void Start()
+    public static bool Create(Bind bind, out BindVisual bindVisual)
     {
-        InitShadowParticles();
-    }
-
-    void InitShadowParticles()
-    {
-        if (!(bind.First is Block block) || !(bind.Second is Block))
-            return;
-        _shadowParticles = Instantiate(Prefabs.Instance.BindShadowParticles);
-        _shadowParticles.transform.position = new Vector3(block.X, block.Y);
-        var dir = Utils.DirFromCoords(bind.Offset);
-        _shadowParticles.transform.Rotate(Vector3.right, dir * 90);
-    }
-
-    public static void Create(Bind bind)
-    {
-        if (!(bind.First is Block block) || block.pulseBlock == null)
-            return;
+        bindVisual = null;
+        if (!(bind.First is Block block))
+            return false;
         
-        var b = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.FrontCanvas.transform).GetComponent<BindVisual>();
-        b.first = bind.First;
-        b.second = bind.Second;
-        b.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 3;
-        b.bind = bind;
-        
-        b._painter.subscribedTo = block.insidePainter;
+        bindVisual = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.bindVisualsCanvas.transform).GetComponent<BindVisual>();
+        bindVisual.first = bind.First;
+        bindVisual.second = bind.Second;
+        bindVisual.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 3;
+        bindVisual.bind = bind;
+        bindVisual._painter.subscribedTo = block.view.secondaryPainter;
+
+        return true;
     }
 
-    void OnDisable()
+    public void Destroy()
     {
         Destroy(gameObject);
-        Destroy(_shadowParticles);
     }
 
     void Update()
     {
-        if (BindMatrix.GetBind(first, second) != bind)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        var imageActive = true;
-        if (bind.First is BindableMonoBehavior mFirst) imageActive = mFirst.isActiveAndEnabled;
-        if (bind.Second is BindableMonoBehavior mSecond) imageActive = imageActive && mSecond.isActiveAndEnabled;
-        if (_image.enabled != imageActive)
-        {
-            _image.enabled = imageActive;
-            if (_shadowParticles != null)
-                _shadowParticles.SetActive(!imageActive);
-        }
-        
         bind.Update();
         
         var firstPosition = first.GetPosition();
@@ -84,7 +53,7 @@ public class BindVisual : MonoBehaviour
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        var length = dir.magnitude * 2 - Block.BlockSide / 3;
+        var length = dir.magnitude * 2 - BlockOld.BlockSide / 3;
         var width = Mathf.Lerp(MaxWidth, MinWidth, length / MaxLength);
         _rectTransform.sizeDelta = new Vector2(width, length);
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IBindHandler
+public class BlockOld : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IBindHandler
 {
     [SerializeField]
     int _x, _y;
@@ -45,7 +45,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         }
         _x = x;
         _y = y;
-        FieldMatrix.Add(x, y, this);
+        // FieldMatrix.Add(x, y, this);
     }
 
     void SetInsideCheckerboardColor()
@@ -55,20 +55,20 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         insidePainter.NumInPalette = 1 - (xt + yt) % 2;
     }
 
-    public static Block Create()
+    public static BlockOld Create()
     {
-        var block = Instantiate(Prefabs.Instance.Block, SharedObjects.Instance.FrontCanvas.transform).GetComponent<Block>();
+        var block = Instantiate(Prefabs.Instance.NodeBlock, SharedObjects.Instance.FrontCanvas.transform).GetComponent<BlockOld>();
         return block;
     }
 
-    public static Block Create(Block parent, int x, int y)
+    public static BlockOld Create(BlockOld parent, int x, int y)
     {
         var b = Create();
         var newBlockOffset = new Vector2(x - parent.X, y - parent.Y);
         b.transform.position = parent.transform.position + (Vector3)newBlockOffset * .8f;
         b.SetCoords(x, y);
         b.SetInsideCheckerboardColor();
-        FieldMatrix.Add(x, y, b);
+        // FieldMatrix.Add(x, y, b);
         b.pulseBlock = parent.pulseBlock;
         var p = b.pulseBlock.GetComponent<Palette>();
         b.GetComponent<Painter>().palette = p;
@@ -80,7 +80,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         return b;
     }
 
-    public static Block Create(int x, int y, int pulseBlockX, int pulseBlockY)
+    public static BlockOld Create(int x, int y, int pulseBlockX, int pulseBlockY)
     {
         var b = Create();
         if (!FieldMatrix.Get(pulseBlockX, pulseBlockY, out var pulseBlock))
@@ -90,7 +90,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         }
         b.transform.position = new Vector3(x, y, 0f);
         b.SetCoords(x, y);
-        b.pulseBlock = (PulseBlock) pulseBlock;
+        // b.pulseBlock = (PulseBlock) pulseBlock;
         var p = pulseBlock.GetComponent<Palette>();
         b.GetComponent<Painter>().palette = p;
         foreach (var painter in b.GetComponentsInChildren<Painter>())
@@ -103,7 +103,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     protected override void Update()
     {
-        if (!IsAnchored())
+        if (!IsAnchored)
         {
             if (BindMatrix.GetBindsCount(this) == 0)
             {
@@ -163,19 +163,19 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
             BindMatrix.RemoveBind(this, MouseBind.Get());
     }
 
-    IEnumerable<Block> CollectBoundBlocks()
+    IEnumerable<BlockOld> CollectBoundBlocks()
     {
-        var result = new List<Block>();
+        var result = new List<BlockOld>();
         foreach (var obj in BindMatrix.CollectBoundCluster(this))
         {
-            if (obj is Block block) result.Add(block);
+            if (obj is BlockOld block) result.Add(block);
         }
 
         return result;
     }
 
-    readonly List<Block> _lastPulseFrom = new List<Block>();
-    public virtual void ReceivePulse(Block from)
+    readonly List<BlockOld> _lastPulseFrom = new List<BlockOld>();
+    public virtual void ReceivePulse(BlockOld from)
     {
         _lastPulseFrom.Add(from);
         insidePainter.NumInPalette = 3;
@@ -188,7 +188,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         SetInsideCheckerboardColor();
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            if (bind.First == this && bind.Second is Block block)
+            if (bind.First == this && bind.Second is BlockOld block)
             {
                 block.ReceivePulse(this);
                 passed = true;
@@ -306,7 +306,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     protected virtual void RefreshFieldCircle()
     {
         var show = true;
-        if (!IsAnchored())
+        if (!IsAnchored)
         {
             show = false;
         }
@@ -314,7 +314,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         {
             foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
             {
-                if (bind.First == this && bind.Second is Block)
+                if (bind.First == this && bind.Second is BlockOld)
                 {
                     show = false;
                     break;
@@ -337,7 +337,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public void OnBind(Bind bind)
     {
-        if (bind.Second == this && bind.First is Block)
+        if (bind.Second == this && bind.First is BlockOld)
         {
             RefreshStepNumber();
         }
@@ -348,7 +348,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     public void OnUnbind(Bind b)
     {
-        if (b.Second == this && b.First is Block) RefreshStepNumber();
+        if (b.Second == this && b.First is BlockOld) RefreshStepNumber();
         RefreshFieldCircle();
         RefreshMaskSqueeze();
     }
@@ -376,7 +376,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
         var t = int.MaxValue / 2;
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            if (bind.Second == this && bind.First is Block block)
+            if (bind.Second == this && bind.First is BlockOld block)
             {
                 t = Math.Min(t, block.StepNumber + 1);
             }
@@ -391,7 +391,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
     {
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            if (bind.First == this && bind.Second is Block block)
+            if (bind.First == this && bind.Second is BlockOld block)
             {
                 block.RefreshStepNumber();
             }
@@ -400,7 +400,7 @@ public class Block : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler, I
 
     protected override void OnDestroy()
     {
-        FieldMatrix.ClearMeDaddy(this);
+        // FieldMatrix.ClearMe(this);
         GlobalPulse.UnsubscribeFromNext(PassPulse);
         base.OnDestroy();
     }

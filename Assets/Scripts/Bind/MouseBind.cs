@@ -3,6 +3,7 @@ using UnityEngine;
 public class MouseBind : IBindable
 {
     Bind _bind;
+
     MouseBind()
     {
     }
@@ -18,13 +19,10 @@ public class MouseBind : IBindable
         return true;
     }
 
-    public bool IsAnchored()
+    public bool IsAnchored
     {
-        return true;
-    }
-
-    public void SetAnchored(bool value)
-    {
+        get => true;
+        set { }
     }
 
     public bool Used { get; set; }

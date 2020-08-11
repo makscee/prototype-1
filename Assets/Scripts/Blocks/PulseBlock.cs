@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PulseBlock : Block
+public class PulseBlock : BlockOld
 {
     public SoundsPlayer SoundsPlayer;
     public Palette palette;
@@ -19,14 +19,14 @@ public class PulseBlock : Block
     protected override void OnEnable()
     {
         UpdateCoordsFromTransformPosition();
-        FieldMatrix.Add(X, Y, this); 
+        // FieldMatrix.Add(X, Y, this); 
         base.OnEnable();
     }
 
     protected override void Init()
     {
         _bgRawImg = Background.GetComponent<RawImage>();
-        GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
+        // GameManager.InvokeAfterServiceObjectsInitialized(PostEnableInit);
     }
 
     void PostEnableInit()
@@ -57,11 +57,6 @@ public class PulseBlock : Block
     }
 
     public override bool IsAnchor()
-    {
-        return true;
-    }
-
-    public override bool IsAnchored()
     {
         return true;
     }
@@ -112,7 +107,7 @@ public class PulseBlock : Block
         }
     }
 
-    public override void ReceivePulse(Block from)
+    public override void ReceivePulse(BlockOld from)
     {
         insidePainter.NumInPalette = 3;
         GlobalPulse.SubscribeToNext(PassPulse);
@@ -122,7 +117,7 @@ public class PulseBlock : Block
     {
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            if (bind.First == this && bind.Second is Block block)
+            if (bind.First == this && bind.Second is BlockOld block)
             {
                 block.ReceivePulse(this);
             }

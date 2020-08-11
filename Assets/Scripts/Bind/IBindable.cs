@@ -8,9 +8,7 @@ public interface IBindable
 
     bool IsAnchor();
 
-    bool IsAnchored();
-
-    void SetAnchored(bool value);
+    bool IsAnchored { get; set; }
     
     bool Used { get; set; }
 }

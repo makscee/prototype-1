@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Prefabs : MonoBehaviour
 {
-    public GameObject Block;
+    public GameObject NodeBlock;
+    public GameObject RootBlock;
     public GameObject BindVisual;
     public GameObject FieldCircle;
     public GameObject NewBlockPlaceholder;
@@ -17,11 +18,6 @@ public class Prefabs : MonoBehaviour
     
     
     public static Prefabs Instance;
-
-    void Awake()
-    {
-        Instance = this;
-    }
 
     void OnEnable()
     {

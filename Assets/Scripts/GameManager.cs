@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     static readonly string GameStateFileName = "game";
     [SerializeField] string JsonGameState;
-    static Action _afterServiceObjectsInitialized;
+    public static Action OnNextFrame;
     public enum StartState
     {
         Game, WaveEditor
@@ -14,57 +14,23 @@ public class GameManager : MonoBehaviour
 
     public StartState startState;
 
-    public static void InvokeAfterServiceObjectsInitialized(Action action)
-    {
-        if (ServiceObjectsInitialized) action();
-        else _afterServiceObjectsInitialized += action;
-    }
-
     void OnEnable()
     {
-        switch (startState)
-        {
-            case StartState.Game:
-                WaveEditor.Instance.transform.parent.gameObject.SetActive(false);
-                break;
-            case StartState.WaveEditor:
-                break;
-        }
-        Instance = this;
-        if (JsonGameState.Length > 0)
-        {
-            InvokeAfterServiceObjectsInitialized(LoadSavedState);
-        }
-        else
-        {
-            InvokeAfterServiceObjectsInitialized(LoadGameFromFile);
-        }
+        Instance = this; 
+        OnNextFrame += LoadGameFromFile;
     }
     void OnDisable()
     {
         SaveState();
-        BlockEditor.DeselectCurrent();
         ClearField();
-        ServiceObjectsInitialized = false; 
     }
 
     void Update()
     {
         GlobalPulse.Update();
         Animator.Update();
-        CheckServiceObjectsInit();
-    }
-
-    public static bool ServiceObjectsInitialized;
-    void CheckServiceObjectsInit()
-    {
-        if (ServiceObjectsInitialized) return;
-        if (SharedObjects.Instance != null && Prefabs.Instance != null)
-        {
-            ServiceObjectsInitialized = true;
-            _afterServiceObjectsInitialized?.Invoke();
-            _afterServiceObjectsInitialized = null; 
-        }
+        OnNextFrame?.Invoke();
+        OnNextFrame = null;
     }
 
     public void SaveState()
@@ -88,15 +54,13 @@ public class GameManager : MonoBehaviour
     public void LoadSavedState()
     {
         Debug.Log($"Loading json: {JsonGameState}");
+        ClearField();
         GameSerialized.Create(JsonGameState).Deserialize();
     }
 
     public void ClearField()
     {
         foreach (var block in FieldMatrix.GetAllAsList())
-        {
-            if (block.GetType() != typeof(Block)) continue;
             block.Destroy();
-        }
     }
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 [Serializable]
 public class GameSerialized : JsonUtilitySerializable
 {
-    public List<BlockSerialized> Blocks;
+    public List<NodeBlockSerialized> NodeBlocks;
+    public List<RootBlockSerialized> RootBlocks;
     public List<BindSerialized> Binds;
     public List<SoundsPlayerSerialized> SoundsPlayers;
 
@@ -13,22 +14,33 @@ public class GameSerialized : JsonUtilitySerializable
     {
         var result = new GameSerialized
         {
-            Blocks = new List<BlockSerialized>(),
+            NodeBlocks = new List<NodeBlockSerialized>(),
+            RootBlocks = new List<RootBlockSerialized>(),
             Binds = new List<BindSerialized>(),
             SoundsPlayers = new List<SoundsPlayerSerialized>(),
         };
         foreach (var block in FieldMatrix.GetAllAsList())
-            if (BlockSerialized.Create(block, out var t))
-                result.Blocks.Add(t);
-        foreach (var bind in BindMatrix.GetAllAsList())
+            switch (block)
+            {
+                case NodeBlock nodeBlock:
+                {
+                    if (NodeBlockSerialized.Create(nodeBlock, out var t))
+                        result.NodeBlocks.Add(t);
+                    break;
+                }
+                case RootBlock rootBlock:
+                {
+                    if (RootBlockSerialized.Create(rootBlock, out var t))
+                        result.RootBlocks.Add(t);
+                    break;
+                }
+            }
+        foreach (var bind in BindMatrix.GetAllAsList()) 
             if (BindSerialized.Create(bind, out var t))
                 result.Binds.Add(t);
-        for (var i = 0; i < 4; i++)
-        {
-            var pb = PulseBlockCenter.Instance.PulseBlocks[i];
-            if (SoundsPlayerSerialized.Create(pb.SoundsPlayer, pb.X, pb.Y, out var t)) 
+        foreach (var rootBlock in SharedObjects.Instance.rootBlocks)
+            if (SoundsPlayerSerialized.Create(rootBlock.soundsPlayer, rootBlock.direction, out var t))
                 result.SoundsPlayers.Add(t);
-        }
         return result;
     }
 
@@ -39,17 +51,17 @@ public class GameSerialized : JsonUtilitySerializable
 
     public void Deserialize()
     {
-        foreach (var bs in Blocks)
-        {
+        foreach (var rb in RootBlocks)
+            rb.Deserialize();
+        foreach (var bs in NodeBlocks)
             bs.Deserialize();
-        }
 
         foreach (var bs in Binds)
         {
             FieldMatrix.Get(bs.FirstX, bs.FirstY, out var first);
             FieldMatrix.Get(bs.SecondX, bs.SecondY, out var second);
             var offset = new Vector2(bs.SecondX - bs.FirstX, bs.SecondY - bs.FirstY);
-            BindMatrix.AddBind(first, second, offset, bs.Strength, bs.RopeLength, bs.BreakDistance);
+            BindMatrix.AddBind(first, second, offset, bs.Strength);
         }
 
         foreach (var sps in SoundsPlayers)

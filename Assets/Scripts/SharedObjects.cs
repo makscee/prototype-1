@@ -8,12 +8,13 @@ public class SharedObjects : MonoBehaviour
     public GameObject UICanvas;
     public Camera Camera;
 
+    public GameObject[] rootCanvases;
+    public RootBlock[] rootBlocks;
+    public GameObject bindVisualsCanvas;
+    public WaveEditor WaveEditor;
+
     public static SharedObjects Instance;
 
-    void Awake()
-    {
-        Instance = this;
-    }
     void OnEnable()
     {
         Instance = this;

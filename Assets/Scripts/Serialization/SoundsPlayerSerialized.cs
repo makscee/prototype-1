@@ -5,17 +5,16 @@ using UnityEngine;
 [Serializable]
 public class SoundsPlayerSerialized : JsonUtilitySerializable
 {
-    public int PulseBlockX, PulseBlockY;
+    public int dir;
     public List<int> selectFrom = new List<int>(4);
     public List<int> selectTo = new List<int>(4);
     public List<int> rate = new List<int>(4);
     public List<float> volume = new List<float>(4);
     
-    public static bool Create(SoundsPlayer soundsPlayer, int pulseBlockX, int pulseBlockY, out SoundsPlayerSerialized result)
+    public static bool Create(SoundsPlayer soundsPlayer, int dir, out SoundsPlayerSerialized result)
     {
         result = new SoundsPlayerSerialized();
-        result.PulseBlockX = pulseBlockX;
-        result.PulseBlockY = pulseBlockY;
+        result.dir = dir;
         for (var i = 0; i < 4; i++)
         {
             result.selectFrom.Add(soundsPlayer.Configs[i].SelectFrom);
@@ -29,18 +28,13 @@ public class SoundsPlayerSerialized : JsonUtilitySerializable
 
     public void Deserialize()
     {
-        if (!FieldMatrix.Get(PulseBlockX, PulseBlockY, out var pb))
-        {
-            Debug.LogError($"No pulse block {PulseBlockX} {PulseBlockY}");
-        }
-
-        var pulseBlock = (PulseBlock) pb;
+        var rootBlock = SharedObjects.Instance.rootBlocks[dir];
         for (var i = 0; i < 4; i++)
         {
-            pulseBlock.SoundsPlayer.Configs[i].SelectFrom = selectFrom[i];
-            pulseBlock.SoundsPlayer.Configs[i].SelectTo = selectTo[i];
-            pulseBlock.SoundsPlayer.Configs[i].Rate = rate[i];
-            pulseBlock.SoundsPlayer.Configs[i].Volume = volume[i];
+            rootBlock.soundsPlayer.Configs[i].SelectFrom = selectFrom[i];
+            rootBlock.soundsPlayer.Configs[i].SelectTo = selectTo[i];
+            rootBlock.soundsPlayer.Configs[i].Rate = rate[i];
+            rootBlock.soundsPlayer.Configs[i].Volume = volume[i];
         }
     }
 }

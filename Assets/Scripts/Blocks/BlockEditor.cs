@@ -3,11 +3,11 @@ using UnityEngine;
 
 public static class BlockEditor
 {
-    static HashSet<Block> _currentCluster;
-    static Block _hovered;
+    static HashSet<BlockOld> _currentCluster;
+    static BlockOld _hovered;
     public static PulseBlock ClusterPulseBlock;
 
-    public static void OnBlockClick(Block block)
+    public static void OnBlockClick(BlockOld block)
     {
         if (_currentCluster != null)
         {
@@ -21,9 +21,9 @@ public static class BlockEditor
                 return;
             }
         }
-        var cluster = new HashSet<Block>();
+        var cluster = new HashSet<BlockOld>();
         foreach (var obj in BindMatrix.CollectBoundCluster(block))
-            if (obj is Block b)
+            if (obj is BlockOld b)
             {
                 cluster.Add(b);
                 b.SetMasked(true);
@@ -33,15 +33,16 @@ public static class BlockEditor
         _currentCluster = cluster;
     }
 
-    public static void OnBlockDragStart(Block block)
+    public static void OnBlockDragStart(BlockOld block)
     {
         Hovered = block;
     }
 
-    public static Block OnBlockDrag()
+    public static BlockOld OnBlockDrag()
     {
         Utils.GetInputCoords(out var x, out var y);
-        if (FieldMatrix.Get(x, y, out var blockOnInput))
+        var blockOnInput = new BlockOld();
+        // if (FieldMatrix.Get(x, y, out var blockOnInput))
         {
             if (blockOnInput == Hovered) return Hovered;
             var bind = BindMatrix.GetBind(Hovered, blockOnInput);
@@ -74,7 +75,7 @@ public static class BlockEditor
 
     public static bool HasActiveCluster => _currentCluster != null;
 
-    static Block Hovered
+    static BlockOld Hovered
     {
         get => _hovered;
         set
@@ -96,7 +97,7 @@ public static class BlockEditor
         _currentCluster = null;
     }
 
-    static Block CreatePath(Block block, int x, int y)
+    static BlockOld CreatePath(BlockOld block, int x, int y)
     {
         var xTotal = Mathf.Abs(x - block.X);
         var yTotal = Mathf.Abs(y - block.Y);
@@ -118,13 +119,13 @@ public static class BlockEditor
                 xCur += xDelta;
                 xPerc = Mathf.Abs((float) xCur - block.X) / xTotal;
             }
-            if (FieldMatrix.Get(xCur, yCur, out var b))
+            // if (FieldMatrix.Get(xCur, yCur, out var b))
+            // {
+            //     parentBlock = b;
+            // }
+            // else
             {
-                parentBlock = b;
-            }
-            else
-            {
-                var newBlock = Block.Create(parentBlock, xCur, yCur);
+                var newBlock = BlockOld.Create(parentBlock, xCur, yCur);
                 parentBlock = newBlock;
                 newBlock.SetMasked(true);
                 _currentCluster.Add(newBlock);
