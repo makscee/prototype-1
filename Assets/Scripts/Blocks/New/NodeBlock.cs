@@ -13,7 +13,15 @@ public class NodeBlock : Block
             if (e.button == PointerEventData.InputButton.Middle) Destroy();
         };
         logic.onPulseReceive += OnPulseDeadEnd;
-        view.onRefresh += () => view.secondaryPainter.NumInPalette = logic.HasPulse ? 3 : CheckerboardColor;
+        view.SetInitialModel(BlockVisualBase.Model.NodeDeadend);
+        view.onRefresh += () =>
+        {
+            view.VisualBase.Select(BindMatrix.GetOutBindsCount(this) == 0
+                ? BlockVisualBase.Model.NodeDeadend
+                : BlockVisualBase.Model.NodePipe);
+            Debug.Log($"{view.VisualBase.Current}");
+            view.secondaryPainter.NumInPalette = logic.HasPulse ? 3 : CheckerboardColor;
+        };
         view.SetDirty();
     }
 
@@ -26,7 +34,7 @@ public class NodeBlock : Block
 
     public static NodeBlock Create(int x, int y, int rootDirection = 0)
     {
-        var b = Instantiate(Prefabs.Instance.NodeBlock, SharedObjects.Instance.rootCanvases[rootDirection].transform).GetComponent<NodeBlock>();
+        var b = Instantiate(Prefabs.Instance.nodeBlock, SharedObjects.Instance.rootCanvases[rootDirection].transform).GetComponent<NodeBlock>();
         b.rootDirection = rootDirection;
         b.logic.SetCoords(x, y);
         b.transform.position = new Vector3(x, y);

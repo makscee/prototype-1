@@ -38,6 +38,8 @@
               <e p="BlockLogic.cs" t="Include" />
               <e p="BlockPhysics.cs" t="Include" />
               <e p="BlockView.cs" t="Include" />
+              <e p="BlockVisualBase.cs" t="Include" />
+              <e p="BlockVisualModel.cs" t="Include" />
               <e p="NodeBlock.cs" t="Include" />
               <e p="RootBlock.cs" t="Include" />
             </e>

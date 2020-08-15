@@ -6,9 +6,12 @@ public class BlockView : MonoBehaviour
 {
     public Block parent;
 
-    public Painter primaryPainter, secondaryPainter;
+    public Painter primaryPainter => VisualBase.Current.primary;
+    public Painter secondaryPainter => VisualBase.Current.secondary;
     Dictionary<Bind, BindVisual> _bindVisuals = new Dictionary<Bind, BindVisual>(8);
     public Action onRefresh;
+
+    public BlockVisualBase VisualBase { get; private set; }
 
     void Update()
     {
@@ -27,11 +30,17 @@ public class BlockView : MonoBehaviour
         onRefresh?.Invoke();
         _dirty = false;
     }
+
+    public void SetInitialModel(BlockVisualBase.Model model)
+    {
+        VisualBase = BlockVisualBase.Create(parent, model);
+    }
     
     public void OnBind(Bind bind)
     {
         if (bind.First == parent && BindVisual.Create(bind, out var bindVisual))
             _bindVisuals.Add(bind, bindVisual);
+        SetDirty();
     }
 
     public void OnUnbind(Bind bind)
@@ -41,5 +50,11 @@ public class BlockView : MonoBehaviour
         _bindVisuals.Remove(bind);
         if (bindVisual != null)
             bindVisual.Destroy();
+        SetDirty();
+    }
+
+    void OnDestroy()
+    {
+        VisualBase.Destroy();
     }
 }

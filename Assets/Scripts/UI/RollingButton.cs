@@ -60,7 +60,7 @@ public class RollingButton : MonoBehaviour
 
     public static RollingButton Create(Transform parent)
     {
-        var button = Instantiate(Prefabs.Instance.RollingButton, SharedObjects.Instance.MidCanvas.transform)
+        var button = Instantiate(Prefabs.Instance.rollingButton, SharedObjects.Instance.MidCanvas.transform)
             .GetComponent<RollingButton>();
         button._parent = parent;
         button.gameObject.SetActive(false);

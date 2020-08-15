@@ -8,7 +8,7 @@ public class PixelPool
     public Pixel Get()
     {
         if (_pixelsPool.Count == 0)
-            _pixelsPool.Push(Object.Instantiate(Prefabs.Instance.Pixel).GetComponent<Pixel>());
+            _pixelsPool.Push(Object.Instantiate(Prefabs.Instance.pixel).GetComponent<Pixel>());
         var pixel = _pixelsPool.Pop();
         pixel.gameObject.SetActive(true);
         return pixel;

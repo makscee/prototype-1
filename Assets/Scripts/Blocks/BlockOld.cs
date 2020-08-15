@@ -57,7 +57,7 @@ public class BlockOld : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler
 
     public static BlockOld Create()
     {
-        var block = Instantiate(Prefabs.Instance.NodeBlock, SharedObjects.Instance.FrontCanvas.transform).GetComponent<BlockOld>();
+        var block = Instantiate(Prefabs.Instance.nodeBlock, SharedObjects.Instance.FrontCanvas.transform).GetComponent<BlockOld>();
         return block;
     }
 

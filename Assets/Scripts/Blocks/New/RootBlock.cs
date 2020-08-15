@@ -22,11 +22,12 @@ public class RootBlock : Block
             } else logic.ReceivePulse();
         };
         view.onRefresh += () => view.secondaryPainter.NumInPalette = logic.HasPulse ? 3 : 2;
+        view.SetInitialModel(BlockVisualBase.Model.Root);
     }
 
     public static RootBlock Create(int x, int y, int dir)
     {
-        var b = Instantiate(Prefabs.Instance.RootBlock, SharedObjects.Instance.rootCanvases[dir].transform).GetComponent<RootBlock>();
+        var b = Instantiate(Prefabs.Instance.rootBlock, SharedObjects.Instance.rootCanvases[dir].transform).GetComponent<RootBlock>();
         b.direction = dir;
         b.logic.SetCoords(x, y);
         b.IsAnchored = true;

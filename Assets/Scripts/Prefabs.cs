@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Prefabs : MonoBehaviour
 {
-    public GameObject NodeBlock;
-    public GameObject RootBlock;
-    public GameObject BindVisual;
-    public GameObject FieldCircle;
-    public GameObject NewBlockPlaceholder;
-    public GameObject ConfigRack;
-    public GameObject ShadowBlock;
-    public GameObject Pixel;
-    public GameObject RollingButton;
-    public GameObject BindShadowParticles;
+    public GameObject nodeBlock;
+    public GameObject rootBlock;
+    public GameObject bindVisual;
+    public GameObject fieldCircle;
+    public GameObject pixel;
+    public GameObject rollingButton;
+
+    #region BlockVisualModels
+
+    public GameObject blockVisualBase;
+    public GameObject nodeDeadendVisualModel;
+    public GameObject nodePipeVisualModel;
+    public GameObject rootBlockVisualModel;
+
+    #endregion
     
     
     public static Prefabs Instance;

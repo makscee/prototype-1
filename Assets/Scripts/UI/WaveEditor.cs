@@ -235,7 +235,7 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public void SelectPulseBlock(int num)
     {
         currentRootBlock = SharedObjects.Instance.rootBlocks[num];
-        palette.copyOf = currentRootBlock.view.primaryPainter.palette;
+        // palette.copyOf = currentRootBlock.view.primaryPainter.palette;
         for (var i = 0; i < 4; i++)
         {
             pbBackgrounds[i].MultiplyBy = i == num ? Vector3.one : Vector3.zero;

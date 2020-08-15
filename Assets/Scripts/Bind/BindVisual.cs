@@ -27,7 +27,7 @@ public class BindVisual : MonoBehaviour
         if (!(bind.First is Block block))
             return false;
         
-        bindVisual = Instantiate(Prefabs.Instance.BindVisual, SharedObjects.Instance.bindVisualsCanvas.transform).GetComponent<BindVisual>();
+        bindVisual = Instantiate(Prefabs.Instance.bindVisual, SharedObjects.Instance.bindVisualsCanvas.transform).GetComponent<BindVisual>();
         bindVisual.first = bind.First;
         bindVisual.second = bind.Second;
         bindVisual.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 3;

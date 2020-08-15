@@ -9,6 +9,7 @@ public class SharedObjects : MonoBehaviour
     public Camera Camera;
 
     public GameObject[] rootCanvases;
+    public GameObject blockVisualCanvas;
     public RootBlock[] rootBlocks;
     public GameObject bindVisualsCanvas;
     public WaveEditor WaveEditor;

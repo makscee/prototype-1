@@ -21,7 +21,7 @@ public class FieldCircle : MonoBehaviour
 
     public static FieldCircle Create(Transform target)
     {
-        var go = Instantiate(Prefabs.Instance.FieldCircle, SharedObjects.Instance.MidCanvas.transform);
+        var go = Instantiate(Prefabs.Instance.fieldCircle, SharedObjects.Instance.MidCanvas.transform);
         var fc = go.GetComponent<FieldCircle>();
         fc.Target = target;
         return fc;
