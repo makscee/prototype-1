@@ -4,10 +4,17 @@ using UnityEngine.EventSystems;
 
 public class NodeBlock : Block
 {
-    void OnEnable()
+    protected override void OnEnable()
     {
-        view.onRefresh += () => view.secondaryPainter.NumInPalette = logic.HasPulse ? 3 : CheckerboardColor;
+        base.OnEnable();
+        logic.onTap += e => logic.ReceivePulse();
+        logic.onTap += e =>
+        {
+            if (e.button == PointerEventData.InputButton.Middle) Destroy();
+        };
         logic.onPulseReceive += OnPulseDeadEnd;
+        view.onRefresh += () => view.secondaryPainter.NumInPalette = logic.HasPulse ? 3 : CheckerboardColor;
+        view.SetDirty();
     }
 
     void OnPulseDeadEnd(Block from)
@@ -22,14 +29,8 @@ public class NodeBlock : Block
         var b = Instantiate(Prefabs.Instance.NodeBlock, SharedObjects.Instance.rootCanvases[rootDirection].transform).GetComponent<NodeBlock>();
         b.rootDirection = rootDirection;
         b.logic.SetCoords(x, y);
-        b.IsAnchored = true;
+        b.transform.position = new Vector3(x, y);
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position), b, Vector2.zero, Bind.BlockStaticBindStrength);
-        b.view.SetDirty();
-        b.logic.onTap += e => b.logic.ReceivePulse();
-        b.logic.onTap += e =>
-        {
-            if (e.button == PointerEventData.InputButton.Middle) b.Destroy();
-        };
         return b;
     }
 

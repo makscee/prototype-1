@@ -6,7 +6,7 @@ public class RootBlock : Block
     public SoundsPlayer soundsPlayer;
     public int direction;
 
-    void OnEnable()
+    protected override void OnEnable()
     {
         rootDirection = direction;
         SharedObjects.Instance.rootBlocks[direction] = this;

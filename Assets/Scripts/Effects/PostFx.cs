@@ -27,17 +27,18 @@ public sealed class PostFxRenderer : PostProcessEffectRenderer<PostFx>
 
     public override void Render(PostProcessRenderContext context)
     {
-        if (!BlockEditor.HasActiveCluster) return;
+        return;
+        // if (!BlockEditor.HasActiveCluster) return;
         var sheet = context.propertySheets.Get(Shader.Find("Hidden/Custom/PostFx"));
         sheet.properties.SetFloat(Blend, settings.blend);
         if (ShadowCamera.Instance != null)
         {
             sheet.properties.SetTexture(Mask, ShadowCamera.Instance.renderTexture);
             sheet.properties.SetTexture(Noise, NoiseGenerator.GetTexture());
-            var primary = BlockEditor.ClusterPulseBlock.palette.colors[2];
-            var secondary = BlockEditor.ClusterPulseBlock.palette.colors[1];
-            sheet.properties.SetColor(ColorPrimary, primary);
-            sheet.properties.SetColor(ColorSecondary, secondary);
+            // var primary = BlockEditor.ClusterPulseBlock.palette.colors[2];
+            // var secondary = BlockEditor.ClusterPulseBlock.palette.colors[1];
+            // sheet.properties.SetColor(ColorPrimary, primary);
+            // sheet.properties.SetColor(ColorSecondary, secondary);
 
         }
 

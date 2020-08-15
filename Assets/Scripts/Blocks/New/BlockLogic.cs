@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class BlockLogic : MonoBehaviour, IPointerClickHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class BlockLogic : MonoBehaviour
 {
     public Vector2 Position => new Vector2(X, Y);
 
@@ -33,6 +33,7 @@ public class BlockLogic : MonoBehaviour, IPointerClickHandler, IDragHandler, IBe
     public Block parent;
     [NonSerialized] public Action<PointerEventData> onTap;
     [NonSerialized] public Action<Block> onPulseReceive;
+    [NonSerialized] public Action<PointerEventData> onBeginDrag, onDrag, onEndDrag;
 
     void OnEnable()
     {
@@ -63,6 +64,7 @@ public class BlockLogic : MonoBehaviour, IPointerClickHandler, IDragHandler, IBe
 
     public void ReceivePulse(Block from = null)
     {
+        if (HasPulse) return;
         onPulseReceive?.Invoke(from);
         GlobalPulse.SubscribeToNext(PassPulse);
         HasPulse = true;
@@ -96,30 +98,28 @@ public class BlockLogic : MonoBehaviour, IPointerClickHandler, IDragHandler, IBe
         
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void Click(PointerEventData eventData)
     {
         if (_dragging) return;
         onTap?.Invoke(eventData);
     }
 
-    public void OnDrag(PointerEventData eventData)
+    public void Drag(PointerEventData eventData)
     {
-        
+        onDrag?.Invoke(eventData);
     }
 
     bool _dragging;
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void BeginDrag(PointerEventData eventData)
     {
         _dragging = true;
-        if (eventData.button == PointerEventData.InputButton.Right)
-            BindMatrix.AddBind(parent, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
+        onBeginDrag?.Invoke(eventData);
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void EndDrag(PointerEventData eventData)
     {
         _dragging = false;
-        if (eventData.button == PointerEventData.InputButton.Right)
-            BindMatrix.RemoveBind(parent, MouseBind.Get());
+        onEndDrag?.Invoke(eventData);
     }
 }

@@ -18,6 +18,14 @@ public class GameManager : MonoBehaviour
     {
         Instance = this; 
         OnNextFrame += LoadGameFromFile;
+        for (var i = 0; i < 30; i++)
+        {
+            for (var j = 0; j < 30; j++)
+            {
+                var c = (i + j) % 2 == 0 ? Color.white : new Color(0.97f, 0.97f, 0.97f);
+                PixelFieldMatrix.Show(i - 15, j - 15, c);
+            }
+        }
     }
     void OnDisable()
     {

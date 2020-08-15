@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Block : MonoBehaviour, IBindable, IBindHandler
 {
@@ -8,6 +9,20 @@ public class Block : MonoBehaviour, IBindable, IBindHandler
     public BlockPhysics physics;
     [HideInInspector]
     public int rootDirection;
+
+    protected virtual void OnEnable()
+    {
+        logic.onBeginDrag += eventData =>
+        {
+            if (eventData.button == PointerEventData.InputButton.Right)
+                BindMatrix.AddBind(this, MouseBind.Get(), Vector2.zero, Bind.MouseBindStrength);
+        };
+        logic.onEndDrag += eventData =>
+        {
+            if (eventData.button == PointerEventData.InputButton.Right)
+                BindMatrix.RemoveBind(this, MouseBind.Get());
+        };
+    }
 
     public Vector2 GetPosition()
     {
@@ -35,7 +50,7 @@ public class Block : MonoBehaviour, IBindable, IBindHandler
         view.OnUnbind(bind);
     }
 
-    public void Destroy()
+    public virtual void Destroy()
     {
         Destroy(gameObject);
     }

@@ -23,7 +23,7 @@ public class BlockOld : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler
     protected virtual void OnEnable()
     {
         if (_initialized) return;
-        onTap = () => BlockEditor.OnBlockClick(this);
+        // onTap = () => BlockEditor.OnBlockClick(this);
         Init();
         _initialized = true;
     }
@@ -270,7 +270,7 @@ public class BlockOld : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler
         masked = value;
         if (value)
         {
-            PixelFieldMatrix.Show(X, Y, Color.red).SetShadow(true);
+            // PixelFieldMatrix.Show(X, Y, Color.red).SetShadow(true);
             transform.position = new Vector3(X, Y);
             RefreshMaskSqueeze();
             gameObject.SetActive(false);

@@ -12,7 +12,6 @@ public class Pixel : MonoBehaviour
         X = 0;
         Y = 0;
         _spriteRenderer.color = Color.magenta;
-        SetShadow(false);
         ResetScale();
         return this;
     }
@@ -28,12 +27,6 @@ public class Pixel : MonoBehaviour
         X = x;
         Y = y;
         transform.position = new Vector3(x, y);
-        return this;
-    }
-
-    public Pixel SetShadow(bool value)
-    {
-        gameObject.layer = value ? 12 : 0;
         return this;
     }
 

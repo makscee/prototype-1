@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
     Camera _camera;
-    BlockOld _draggedBlock;
 
     void Start()
     {
@@ -12,44 +11,43 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
     }
     public void OnDrag(PointerEventData eventData)
     {
-        if (Input.touchCount < 2)
-        {
-            if (_draggedBlock != null)
-                _draggedBlock = BlockEditor.OnBlockDrag();
-            else _camera.transform.position -= _camera.ScreenToWorldPoint(eventData.delta) - _camera.ScreenToWorldPoint(Vector3.zero);
-        }
+        if (Input.touchCount < 2 && !_draggingBlock)
+            _camera.transform.position -= _camera.ScreenToWorldPoint(eventData.delta) - _camera.ScreenToWorldPoint(Vector3.zero);
+        
+        BlockEditor.OnBlockDrag();
     }
 
-    bool _dragging;
+    bool _dragging, _draggingBlock;
+    Block _draggedBlock;
     public void OnBeginDrag(PointerEventData eventData)
     {
         _dragging = true;
-        // TryGetDraggedMaskedBlock();
-        // if (_draggedBlock != null) BlockEditor.OnBlockDragStart(_draggedBlock);
-    }
-
-    void TryGetDraggedMaskedBlock()
-    {
+        
         Utils.GetInputCoords(out var x, out var y);
-        // if (!FieldMatrix.Get(x, y, out _draggedBlock)) return;
-        if (!_draggedBlock.masked) _draggedBlock = null;
+        if (FieldMatrix.Get(x, y, out _draggedBlock))
+        {
+            _draggingBlock = true;
+            _draggedBlock.logic.BeginDrag(eventData);
+            BlockEditor.OnBlockDragStart(_draggedBlock);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         _dragging = false;
+        _draggingBlock = false;
+        
+        BlockEditor.OnBlockDragEnd();
+        
+        if (_draggedBlock != null)
+            _draggedBlock.logic.EndDrag(eventData);
     }
-
-    Block _last;
     public void OnPointerClick(PointerEventData eventData)
     {
         if (_dragging || Input.touchCount > 1) return;
+        
         Utils.GetInputCoords(out var x, out var y);
-        if (_last == null)
-            _last = NodeBlock.Create(x, y);
-        else _last = NodeBlock.Create(x, y, _last);
-        _last.transform.position = (Vector2)_camera.ScreenToWorldPoint(Input.mousePosition);
-        // if (FieldMatrix.Get(x, y, out var block))
-        //     BlockEditor.OnBlockClick(block);
+        if (FieldMatrix.Get(x, y, out var block))
+            block.logic.Click(eventData);
     }
 }
