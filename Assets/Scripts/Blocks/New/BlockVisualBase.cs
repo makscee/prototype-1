@@ -7,6 +7,7 @@ public class BlockVisualBase : MonoBehaviour
     public Block block;
     public readonly Dictionary<Model, BlockVisualModel> _models = new Dictionary<Model, BlockVisualModel>();
     Model _currentModel;
+    public Action<BlockVisualModel> onModelChange;
 
     void Update()
     {
@@ -20,6 +21,7 @@ public class BlockVisualBase : MonoBehaviour
         if (!_models.ContainsKey(model)) AddModel(model);
         _models[model].Show();
         _currentModel = model;
+        onModelChange?.Invoke(Current);
     }
 
     public BlockVisualModel Current => _models[_currentModel];

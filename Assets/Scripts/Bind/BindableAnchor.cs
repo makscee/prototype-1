@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class BindableAnchor : IBindable
 {
     public abstract Vector2 GetPosition();
-    public bool IsAnchor()
+    public virtual bool IsAnchor()
     {
         return true;
     }

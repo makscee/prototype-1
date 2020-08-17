@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class BindVisual : MonoBehaviour
 {
@@ -13,12 +14,23 @@ public class BindVisual : MonoBehaviour
     public Bind bind;
 
     Painter _painter;
-    Image _image;
+    bool isRectFirst;
+    RectTransform firstRect;
     void Awake()
     {
-        _image = GetComponent<Image>();
         _painter = GetComponent<Painter>();
         _rectTransform = GetComponent<RectTransform>();
+    }
+
+    void Start()
+    {
+        if (bind.First is Block block)
+        {
+            isRectFirst = true;
+            firstRect = block.view.VisualBase.Current.GetComponent<RectTransform>();
+            _painter.subscribedTo = block.view.SecondaryPainter;
+            block.view.VisualBase.onModelChange += model => _painter.subscribedTo = model.secondary;
+        }  
     }
 
     public static bool Create(Bind bind, out BindVisual bindVisual)
@@ -32,7 +44,7 @@ public class BindVisual : MonoBehaviour
         bindVisual.second = bind.Second;
         bindVisual.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 3;
         bindVisual.bind = bind;
-        bindVisual._painter.subscribedTo = block.view.secondaryPainter;
+        bindVisual._painter.subscribedTo = block.view.SecondaryPainter;
 
         return true;
     }
@@ -53,8 +65,17 @@ public class BindVisual : MonoBehaviour
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        var length = dir.magnitude * 2 - BlockOld.BlockSide / 3;
-        var width = Mathf.Lerp(MaxWidth, MinWidth, length / MaxLength);
+
+        var maxWidth = MaxWidth;
+        var minWidth = MinWidth;
+        if (isRectFirst)
+        {
+            var rect = firstRect.rect;
+            maxWidth = Mathf.Min(rect.width, rect.height) / 2.5f;
+            minWidth = maxWidth - 0.1f;
+        }
+        var length = dir.magnitude * 2 - 1f / 3;
+        var width = Mathf.Lerp(maxWidth, minWidth, length / MaxLength);
         _rectTransform.sizeDelta = new Vector2(width, length);
     }
 }

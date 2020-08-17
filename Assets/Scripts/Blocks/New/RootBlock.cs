@@ -21,8 +21,9 @@ public class RootBlock : Block
                 NodeBlock.Create(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y), this);
             } else logic.ReceivePulse();
         };
-        view.onRefresh += () => view.secondaryPainter.NumInPalette = logic.HasPulse ? 3 : 2;
+        view.onRefresh += () => view.SecondaryPainter.NumInPalette = logic.HasPulse ? 3 : 2;
         view.SetInitialModel(BlockVisualBase.Model.Root);
+        logic.stepNumber = 0;
     }
 
     public static RootBlock Create(int x, int y, int dir)

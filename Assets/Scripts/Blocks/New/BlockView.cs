@@ -6,8 +6,8 @@ public class BlockView : MonoBehaviour
 {
     public Block parent;
 
-    public Painter primaryPainter => VisualBase.Current.primary;
-    public Painter secondaryPainter => VisualBase.Current.secondary;
+    public Painter PrimaryPainter => VisualBase.Current.primary;
+    public Painter SecondaryPainter => VisualBase.Current.secondary;
     Dictionary<Bind, BindVisual> _bindVisuals = new Dictionary<Bind, BindVisual>(8);
     public Action onRefresh;
 
@@ -19,6 +19,15 @@ public class BlockView : MonoBehaviour
         Refresh();
     }
 
+    string _text;
+
+    public void SetText(string text)
+    {
+        if (text?.Length > 4) text = "";
+        VisualBase.Current.Text = text;
+        _text = text;
+    }
+
     bool _dirty;
     public void SetDirty()
     {
@@ -28,12 +37,14 @@ public class BlockView : MonoBehaviour
     void Refresh()
     {
         onRefresh?.Invoke();
+        SetText(_text);
         _dirty = false;
     }
 
     public void SetInitialModel(BlockVisualBase.Model model)
     {
         VisualBase = BlockVisualBase.Create(parent, model);
+        VisualBase.onModelChange += visualModel => SetDirty();
     }
     
     public void OnBind(Bind bind)
@@ -55,6 +66,7 @@ public class BlockView : MonoBehaviour
 
     void OnDestroy()
     {
-        VisualBase.Destroy();
+        if (VisualBase != null && VisualBase.gameObject != null)
+            VisualBase.Destroy();
     }
 }

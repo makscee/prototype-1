@@ -19,8 +19,7 @@ public class NodeBlock : Block
             view.VisualBase.Select(BindMatrix.GetOutBindsCount(this) == 0
                 ? BlockVisualBase.Model.NodeDeadend
                 : BlockVisualBase.Model.NodePipe);
-            Debug.Log($"{view.VisualBase.Current}");
-            view.secondaryPainter.NumInPalette = logic.HasPulse ? 3 : CheckerboardColor;
+            view.SecondaryPainter.NumInPalette = logic.HasPulse ? 3 : CheckerboardColor;
         };
         view.SetDirty();
     }
@@ -38,7 +37,7 @@ public class NodeBlock : Block
         b.rootDirection = rootDirection;
         b.logic.SetCoords(x, y);
         b.transform.position = new Vector3(x, y);
-        BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position), b, Vector2.zero, Bind.BlockStaticBindStrength);
+        BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position, false), b, Vector2.zero, Bind.BlockStaticBindStrength);
         return b;
     }
 

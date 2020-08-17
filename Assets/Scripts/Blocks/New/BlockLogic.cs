@@ -7,6 +7,7 @@ public class BlockLogic : MonoBehaviour
     public Vector2 Position => new Vector2(X, Y);
 
     public bool HasPulse { get; private set; }
+    public int stepNumber = int.MaxValue / 2;
 
 
     [SerializeField]int _x, _y;
@@ -87,15 +88,51 @@ public class BlockLogic : MonoBehaviour
         HasPulse = false;
         parent.view.SetDirty();
     }
+    
+    
+
+    public void RefreshStepNumber()
+    {
+        var t = int.MaxValue / 2;
+        if (parent.IsAnchored)
+        {
+            foreach (var bind in BindMatrix.GetAllAdjacentBinds(parent))
+            {
+                if (bind.Second == parent && bind.First is Block block)
+                {
+                    t = Math.Min(t, block.logic.stepNumber + 1);
+                }
+            }
+        }
+
+        if (t == stepNumber)
+            return;
+        stepNumber = t;
+        parent.view.SetText(stepNumber.ToString());
+        StepNumberChangeNotify();
+    }
+
+    public void StepNumberChangeNotify()
+    {
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(parent))
+        {
+            if (bind.First == parent && bind.Second is Block block)
+            {
+                block.logic.RefreshStepNumber();
+            }
+        }
+    }
 
     public void OnBind(Bind bind)
     {
-        
+        if (bind.Second == parent && bind.First is Block)
+            RefreshStepNumber();
     }
     
     public void OnUnbind(Bind bind)
     {
-        
+        if (bind.Second == parent && bind.First is Block)
+            RefreshStepNumber();
     }
 
     public void Click(PointerEventData eventData)
