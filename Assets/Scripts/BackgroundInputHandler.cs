@@ -49,5 +49,7 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
         Utils.GetInputCoords(out var x, out var y);
         if (FieldMatrix.Get(x, y, out var block))
             block.logic.Click(eventData);
+        else PixelDriver.Add(PixelRoad.Circle(SharedObjects.Instance.rootBlocks[0].view.PrimaryPainter.palette.GetColor(3),
+            3f, 3f, 0.05f, 0.5f, x, y).SetWeight(0.05f));
     }
 }

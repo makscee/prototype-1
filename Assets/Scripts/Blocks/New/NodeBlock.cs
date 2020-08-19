@@ -29,6 +29,8 @@ public class NodeBlock : Block
         if (from == null || BindMatrix.GetOutBindsCount(this) != 0) return;
         var dir = Utils.DirFromCoords(logic.Position - from.logic.Position);
         SharedObjects.Instance.rootBlocks[rootDirection].soundsPlayer.Play(dir);
+        PixelDriver.Add(PixelRoad.Circle(SharedObjects.Instance.rootBlocks[0].view.PrimaryPainter.palette.GetColor(3),
+            3f, 3f, 0.05f, 0.5f, logic.X, logic.Y).SetWeight(0.05f));
     }
 
     public static NodeBlock Create(int x, int y, int rootDirection = 0)

@@ -61,8 +61,9 @@
           <e p="KeyboardHandler.cs" t="Include" />
           <e p="Pixel" t="Include">
             <e p="Pixel.cs" t="Include" />
-            <e p="PixelFieldMatrix.cs" t="Include" />
-            <e p="PixelPool.cs" t="Include" />
+            <e p="PixelDriver.cs" t="Include" />
+            <e p="PixelRoad.cs" t="Include" />
+            <e p="WeightedColor.cs" t="Include" />
           </e>
           <e p="Prefabs.cs" t="Include" />
           <e p="Serialization" t="Include">

@@ -277,7 +277,7 @@ public class BlockOld : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler
         }
         else
         {
-            PixelFieldMatrix.Hide(X, Y);
+            // PixelFieldMatrix.Hide(X, Y);
             gameObject.SetActive(true);
         }
     }
@@ -356,18 +356,18 @@ public class BlockOld : BindableMonoBehavior, IBeginDragHandler, IEndDragHandler
     protected virtual void RefreshMaskSqueeze()
     {
         if (!masked) return;
-        if (!PixelFieldMatrix.Get(X, Y, out var pixel)) return;
+        // if (!PixelFieldMatrix.Get(X, Y, out var pixel)) return;
         var binds = BindMatrix.GetAllAdjacentBinds(this).ToArray();
         if (binds.Length != 2)
         {
-            pixel.ResetScale();
+            // pixel.ResetScale();
             return;
         }
         if (binds[0].First != binds[1].First &&
             binds[0].Second != binds[1].Second &&
             binds[0].Offset == binds[1].Offset)
         {
-            pixel.Squeeze(binds[0].Offset.x == 0f);
+            // pixel.Squeeze(binds[0].Offset.x == 0f);
         }
     }
 

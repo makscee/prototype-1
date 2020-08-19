@@ -62,6 +62,18 @@ public static class Utils
         }
     }
     
+    public static Color ChangeAlpha(this Color c, float alpha)
+    {
+        c.a = alpha;
+        return c;
+    }
+    
+    public static Color LerpAlpha(this Color c, float a, float b, float t)
+    {
+        c.a = Mathf.Lerp(a, b, t);
+        return c;
+    }
+    
     public static void GetInputCoords(out int x, out int y)
     {
         var worldPos = SharedObjects.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);

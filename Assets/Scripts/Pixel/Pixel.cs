@@ -7,42 +7,31 @@ public class Pixel : MonoBehaviour
     
     [SerializeField] SpriteRenderer _spriteRenderer;
 
-    public Pixel StateReset()
+    void Start()
     {
-        X = 0;
-        Y = 0;
-        _spriteRenderer.color = Color.magenta;
-        ResetScale();
-        return this;
+        transform.position = new Vector3(X, Y);
     }
 
-    public Pixel SetColor(Color c)
+    void SetColor(Color c)
     {
         _spriteRenderer.color = c;
-        return this;
     }
 
-    public Pixel Move(int x, int y)
+    void Update()
     {
-        X = x;
-        Y = y;
-        transform.position = new Vector3(x, y);
-        return this;
+        SetColor(PixelDriver.GetColor(X, Y));
     }
 
-    public Pixel Squeeze(bool vertical)
+    void OnDisable()
     {
-        const float squeezedValue = 0.5f;
-        var scale = transform.localScale;
-        if (vertical) scale.x = squeezedValue;
-        else scale.y = squeezedValue;
-        transform.localScale = scale;
-        return this;
+        Destroy(gameObject);
     }
 
-    public Pixel ResetScale()
+    public static Pixel Create(int x, int y)
     {
-        transform.localScale = Vector3.one;
-        return this;
+        var p = Instantiate(Prefabs.Instance.pixel).GetComponent<Pixel>();
+        p.X = x;
+        p.Y = y;
+        return p;
     }
 }

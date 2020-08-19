@@ -271,7 +271,6 @@ public class WaveEditor : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     Vector2 ScaledScreenPos(Vector2 v)
     {
-        Debug.Log($"{canvasScaler == null}");
         var scale = canvasScaler.referenceResolution / new Vector2(Screen.width, Screen.height);
         return v * scale;
     }
