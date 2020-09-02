@@ -7,12 +7,6 @@ public class GameManager : MonoBehaviour
     static readonly string GameStateFileName = "game";
     [SerializeField] string JsonGameState;
     public static Action OnNextFrame;
-    public enum StartState
-    {
-        Game, WaveEditor
-    }
-
-    public StartState startState;
 
     void OnEnable()
     {

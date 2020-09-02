@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 [Serializable]
 public class RootBlockSerialized : JsonUtilitySerializable
@@ -14,13 +13,13 @@ public class RootBlockSerialized : JsonUtilitySerializable
             return false;
         }
 
-        result = new RootBlockSerialized {X = b.logic.X, Y = b.logic.Y, Dir = b.direction};
+        result = new RootBlockSerialized {X = b.logic.X, Y = b.logic.Y, Dir = b.rootNum};
 
         return true;
     }
 
     public void Deserialize()
     {
-        RootBlock.Create(X, Y, Dir);
+        RootBlock.Create(X, Y);
     }
 }

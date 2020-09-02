@@ -13,6 +13,22 @@ public class NodeBlock : Block
             if (e.button == PointerEventData.InputButton.Middle) Destroy();
         };
         logic.onPulseReceive += OnPulseDeadEnd;
+        logic.onBind += bind =>
+        {
+            if (bind.Second == this && bind.First is Block)
+                RefreshStepNumber();
+        };
+        logic.onUnbind += bind =>
+        {
+
+            if (bind.Second == this && bind.First is Block)
+                RefreshStepNumber();
+        };
+    }
+
+    protected override void StartInit()
+    {
+        base.StartInit();
         view.SetInitialModel(BlockVisualBase.Model.NodeDeadend);
         view.onRefresh += () =>
         {
@@ -28,15 +44,49 @@ public class NodeBlock : Block
     {
         if (from == null || BindMatrix.GetOutBindsCount(this) != 0) return;
         var dir = Utils.DirFromCoords(logic.Position - from.logic.Position);
-        SharedObjects.Instance.rootBlocks[rootDirection].soundsPlayer.Play(dir);
-        PixelDriver.Add(PixelRoad.Circle(SharedObjects.Instance.rootBlocks[0].view.PrimaryPainter.palette.GetColor(3),
-            3f, 3f, 0.05f, 0.5f, logic.X, logic.Y).SetWeight(0.05f));
+        var root = Roots.Blocks[rootNum]; 
+        root.soundsPlayer.Play(dir); 
+        PixelDriver.Add(PixelRoad.Circle(root.view.PrimaryPainter.palette.GetColor(dir),
+            2f, 3f, 0.05f, 0.5f, logic.X, logic.Y).SetWeight(0.3f));
+    }
+    
+    public void RefreshStepNumber()
+    {
+        var t = int.MaxValue / 2;
+        if (IsAnchored)
+        {
+            foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
+            {
+                if (bind.Second == this && bind.First is Block block)
+                {
+                    t = Math.Min(t, block.logic.stepNumber + 1);
+                }
+            }
+        }
+
+        if (t == logic.stepNumber)
+            return;
+        logic.stepNumber = t;
+        view.SetText(logic.stepNumber.ToString());
+        StepNumberChangeNotify();
     }
 
-    public static NodeBlock Create(int x, int y, int rootDirection = 0)
+    public void StepNumberChangeNotify()
     {
-        var b = Instantiate(Prefabs.Instance.nodeBlock, SharedObjects.Instance.rootCanvases[rootDirection].transform).GetComponent<NodeBlock>();
-        b.rootDirection = rootDirection;
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
+        {
+            if (bind.First == this && bind.Second is Block)
+            {
+                RefreshStepNumber();
+            }
+        }
+    }
+
+    public static NodeBlock Create(int x, int y, int rootId = 0)
+    {
+        var b = Instantiate(Prefabs.Instance.nodeBlock, Roots.RootCanvases(rootId).transform).GetComponent<NodeBlock>();
+        b.rootNum = rootId;
+        b.StartInit();
         b.logic.SetCoords(x, y);
         b.transform.position = new Vector3(x, y);
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position, false), b, Vector2.zero, Bind.BlockStaticBindStrength);
@@ -45,7 +95,7 @@ public class NodeBlock : Block
 
     public static NodeBlock Create(int x, int y, Block boundWith)
     {
-        var b = Create(x, y, boundWith.rootDirection);
+        var b = Create(x, y, boundWith.rootNum);
         BindMatrix.AddBind(boundWith, b, b.logic.Position - boundWith.logic.Position, Bind.BlockBindStrength);
         return b;
     }

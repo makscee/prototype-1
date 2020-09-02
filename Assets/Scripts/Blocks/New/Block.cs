@@ -7,8 +7,7 @@ public class Block : MonoBehaviour, IBindable, IBindHandler
     public BlockLogic logic;
     public BlockView view;
     public BlockPhysics physics;
-    [HideInInspector]
-    public int rootDirection;
+    public int rootNum;
 
     protected virtual void OnEnable()
     {
@@ -22,6 +21,17 @@ public class Block : MonoBehaviour, IBindable, IBindHandler
             if (eventData.button == PointerEventData.InputButton.Right)
                 BindMatrix.RemoveBind(this, MouseBind.Get());
         };
+    }
+
+    protected void Start()
+    {
+        if (!_inited) Debug.LogError($"StartInit wasn't called {name}");
+    }
+
+    bool _inited;
+    protected virtual void StartInit()
+    {
+        _inited = true;
     }
 
     public Vector2 GetPosition()

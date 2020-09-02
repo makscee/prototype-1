@@ -48,7 +48,7 @@
           </e>
           <e p="CameraScript.cs" t="Include" />
           <e p="Colors" t="Include">
-            <e p="Gallery.cs" t="Include" />
+            <e p="Colors.cs" t="Include" />
             <e p="Painter.cs" t="Include" />
             <e p="Palette.cs" t="Include" />
           </e>
@@ -66,6 +66,8 @@
             <e p="WeightedColor.cs" t="Include" />
           </e>
           <e p="Prefabs.cs" t="Include" />
+          <e p="RootBlockPlacer.cs" t="Include" />
+          <e p="Roots.cs" t="Include" />
           <e p="Serialization" t="Include">
             <e p="BindSerialized.cs" t="Include" />
             <e p="FileStorage.cs" t="Include" />
@@ -85,8 +87,16 @@
           </e>
           <e p="UI" t="Include">
             <e p="CentralRack.cs" t="Include" />
+            <e p="ConfigCanvas.cs" t="Include" />
             <e p="DarkOverlay.cs" t="Include" />
+            <e p="PaletteButton.cs" t="Include" />
+            <e p="PalettePicker.cs" t="Include" />
             <e p="RollingButton.cs" t="Include" />
+            <e p="RootBlockButton.cs" t="Include" />
+            <e p="RootEditor.cs" t="Include" />
+            <e p="RootEditorScreen.cs" t="Include" />
+            <e p="RootEditorsFolder.cs" t="Include" />
+            <e p="SoundEditor.cs" t="Include" />
             <e p="SplitSlider.cs" t="Include" />
             <e p="WaveEditor.cs" t="Include" />
             <e p="WaveEditorAddRecordButton.cs" t="Include" />

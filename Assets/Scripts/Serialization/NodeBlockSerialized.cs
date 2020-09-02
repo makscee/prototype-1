@@ -14,7 +14,7 @@ public class NodeBlockSerialized : JsonUtilitySerializable
             return false;
         }
 
-        result = new NodeBlockSerialized {X = b.logic.X, Y = b.logic.Y, RootDir = b.rootDirection};
+        result = new NodeBlockSerialized {X = b.logic.X, Y = b.logic.Y, RootDir = b.rootNum};
 
         return true;
     }

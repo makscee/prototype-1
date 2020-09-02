@@ -28,7 +28,7 @@ public class SoundsPlayerSerialized : JsonUtilitySerializable
 
     public void Deserialize()
     {
-        var rootBlock = SharedObjects.Instance.rootBlocks[dir];
+        var rootBlock = Roots.Blocks[dir];
         for (var i = 0; i < 4; i++)
         {
             rootBlock.soundsPlayer.Configs[i].SelectFrom = selectFrom[i];

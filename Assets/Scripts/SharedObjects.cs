@@ -2,17 +2,13 @@ using UnityEngine;
 
 public class SharedObjects : MonoBehaviour
 {
-    public GameObject BackCanvas;
     public GameObject MidCanvas;
     public GameObject FrontCanvas;
-    public GameObject UICanvas;
     public Camera Camera;
 
-    public GameObject[] rootCanvases;
-    public GameObject blockVisualCanvas;
-    public RootBlock[] rootBlocks;
+    public GameObject[] blockVisualCanvases;
     public GameObject bindVisualsCanvas;
-    public WaveEditor WaveEditor;
+    public ConfigCanvas configCanvas;
 
     public static SharedObjects Instance;
 

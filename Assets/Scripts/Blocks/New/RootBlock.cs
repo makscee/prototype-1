@@ -4,34 +4,38 @@ using UnityEngine;
 public class RootBlock : Block
 {
     public SoundsPlayer soundsPlayer;
-    public int direction;
 
     protected override void OnEnable()
     {
-        rootDirection = direction;
-        SharedObjects.Instance.rootBlocks[direction] = this;
-        
-        BindMatrix.AddBind(StaticAnchor.Create(logic.Position), this, Vector2.zero, Bind.BlockBindStrength);
-        
         logic.onTap += e =>
         {
             if (BindMatrix.GetOutBindsCount(this) == 0)
             {
-                var v = logic.Position + Utils.CoordsFromDir(direction);
+                var v = logic.Position + Utils.CoordsFromDir(rootNum % 4);
                 NodeBlock.Create(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y), this);
             } else logic.ReceivePulse();
         };
         view.onRefresh += () => view.SecondaryPainter.NumInPalette = logic.HasPulse ? 3 : 2;
-        view.SetInitialModel(BlockVisualBase.Model.Root);
         logic.stepNumber = 0;
     }
 
-    public static RootBlock Create(int x, int y, int dir)
+    protected override void StartInit()
     {
-        var b = Instantiate(Prefabs.Instance.rootBlock, SharedObjects.Instance.rootCanvases[dir].transform).GetComponent<RootBlock>();
-        b.direction = dir;
+        base.StartInit();
+        view.SetInitialModel(BlockVisualBase.Model.Root);
+        BindMatrix.AddBind(StaticAnchor.Create(logic.Position), this, Vector2.zero, Bind.BlockBindStrength);
+    }
+
+    public static RootBlock Create(int x, int y, int rootNum = -1)
+    {
+        rootNum = rootNum == -1 ? Roots.Count : rootNum;
+        var b = Instantiate(Prefabs.Instance.rootBlock, Roots.RootCanvases(rootNum).transform).GetComponent<RootBlock>();
+        b.rootNum = rootNum;
+        Roots.Blocks[rootNum] = b;
         b.logic.SetCoords(x, y);
+        b.transform.position = b.logic.Position;
         b.IsAnchored = true;
+        b.StartInit();
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position), b, Vector2.zero, Bind.BlockStaticBindStrength);
         b.view.SetDirty();
         return b;

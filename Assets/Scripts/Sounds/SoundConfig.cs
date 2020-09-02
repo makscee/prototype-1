@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SoundConfig
 {
-    int _selectFrom = 0, _selectTo = 1488, _rate = 44100;
+    int _selectFrom = 0, _selectTo = 3000, _rate = 44100;
     float _volume = 1f;
 
     public int SelectFrom
@@ -42,6 +42,11 @@ public class SoundConfig
         }
     }
 
+    SoundsPlayer _player;
+    public SoundConfig(SoundsPlayer player)
+    {
+        _player = player;
+    }
     public void CutoutAdjust(int from, int to)
     {
         var length = to - from;
@@ -86,7 +91,7 @@ public class SoundConfig
         get
         {
             if (_clipCache != null) return _clipCache;
-            var clip = SharedObjects.Instance.WaveEditor.Clip;
+            var clip = _player.Clip;
             var amount = SelectTo - SelectFrom;
             if (amount == 0) return null;
             var newClip = ClipMaker.Make(clip, _selectFrom, _selectTo, Rate);

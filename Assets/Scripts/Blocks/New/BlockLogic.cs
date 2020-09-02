@@ -35,6 +35,7 @@ public class BlockLogic : MonoBehaviour
     [NonSerialized] public Action<PointerEventData> onTap;
     [NonSerialized] public Action<Block> onPulseReceive;
     [NonSerialized] public Action<PointerEventData> onBeginDrag, onDrag, onEndDrag;
+    [NonSerialized] public Action<Bind> onBind, onUnbind;
 
     void OnEnable()
     {
@@ -88,51 +89,15 @@ public class BlockLogic : MonoBehaviour
         HasPulse = false;
         parent.view.SetDirty();
     }
-    
-    
-
-    public void RefreshStepNumber()
-    {
-        var t = int.MaxValue / 2;
-        if (parent.IsAnchored)
-        {
-            foreach (var bind in BindMatrix.GetAllAdjacentBinds(parent))
-            {
-                if (bind.Second == parent && bind.First is Block block)
-                {
-                    t = Math.Min(t, block.logic.stepNumber + 1);
-                }
-            }
-        }
-
-        if (t == stepNumber)
-            return;
-        stepNumber = t;
-        parent.view.SetText(stepNumber.ToString());
-        StepNumberChangeNotify();
-    }
-
-    public void StepNumberChangeNotify()
-    {
-        foreach (var bind in BindMatrix.GetAllAdjacentBinds(parent))
-        {
-            if (bind.First == parent && bind.Second is Block block)
-            {
-                block.logic.RefreshStepNumber();
-            }
-        }
-    }
 
     public void OnBind(Bind bind)
     {
-        if (bind.Second == parent && bind.First is Block)
-            RefreshStepNumber();
+        onBind?.Invoke(bind);
     }
     
     public void OnUnbind(Bind bind)
     {
-        if (bind.Second == parent && bind.First is Block)
-            RefreshStepNumber();
+        onUnbind?.Invoke(bind);
     }
 
     public void Click(PointerEventData eventData)

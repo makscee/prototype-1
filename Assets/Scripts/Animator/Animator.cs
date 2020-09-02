@@ -21,13 +21,13 @@ public static class Animator
         _updateablesToAdd.Add(result);
         return result;
     }
-    // public static Interpolator<Vector3> Interpolate(Vector3 from, Vector3 to, float over)
-    // {
-    //     var result = new Interpolator<Vector3>(from, to, over, 
-    //         (v, f) => v * f, (v1, v2) => v1 + v2, (v1, v2) => v1 - v2);
-    //     _updateablesToAdd.Add(result);
-    //     return result;
-    // }
+    public static Interpolator<Vector3> Interpolate(Vector3 from, Vector3 to, float over)
+    {
+        var result = new Interpolator<Vector3>(from, to, over, 
+            (v, f) => v * f, (v1, v2) => v1 + v2, (v1, v2) => v1 - v2);
+        _updateablesToAdd.Add(result);
+        return result;
+    }
     public static Interpolator<Color> Interpolate(Color from, Color to, float over)
     {
         var result = new Interpolator<Color>(from, to, over, 

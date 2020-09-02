@@ -49,15 +49,11 @@ public class CameraScript : MonoBehaviour
         _camera.orthographicSize = Mathf.Clamp(orthographicSize - amount, MinZoom, MaxZoom);
     }
 
-    static readonly float PanSpeed = 20f;
-    static readonly float ZoomSpeedTouch = 0.1f;
-    static readonly float ZoomSpeedMouse = 0.5f;
-    static readonly float[] ZoomBounds = new float[] {0.1f, 85f};
-    Vector2 lastPanPosition;
-    Vector3 startCameraPos;
-    int panFingerId; // Touch mode only
+    Vector2 _lastPanPosition;
+    Vector3 _startCameraPos;
+    int _panFingerId; // Touch mode only
     public static bool WasZoomingLastFrame; // Touch mode only
-    Vector2[] lastZoomPositions; // Touch mode only
+    Vector2[] _lastZoomPositions; // Touch mode only
 
     void HandleTouch()
     {
@@ -87,7 +83,7 @@ public class CameraScript : MonoBehaviour
                 var newPositions = new Vector2[] {Input.GetTouch(0).position, Input.GetTouch(1).position};
                 if (!WasZoomingLastFrame)
                 {
-                    lastZoomPositions = newPositions;
+                    _lastZoomPositions = newPositions;
                     WasZoomingLastFrame = true;
                 }
                 else
@@ -95,7 +91,7 @@ public class CameraScript : MonoBehaviour
                     // Zoom based on the distance between the new positions compared to the 
                     // distance between the previous positions.
                     var newDistance = Vector2.Distance(newPositions[0], newPositions[1]);
-                    var oldDistance = Vector2.Distance(lastZoomPositions[0], lastZoomPositions[1]);
+                    var oldDistance = Vector2.Distance(_lastZoomPositions[0], _lastZoomPositions[1]);
                     var towardsVec =
                         _camera.ScreenToWorldPoint((newPositions[1] - newPositions[0]) / 2 + newPositions[0]);
                     Debug.DrawLine(_camera.ScreenToWorldPoint(newPositions[0]), towardsVec);
@@ -104,7 +100,7 @@ public class CameraScript : MonoBehaviour
                     // ZoomCamera(offset, ZoomSpeedTouch);
                     ZoomOrthoCamera(towardsVec, offset / 120);
 
-                    lastZoomPositions = newPositions;
+                    _lastZoomPositions = newPositions;
                 }
 
                 break;
