@@ -12,7 +12,7 @@ public class BlockPhysics : MonoBehaviour
 
     Vector2 _velocity;
     Vector2 _desiredVelocity;
-    const float MaxAcceleration = 300;
+    const float MaxAcceleration = 900;
 
     void Update()
     {

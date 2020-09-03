@@ -75,20 +75,21 @@ public class NodeBlock : Block
     {
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
-            if (bind.First == this && bind.Second is Block)
+            if (bind.First == this && bind.Second is NodeBlock nodeBlock)
             {
-                RefreshStepNumber();
+                nodeBlock.RefreshStepNumber();
             }
         }
     }
 
-    public static NodeBlock Create(int x, int y, int rootId = 0)
+    public static NodeBlock Create(int x, int y, int rootId = 0, float startOffsetClamp = 2f)
     {
-        var b = Instantiate(Prefabs.Instance.nodeBlock, Roots.RootCanvases(rootId).transform).GetComponent<NodeBlock>();
+        var position = new Vector2(x, y);
+        var startPosition = position + Vector2.ClampMagnitude(Roots.Blocks[rootId].logic.Position - position, startOffsetClamp);
+        var b = Instantiate(Prefabs.Instance.nodeBlock, startPosition, Quaternion.identity, Roots.RootCanvases(rootId).transform).GetComponent<NodeBlock>();
         b.rootNum = rootId;
-        b.StartInit();
         b.logic.SetCoords(x, y);
-        b.transform.position = new Vector3(x, y);
+        b.StartInit();
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position, false), b, Vector2.zero, Bind.BlockStaticBindStrength);
         return b;
     }

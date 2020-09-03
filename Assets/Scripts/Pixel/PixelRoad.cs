@@ -43,6 +43,19 @@ public class PixelRoad
         return pr;
     }
 
+    public static PixelRoad NodeBackground()
+    {
+        var pr = new PixelRoad(-1f);
+        pr._colorFunc = (x, y) =>
+        {
+            if (FieldMatrix.Get(x, y, out var block))
+                return new WeightedColor(Roots.Blocks[block.rootNum].view.PrimaryPainter.palette.GetColor(2),
+                    pr._weight);
+            return WeightedColor.Clear;
+        };
+        return pr;
+    }
+
     float Timer { get; set; }
     float _weight = 1f;
     readonly float _startTimer;

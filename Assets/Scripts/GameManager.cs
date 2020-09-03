@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
     {
         Instance = this; 
         OnNextFrame += LoadGameFromFile;
-        PixelDriver.Add(PixelRoad.Checkerboard(Color.white, new Color(0.97f, 0.97f, 0.97f)).SetWeight(0.1f));
+        PixelDriver.Add(PixelRoad.Checkerboard(Color.white, new Color(0.97f, 0.97f, 0.97f)).SetWeight(0.3f));
+        PixelDriver.Add(PixelRoad.NodeBackground().SetWeight(0.1f));
     }
     void OnDisable()
     {

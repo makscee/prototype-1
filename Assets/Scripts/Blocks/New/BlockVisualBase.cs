@@ -50,16 +50,18 @@ public class BlockVisualBase : MonoBehaviour
         }
 
         var modelObject = Instantiate(prefab, transform).GetComponent<BlockVisualModel>();
+        modelObject.Init();
         _models.Add(model, modelObject);
     }
     
     public static BlockVisualBase Create(Block block, Model model)
     {
-        var b = Instantiate(Prefabs.Instance.blockVisualBase, SharedObjects.Instance.blockVisualCanvases[block.rootNum].transform)
+        var b = Instantiate(Prefabs.Instance.blockVisualBase, block.transform.position, Quaternion.identity, SharedObjects.Instance.blockVisualCanvases[block.rootNum].transform)
             .GetComponent<BlockVisualBase>();
         b.block = block;
         b.AddModel(model);
         b._currentModel = model;
+        b.Current.Init();
         b.Current.Show();
         return b;
     }

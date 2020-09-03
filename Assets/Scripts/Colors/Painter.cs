@@ -51,7 +51,7 @@ public class Painter : MonoBehaviour
         }
     }
 
-    void PaintRefresh()
+    public void PaintRefresh()
     {
         if (_colorBefore == Color) return;
         _paint?.Invoke(Color);

@@ -21,6 +21,6 @@ public class NodeBlockSerialized : JsonUtilitySerializable
 
     public void Deserialize()
     {
-        NodeBlock.Create(X, Y, RootDir);
+        NodeBlock.Create(X, Y, RootDir, 0.1f);
     }
 }

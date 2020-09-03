@@ -19,6 +19,12 @@ public class BlockVisualModel : MonoBehaviour
         }
     }
 
+    public void Init()
+    {
+        primary.PaintRefresh();
+        secondary.PaintRefresh();
+    }
+
     public void Hide()
     {
         IsShown = false;

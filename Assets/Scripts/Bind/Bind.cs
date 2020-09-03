@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bind
 {
     public const int BlockBindStrength = 5;
-    public const int BlockStaticBindStrength = 6;
+    public const int BlockStaticBindStrength = 10;
     public const int MouseBindStrength = 8;
     public const int PulseBlockBindStrength = 14;
     
