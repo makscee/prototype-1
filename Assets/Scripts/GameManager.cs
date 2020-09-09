@@ -4,14 +4,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    static readonly string GameStateFileName = "game";
-    [SerializeField] string JsonGameState;
+    const string GameStateFileName = "game";
+    [SerializeField] string jsonGameState;
     public static Action OnNextFrame;
 
     void OnEnable()
     {
         Instance = this; 
-        OnNextFrame += LoadGameFromFile;
+        OnNextFrame += LoadFromMemoryOrFile;
         PixelDriver.Add(PixelRoad.Checkerboard(Color.white, new Color(0.97f, 0.97f, 0.97f)).SetWeight(0.3f));
         PixelDriver.Add(PixelRoad.NodeBackground().SetWeight(0.1f));
     }
@@ -32,27 +32,34 @@ public class GameManager : MonoBehaviour
 
     public void SaveState()
     {
-        JsonGameState = GameSerialized.Create().ToJson();
-        Debug.Log($"Save state: {JsonGameState}");
+        jsonGameState = GameSerialized.Create().ToJson();
+        Debug.Log($"Save state: {jsonGameState}");
     }
 
     public void SaveGameToFile()
     {
         SaveState();
-        FileStorage.SaveJsonToFile(JsonGameState, GameStateFileName);
+        FileStorage.SaveJsonToFile(jsonGameState, GameStateFileName);
+    }
+
+    public void LoadFromMemoryOrFile()
+    {
+        if (!string.IsNullOrEmpty(jsonGameState)) 
+            LoadSavedState();
+        else LoadGameFromFile();
     }
 
     public void LoadGameFromFile()
     {
-        JsonGameState = FileStorage.LoadGameFromFile(GameStateFileName);
+        jsonGameState = FileStorage.LoadGameFromFile(GameStateFileName);
         LoadSavedState();
     }
 
     public void LoadSavedState()
     {
-        Debug.Log($"Loading json: {JsonGameState}");
+        Debug.Log($"Loading json: {jsonGameState}");
         ClearField();
-        GameSerialized.Create(JsonGameState).Deserialize();
+        GameSerialized.Create(jsonGameState).Deserialize();
     }
 
     public void ClearField()

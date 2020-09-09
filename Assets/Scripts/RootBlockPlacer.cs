@@ -36,11 +36,10 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             .WhenDone(() =>
             {
                 gameObject.SetActive(false);
-                SharedObjects.Instance.configCanvas.Enable();
                 var position = _camera.transform.position;
                 int x = Mathf.RoundToInt(position.x), y = Mathf.RoundToInt(position.y);
-                var newRootBlock = RootBlock.Create(x, y);
-                Roots.Palettes(newRootBlock.rootNum).ColorsId = palette.ColorsId;
+                var newRootBlock = RootBlock.Create(x, y, -1, palette.ColorsId);
+                SharedObjects.Instance.configCanvas.Enable();
             });
     }
 

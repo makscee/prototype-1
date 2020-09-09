@@ -26,16 +26,17 @@ public class RootBlock : Block
         BindMatrix.AddBind(StaticAnchor.Create(logic.Position), this, Vector2.zero, Bind.BlockBindStrength);
     }
 
-    public static RootBlock Create(int x, int y, int rootNum = -1)
+    public static RootBlock Create(int x, int y, int rootId = -1, int colorsId = -1)
     {
-        rootNum = rootNum == -1 ? Roots.Count : rootNum;
-        var b = Instantiate(Prefabs.Instance.rootBlock, Roots.RootCanvases(rootNum).transform).GetComponent<RootBlock>();
-        b.rootNum = rootNum;
-        Roots.Blocks[rootNum] = b;
+        rootId = rootId == -1 ? Roots.Count : rootId;
+        var b = Instantiate(Prefabs.Instance.rootBlock, Roots.RootCanvases(rootId).transform).GetComponent<RootBlock>();
+        b.rootNum = rootId;
+        Roots.Blocks[rootId] = b;
         b.logic.SetCoords(x, y);
         b.transform.position = b.logic.Position;
         b.IsAnchored = true;
         b.StartInit();
+        if (colorsId != -1) Roots.Palettes(rootId).ColorsId = colorsId;
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position), b, Vector2.zero, Bind.BlockStaticBindStrength);
         b.view.SetDirty();
         return b;
