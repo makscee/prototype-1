@@ -11,7 +11,7 @@ public class RootBlock : Block
         {
             if (BindMatrix.GetOutBindsCount(this) == 0)
             {
-                var v = logic.Position + Utils.CoordsFromDir(rootNum % 4);
+                var v = logic.Position + Utils.CoordsFromDir(rootId % 4);
                 NodeBlock.Create(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y), this);
             } else logic.ReceivePulse();
         };
@@ -30,7 +30,7 @@ public class RootBlock : Block
     {
         rootId = rootId == -1 ? Roots.Count : rootId;
         var b = Instantiate(Prefabs.Instance.rootBlock, Roots.RootCanvases(rootId).transform).GetComponent<RootBlock>();
-        b.rootNum = rootId;
+        b.rootId = rootId;
         Roots.Blocks[rootId] = b;
         b.logic.SetCoords(x, y);
         b.transform.position = b.logic.Position;

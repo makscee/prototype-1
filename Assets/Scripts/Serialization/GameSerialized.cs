@@ -39,7 +39,7 @@ public class GameSerialized : JsonUtilitySerializable
             if (BindSerialized.Create(bind, out var t))
                 result.Binds.Add(t);
         foreach (var rootBlock in Roots.Blocks)
-            if (rootBlock != null && SoundsPlayerSerialized.Create(rootBlock.soundsPlayer, rootBlock.rootNum, out var t))
+            if (rootBlock != null && SoundsPlayerSerialized.Create(rootBlock.soundsPlayer, rootBlock.rootId, out var t))
                 result.SoundsPlayers.Add(t);
         return result;
     }

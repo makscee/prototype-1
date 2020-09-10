@@ -13,7 +13,7 @@ public class RootBlockSerialized : JsonUtilitySerializable
             return false;
         }
 
-        result = new RootBlockSerialized {X = b.logic.X, Y = b.logic.Y, Id = b.rootNum, ColorsId = Roots.Palettes(b.rootNum).ColorsId};
+        result = new RootBlockSerialized {X = b.logic.X, Y = b.logic.Y, Id = b.rootId, ColorsId = Roots.Palettes(b.rootId).ColorsId};
 
         return true;
     }

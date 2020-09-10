@@ -56,7 +56,7 @@ public class BlockVisualBase : MonoBehaviour
     
     public static BlockVisualBase Create(Block block, Model model)
     {
-        var b = Instantiate(Prefabs.Instance.blockVisualBase, block.transform.position, Quaternion.identity, SharedObjects.Instance.blockVisualCanvases[block.rootNum].transform)
+        var b = Instantiate(Prefabs.Instance.blockVisualBase, block.transform.position, Quaternion.identity, SharedObjects.Instance.blockVisualCanvases[block.rootId].transform)
             .GetComponent<BlockVisualBase>();
         b.block = block;
         b.AddModel(model);

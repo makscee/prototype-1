@@ -30,14 +30,18 @@ public class WaveEditor : RootEditorScreen, IDragHandler, IBeginDragHandler, IEn
         set => _bottomPicker = Mathf.Max(Mathf.Clamp(value, 0f, 1f), _topPicker + MinThreshold);
     }
 
+    AudioClip _lastClip;
     public AudioClip Clip => RootBlock.soundsPlayer.Clip;
 
-    void RefreshTexture()
+    public void RefreshTexture()
     {
         _currentTexture = WaveTextureProvider.TextureFrom(Clip, width, height);
         Top.texture = _currentTexture;
         Mid.texture = _currentTexture;
         Bot.texture = _currentTexture;
+        
+        _topPicker = (float) RootBlock.soundsPlayer.Configs[currentDirection].SelectFrom / Clip.samples;
+        BottomPicker = (float) RootBlock.soundsPlayer.Configs[currentDirection].SelectTo / Clip.samples;
     }
 
     public override void Select()
@@ -62,6 +66,7 @@ public class WaveEditor : RootEditorScreen, IDragHandler, IBeginDragHandler, IEn
         AddRecordButton.OnUp = EndRecording;
 
         _currentTexture = WaveTextureProvider.TextureFrom(Clip, width, height);
+        _lastClip = Clip;
         Top.texture = _currentTexture;
         Mid.texture = _currentTexture;
         Bot.texture = _currentTexture;
@@ -89,14 +94,18 @@ public class WaveEditor : RootEditorScreen, IDragHandler, IBeginDragHandler, IEn
         Recorder.EndRecording();
         RootBlock.soundsPlayer.Clip = ClipMaker.Add(Clip, Recorder.GetLastRecording());
 
+        RefreshTexture();
         var top = 1f - (float) Recorder.GetLastRecording().samples / Clip.samples;
         _topPicker = top;
         BottomPicker = 1f;
-        RefreshTexture();
     }
 
     void Update()
     {
+        if (!_isRecording && Clip != _lastClip)
+        {
+            RefreshTexture();
+        }
         RecordingUpdate();
         
         var topDist = height * TopPicker;
@@ -203,8 +212,6 @@ public class WaveEditor : RootEditorScreen, IDragHandler, IBeginDragHandler, IEn
                     {
                         CutClip(_cutFrom, _cutTo);
                         _curDragged.position = new Vector3(0, _curDragged.position.y);
-                        _topPicker = (float) RootBlock.soundsPlayer.Configs[currentDirection].SelectFrom / Clip.samples;
-                        BottomPicker = (float) RootBlock.soundsPlayer.Configs[currentDirection].SelectTo / Clip.samples;
                     });
             }
         }

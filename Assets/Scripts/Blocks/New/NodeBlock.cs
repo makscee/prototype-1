@@ -44,7 +44,7 @@ public class NodeBlock : Block
     {
         if (from == null || BindMatrix.GetOutBindsCount(this) != 0) return;
         var dir = Utils.DirFromCoords(logic.Position - from.logic.Position);
-        var root = Roots.Blocks[rootNum]; 
+        var root = Roots.Blocks[rootId]; 
         root.soundsPlayer.Play(dir); 
         PixelDriver.Add(PixelRoad.Circle(root.view.PrimaryPainter.palette.GetColor(dir),
             2f, 3f, 0.05f, 0.5f, logic.X, logic.Y).SetWeight(0.3f));
@@ -87,7 +87,7 @@ public class NodeBlock : Block
         var position = new Vector2(x, y);
         var startPosition = position + Vector2.ClampMagnitude(Roots.Blocks[rootId].logic.Position - position, startOffsetClamp);
         var b = Instantiate(Prefabs.Instance.nodeBlock, startPosition, Quaternion.identity, Roots.RootCanvases(rootId).transform).GetComponent<NodeBlock>();
-        b.rootNum = rootId;
+        b.rootId = rootId;
         b.logic.SetCoords(x, y);
         b.StartInit();
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position, false), b, Vector2.zero, Bind.BlockStaticBindStrength);
@@ -96,7 +96,7 @@ public class NodeBlock : Block
 
     public static NodeBlock Create(int x, int y, Block boundWith)
     {
-        var b = Create(x, y, boundWith.rootNum);
+        var b = Create(x, y, boundWith.rootId);
         BindMatrix.AddBind(boundWith, b, b.logic.Position - boundWith.logic.Position, Bind.BlockBindStrength);
         return b;
     }

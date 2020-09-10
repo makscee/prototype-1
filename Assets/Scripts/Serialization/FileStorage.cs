@@ -16,11 +16,11 @@ public static class FileStorage
         File.WriteAllText(Path(fileName), json);
     }
 
-    public static void SaveAudioClipToFile(AudioClip clip, string fileName)
+    public static void SaveAudioClipToFile(AudioClip clip, int rootId)
     {
         var data = new float[clip.samples];
         clip.GetData(data, 0);
-        using (var file = File.Create(Path(fileName, "dat")))
+        using (var file = File.Create(GetClipFilePath(rootId)))
         {
             using (var writer = new BinaryWriter(file))
             {
@@ -31,15 +31,24 @@ public static class FileStorage
             }
         }
     }
-
-    public static AudioClip GetAudioClipFromFile(string fileName)
+    static string GetClipFilePath(int rootId)
     {
-        var bytes = File.ReadAllBytes(Path(fileName, "dat"));
+        return Path($"clip_{rootId}", "dat");
+    }
+    public static bool GetAudioClipFromFile(int rootId, out AudioClip result)
+    {
+        var path = GetClipFilePath(rootId);
+        if (!File.Exists(path))
+        {
+            result = null;
+            return false;
+        }
+        var bytes = File.ReadAllBytes(path);
         var data = new float[bytes.Length / 4];
         Buffer.BlockCopy(bytes, 0, data, 0, bytes.Length);
-        var result = AudioClip.Create("clip", data.Length, 1, 44100, false);
+        result = AudioClip.Create("clip", data.Length, 1, 44100, false);
         result.SetData(data, 0);
-        return result;
+        return true;
     }
 
     static string Path(string fileName, string extension = "json")

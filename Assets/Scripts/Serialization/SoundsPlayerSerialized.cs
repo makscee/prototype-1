@@ -5,16 +5,15 @@ using UnityEngine;
 [Serializable]
 public class SoundsPlayerSerialized : JsonUtilitySerializable
 {
-    public int dir;
+    public int rootId;
     public List<int> selectFrom = new List<int>(4);
     public List<int> selectTo = new List<int>(4);
     public List<int> rate = new List<int>(4);
     public List<float> volume = new List<float>(4);
     
-    public static bool Create(SoundsPlayer soundsPlayer, int dir, out SoundsPlayerSerialized result)
+    public static bool Create(SoundsPlayer soundsPlayer, int rootId, out SoundsPlayerSerialized result, bool saveClipToFile = false)
     {
-        result = new SoundsPlayerSerialized();
-        result.dir = dir;
+        result = new SoundsPlayerSerialized {rootId = rootId};
         for (var i = 0; i < 4; i++)
         {
             result.selectFrom.Add(soundsPlayer.Configs[i].SelectFrom);
@@ -22,13 +21,12 @@ public class SoundsPlayerSerialized : JsonUtilitySerializable
             result.rate.Add(soundsPlayer.Configs[i].Rate);
             result.volume.Add(soundsPlayer.Configs[i].Volume);
         }
-
         return true;
     }
 
     public void Deserialize()
     {
-        var rootBlock = Roots.Blocks[dir];
+        var rootBlock = Roots.Blocks[rootId];
         for (var i = 0; i < 4; i++)
         {
             rootBlock.soundsPlayer.Configs[i].SelectFrom = selectFrom[i];

@@ -24,17 +24,5 @@ public class KeyboardHandler : MonoBehaviour
         {
             Debug.Log(GameSerialized.Create().ToJson());
         }
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            FileStorage.SaveAudioClipToFile(Roots.Blocks[0].soundsPlayer.Clip, "clip1");
-        }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            var clip = FileStorage.GetAudioClipFromFile("clip1");
-            Debug.Log($"{clip.samples}");
-            Roots.Blocks[0].soundsPlayer.Clip = clip;
-        }
     }
 }

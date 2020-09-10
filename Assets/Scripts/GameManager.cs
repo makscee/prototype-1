@@ -30,18 +30,6 @@ public class GameManager : MonoBehaviour
         OnNextFrame = null;
     }
 
-    public void SaveState()
-    {
-        jsonGameState = GameSerialized.Create().ToJson();
-        Debug.Log($"Save state: {jsonGameState}");
-    }
-
-    public void SaveGameToFile()
-    {
-        SaveState();
-        FileStorage.SaveJsonToFile(jsonGameState, GameStateFileName);
-    }
-
     public void LoadFromMemoryOrFile()
     {
         if (!string.IsNullOrEmpty(jsonGameState)) 
@@ -49,10 +37,10 @@ public class GameManager : MonoBehaviour
         else LoadGameFromFile();
     }
 
-    public void LoadGameFromFile()
+    public void SaveState()
     {
-        jsonGameState = FileStorage.LoadGameFromFile(GameStateFileName);
-        LoadSavedState();
+        jsonGameState = GameSerialized.Create().ToJson();
+        Debug.Log($"Save state: {jsonGameState}");
     }
 
     public void LoadSavedState()
@@ -60,6 +48,24 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Loading json: {jsonGameState}");
         ClearField();
         GameSerialized.Create(jsonGameState).Deserialize();
+    }
+
+    public void SaveGameToFile()
+    {
+        SaveState();
+        FileStorage.SaveJsonToFile(jsonGameState, GameStateFileName);
+        foreach (var rootBlock in Roots.Blocks)
+            if (rootBlock != null)
+                FileStorage.SaveAudioClipToFile(rootBlock.soundsPlayer.Clip, rootBlock.rootId);
+    }
+
+    public void LoadGameFromFile()
+    {
+        jsonGameState = FileStorage.LoadGameFromFile(GameStateFileName);
+        LoadSavedState();
+        foreach (var rootBlock in Roots.Blocks)
+            if (rootBlock != null && FileStorage.GetAudioClipFromFile(rootBlock.rootId, out var result))
+                rootBlock.soundsPlayer.Clip = result;
     }
 
     public void ClearField()

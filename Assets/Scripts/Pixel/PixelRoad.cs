@@ -49,7 +49,7 @@ public class PixelRoad
         pr._colorFunc = (x, y) =>
         {
             if (FieldMatrix.Get(x, y, out var block))
-                return new WeightedColor(Roots.Blocks[block.rootNum].view.PrimaryPainter.palette.GetColor(2),
+                return new WeightedColor(Roots.Blocks[block.rootId].view.PrimaryPainter.palette.GetColor(2),
                     pr._weight);
             return WeightedColor.Clear;
         };

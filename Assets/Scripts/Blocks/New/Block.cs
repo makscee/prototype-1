@@ -7,7 +7,7 @@ public class Block : MonoBehaviour, IBindable, IBindHandler
     public BlockLogic logic;
     public BlockView view;
     public BlockPhysics physics;
-    public int rootNum;
+    public int rootId;
 
     protected virtual void OnEnable()
     {
