@@ -47,7 +47,12 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"Loading json: {jsonGameState}");
         ClearField();
-        GameSerialized.Create(jsonGameState).Deserialize();
+        if (jsonGameState == "{}")
+        {
+            var defaultJson = Resources.Load<TextAsset>("default_game").text;
+            GameSerialized.Create(defaultJson).Deserialize();
+        }
+        else GameSerialized.Create(jsonGameState).Deserialize();
     }
 
     public void SaveGameToFile()
