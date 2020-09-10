@@ -13,14 +13,15 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
     {
         if (Input.touchCount < 2 && !_draggingBlock)
             _camera.transform.position -= _camera.ScreenToWorldPoint(eventData.delta) - _camera.ScreenToWorldPoint(Vector3.zero);
-        
-        BlockEditor.OnBlockDrag();
+        if (eventData.button == PointerEventData.InputButton.Left && Input.touchCount < 2)
+            BlockEditor.OnBlockDrag();
     }
 
     bool _dragging, _draggingBlock;
     Block _draggedBlock;
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left || Input.touchCount > 1) return;
         _dragging = true;
         
         Utils.GetInputCoords(out var x, out var y);
@@ -34,6 +35,7 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (eventData.button != PointerEventData.InputButton.Left || Input.touchCount > 1) return;
         _dragging = false;
         _draggingBlock = false;
         
@@ -44,7 +46,7 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (_dragging || Input.touchCount > 1) return;
+        if (_dragging || Input.touchCount > 1 || eventData.button != PointerEventData.InputButton.Left) return;
         
         Utils.GetInputCoords(out var x, out var y);
         if (FieldMatrix.Get(x, y, out var block))
