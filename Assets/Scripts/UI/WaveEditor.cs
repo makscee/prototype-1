@@ -105,6 +105,7 @@ public class WaveEditor : RootEditorScreen, IDragHandler, IBeginDragHandler, IEn
     {
         if (!_isRecording && Clip != _lastClip)
         {
+            _lastClip = Clip;
             RefreshTexture();
         }
         RecordingUpdate();
