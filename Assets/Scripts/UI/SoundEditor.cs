@@ -9,6 +9,9 @@ public class SoundEditor : RootEditorScreen
     {
         volume.onClick = Play;
         rate.onClick = Play;
+
+        volume.onDragEnd = ValueChangeEnd;
+        rate.onDragEnd = ValueChangeEnd;
         
         volume.onValueChange = v => Apply();
         rate.onValueChange = v => Apply();
@@ -39,5 +42,11 @@ public class SoundEditor : RootEditorScreen
     void Play()
     {
         rootEditor.RootBlock.soundsPlayer.Play(_direction);
+    }
+
+    void ValueChangeEnd()
+    {
+        if (GlobalPulse.HasSubscribers) return;
+        Play();
     }
 }

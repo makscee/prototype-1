@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [ExecuteInEditMode]
-public class SplitSlider : MonoBehaviour, IDragHandler, IPointerClickHandler
+public class SplitSlider : MonoBehaviour, IDragHandler, IPointerClickHandler, IEndDragHandler, IBeginDragHandler
 {
     [SerializeField] RawImage top, bottom;
     [SerializeField] RectTransform rect;
@@ -44,6 +44,7 @@ public class SplitSlider : MonoBehaviour, IDragHandler, IPointerClickHandler
         onValueChange?.Invoke(MultipliedValueFloat);
     }
 
+    bool _dragging;
     public void OnDrag(PointerEventData eventData)
     {
         value += eventData.delta.y / rect.rect.height;
@@ -54,6 +55,18 @@ public class SplitSlider : MonoBehaviour, IDragHandler, IPointerClickHandler
     public Action onDragEnd;
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (_dragging) return;
         onClick?.Invoke();
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        _dragging = true;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        _dragging = false;
+        onDragEnd?.Invoke();
     }
 }

@@ -10,6 +10,8 @@ public static class GlobalPulse
     {
         TickTime = 60f / Bpm / 4;
     }
+
+    public static bool HasSubscribers => _subscribers != null;
     
     static Action _subscribers;
     public static void SubscribeToNext(Action a)
