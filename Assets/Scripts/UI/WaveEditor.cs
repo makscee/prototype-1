@@ -72,7 +72,6 @@ public class WaveEditor : RootEditorScreen, IDragHandler, IBeginDragHandler, IEn
         Bot.texture = _currentTexture;
     }
     
-    float _recordingLength;
     bool _isRecording;
     void StartRecording()
     {
@@ -92,6 +91,8 @@ public class WaveEditor : RootEditorScreen, IDragHandler, IBeginDragHandler, IEn
         _isRecording = false;
         height = Mathf.RoundToInt(_maxHeight);
         Recorder.EndRecording();
+        if (Recorder.GetLastRecording() == null) return;
+        
         RootBlock.soundsPlayer.Clip = ClipMaker.Add(Clip, Recorder.GetLastRecording());
 
         RefreshTexture();
