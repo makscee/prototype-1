@@ -1,17 +1,5 @@
 using UnityEngine;
 
-/*
- 
-new[]
-{
-    Color.black,
-    Color.black,
-    Color.black,
-    Color.black,
-},
-
- */
-
 [ExecuteInEditMode]
 public class Palette : MonoBehaviour
 {
@@ -21,7 +9,7 @@ public class Palette : MonoBehaviour
 
     public Palette copyOf;
     
-    [SerializeField, Range(-1, 3)] int colorsId;
+    [SerializeField, Range(-1, 7)] int colorsId;
 
     public int ColorsId
     {

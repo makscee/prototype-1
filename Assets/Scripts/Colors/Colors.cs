@@ -2,6 +2,18 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+
+/*
+ 
+new[]
+{
+    Color.black,
+    Color.black,
+    Color.black,
+    Color.black
+},
+
+ */
 public static class Colors
 {
     static readonly Color[][] Palettes = {
@@ -14,10 +26,10 @@ public static class Colors
         },
         new[]
         {
-            new Color(0.49f, 0.35f, 0.35f),
-            new Color(0.95f, 0.82f, 0.82f),
-            new Color(0.95f, 0.88f, 0.88f),
-            new Color(0.98f, 0.95f, 0.95f),
+            new Color(0.93f, 0.81f, 0.66f),
+            new Color(0.91f, 0.62f, 0.44f),
+            new Color(0.84f, 0.44f, 0.29f),
+            new Color(0.67f, 0.29f, 0.19f)
         },
         new[]
         {
@@ -28,10 +40,38 @@ public static class Colors
         },
         new[]
         {
-            new Color(0.66f, 0.9f, 0.81f),
-            new Color(0.86f, 0.93f, 0.76f),
-            new Color(1f, 0.83f, 0.71f),
-            new Color(1f, 0.67f, 0.65f),
+            new Color(0.96f, 0.96f, 0.96f),
+            new Color(0.94f, 0.65f, 0f),
+            new Color(0.81f, 0.46f, 0f),
+            new Color(0.1f, 0.11f, 0.13f),
+        },
+        new[]
+        {
+            new Color(0.95f, 0.95f, 0.97f),
+            new Color(0.84f, 0.88f, 0.94f),
+            new Color(0.55f, 0.58f, 0.67f),
+            new Color(0.22f, 0.23f, 0.27f)
+        },
+        new[]
+        {
+            new Color(0.85f, 0.13f, 0.15f),
+            new Color(1f, 0.57f, 0.2f),
+            new Color(1f, 0.8f, 0.24f),
+            new Color(0.21f, 0.82f, 0.73f)
+        },
+        new[]
+        {
+            new Color(0.44f, 0.29f, 0.56f),
+            new Color(0.13f, 0.12f, 0.23f),
+            new Color(0.02f, 0.02f, 0.02f),
+            new Color(0.92f, 0.92f, 0.92f)
+        },
+        new[]
+        {
+            new Color(0.93f, 0.93f, 0.93f),
+            new Color(0.2f, 0.88f, 0.77f),
+            new Color(0.22f, 0.24f, 0.27f),
+            new Color(0.13f, 0.16f, 0.19f)
         },
     };
 

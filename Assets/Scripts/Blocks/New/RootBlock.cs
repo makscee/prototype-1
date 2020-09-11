@@ -46,7 +46,7 @@ public class RootBlock : Block
             next.pulseVersion = pulseVersion;
             foreach (var bind in BindMatrix.GetAllAdjacentBinds(next))
             {
-                if (bind.First == next && bind.Second is Block block && block.pulseVersion != pulseVersion)
+                if (bind.First == next && bind.Second is Block block && block.pulseVersion != pulseVersion && block.rootId == rootId)
                     queue.Enqueue(block);
             }
         }

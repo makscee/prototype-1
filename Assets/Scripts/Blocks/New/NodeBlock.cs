@@ -15,7 +15,7 @@ public class NodeBlock : Block
         logic.onPulseReceive += OnPulseDeadEnd;
         logic.onBind += bind =>
         {
-            if (bind.Second == this && bind.First is Block block)
+            if (bind.Second == this && bind.First is Block block && block.rootId == rootId)
             {
                 pulseVersion = block.pulseVersion;
                 RefreshStepNumber();

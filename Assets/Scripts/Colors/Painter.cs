@@ -11,7 +11,7 @@ public class Painter : MonoBehaviour
     public Palette palette;
     public Color Default;
     public bool ForceDefault;
-    [SerializeField, Range(0, 3)]int numInPalette;
+    [SerializeField, Range(0, 7)]int numInPalette;
     public Painter subscribedTo;
     public Vector3 MultiplyBy = new Vector3(1, 1, 1);
     public Object PaintOn;
