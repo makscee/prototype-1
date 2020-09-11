@@ -15,8 +15,11 @@ public class NodeBlock : Block
         logic.onPulseReceive += OnPulseDeadEnd;
         logic.onBind += bind =>
         {
-            if (bind.Second == this && bind.First is Block)
+            if (bind.Second == this && bind.First is Block block)
+            {
+                pulseVersion = block.pulseVersion;
                 RefreshStepNumber();
+            }
         };
         logic.onUnbind += bind =>
         {
@@ -40,6 +43,11 @@ public class NodeBlock : Block
         view.SetDirty();
     }
 
+    void Update()
+    {
+        if (_stepNumberDirty) RefreshStepNumber();
+    }
+
     void OnPulseDeadEnd(Block from)
     {
         if (from == null || BindMatrix.GetOutBindsCount(this) != 0) return;
@@ -49,11 +57,10 @@ public class NodeBlock : Block
         PixelDriver.Add(PixelRoad.Circle(root.view.PrimaryPainter.palette.GetColor(dir),
             2f, 3f, 0.05f, 0.5f, logic.X, logic.Y).SetWeight(0.3f));
     }
-    
     public void RefreshStepNumber()
     {
         var t = int.MaxValue / 2;
-        if (IsAnchored)
+        if (PulseConnected)
         {
             foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
             {
@@ -71,13 +78,14 @@ public class NodeBlock : Block
         StepNumberChangeNotify();
     }
 
+    bool _stepNumberDirty;
     public void StepNumberChangeNotify()
     {
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
         {
             if (bind.First == this && bind.Second is NodeBlock nodeBlock)
             {
-                nodeBlock.RefreshStepNumber();
+                nodeBlock._stepNumberDirty = true;
             }
         }
     }
@@ -90,6 +98,10 @@ public class NodeBlock : Block
         b.rootId = rootId;
         b.logic.SetCoords(x, y);
         b.StartInit();
+        var startModel = b.view.VisualBase.Current;
+        Animator.Interpolate(0.4f, 1f, 0.4f)
+            .PassValue(v => startModel.transform.localScale = new Vector3(v, v, 1))
+            .Type(InterpolationType.InvSquare).NullCheck(startModel.gameObject);
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position, false), b, Vector2.zero, Bind.BlockStaticBindStrength);
         return b;
     }

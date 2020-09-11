@@ -58,7 +58,7 @@ public class Interpolator<T> : IUpdateable
     GameObject _nullCheck;
     bool _haveToNullCheck;
 
-    public Interpolator<T> NulLCheck(GameObject gameObject)
+    public Interpolator<T> NullCheck(GameObject gameObject)
     {
         _haveToNullCheck = true;
         _nullCheck = gameObject;
@@ -75,6 +75,11 @@ public class Interpolator<T> : IUpdateable
     bool _isDone;
     public void Update()
     {
+        if (_haveToNullCheck && _nullCheck == null)
+        {
+            _isDone = true;
+            return;
+        }
         var delta = Time.deltaTime;
         if (_delay > 0f)
         {
@@ -100,11 +105,6 @@ public class Interpolator<T> : IUpdateable
         _cur = _addFunc(_from, _multiplyFunc(_subtractFunc(_to, _from), tUnit));
         _passDelta?.Invoke(_subtractFunc(_cur, before));
         _passValue?.Invoke(_cur);
-        if (_haveToNullCheck && _nullCheck == null)
-        {
-            _isDone = true;
-            return;
-        }
         if (_t == _over)
         {
             _isDone = true;

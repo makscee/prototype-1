@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RootBlock : Block
@@ -26,6 +27,31 @@ public class RootBlock : Block
         BindMatrix.AddBind(StaticAnchor.Create(logic.Position), this, Vector2.zero, Bind.BlockBindStrength);
     }
 
+    void Update()
+    {
+        if (pulseVersionDirty) PulseConnectionUpdate();
+    }
+
+    public bool pulseVersionDirty;
+    public void PulseConnectionUpdate()
+    {
+        pulseVersionDirty = false;
+        pulseVersion++;
+        
+        var queue = new Queue<Block>();
+        queue.Enqueue(this);
+        while (queue.Count > 0)
+        {
+            var next = queue.Dequeue();
+            next.pulseVersion = pulseVersion;
+            foreach (var bind in BindMatrix.GetAllAdjacentBinds(next))
+            {
+                if (bind.First == next && bind.Second is Block block && block.pulseVersion != pulseVersion)
+                    queue.Enqueue(block);
+            }
+        }
+    }
+
     public static RootBlock Create(int x, int y, int rootId = -1, int colorsId = -1)
     {
         rootId = rootId == -1 ? Roots.Count : rootId;
@@ -34,7 +60,6 @@ public class RootBlock : Block
         Roots.Blocks[rootId] = b;
         b.logic.SetCoords(x, y);
         b.transform.position = b.logic.Position;
-        b.IsAnchored = true;
         b.StartInit();
         if (colorsId != -1) Roots.Palettes(rootId).ColorsId = colorsId;
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position), b, Vector2.zero, Bind.BlockStaticBindStrength);

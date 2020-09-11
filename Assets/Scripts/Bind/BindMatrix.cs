@@ -18,10 +18,9 @@ public static class BindMatrix
 
         Matrix[first][second] = b;
         Matrix[second][first] = b;
-
-        if (first.IsAnchored != second.IsAnchored)
-            foreach (var obj in CollectBoundCluster(first))
-                obj.IsAnchored = true;
+        
+        if (first is Block block1) Roots.Blocks[block1.rootId].pulseVersionDirty = true;
+        else if (second is Block block2) Roots.Blocks[block2.rootId].pulseVersionDirty = true;
 
         if (first is IBindHandler firstH)
             firstH.OnBind(b);
@@ -40,8 +39,9 @@ public static class BindMatrix
         var bind = Matrix[first][second];
         Matrix[first]?.Remove(second);
         Matrix[second]?.Remove(first);
-        if (!first.IsAnchor()) RefreshAnchored(first);
-        if (!second.IsAnchor()) RefreshAnchored(second);
+        
+        if (first is Block block1) Roots.Blocks[block1.rootId].pulseVersionDirty = true;
+        else if (second is Block block2) Roots.Blocks[block2.rootId].pulseVersionDirty = true;
         
         if (first is IBindHandler firstH)
             firstH.OnUnbind(bind);
@@ -91,43 +91,6 @@ public static class BindMatrix
     {
         if (!Matrix.ContainsKey(obj)) return 0;
         return Matrix[obj].Values.Count;
-    }
-
-    // ReSharper disable once ReturnTypeCanBeEnumerable.Global
-    public static List<IBindable> CollectBoundCluster(IBindable obj, bool jumpCenter = false)
-    {
-        var result = new List<IBindable>();
-        var queue = new Queue<IBindable>();
-        queue.Enqueue(obj);
-        while (queue.Count > 0)
-        {
-            var next = queue.Dequeue();
-            next.Used = true;
-            if (next is PulseBlockCenter) continue;
-            result.Add(next);
-            foreach (var bind in GetAllAdjacentBinds(next))
-            {
-                if (!bind.First.Used) queue.Enqueue(bind.First);
-                if (!bind.Second.Used) queue.Enqueue(bind.Second);
-            }
-        }
-
-        foreach (var o in result)
-        {
-            o.Used = false;
-        }
-
-        return result;
-    }
-
-    static void RefreshAnchored(IBindable obj)
-    {
-        var bound = CollectBoundCluster(obj);
-        var hasAnchor = bound.Any(o => o.IsAnchor());
-        foreach (var o in bound)
-        {
-            o.IsAnchored = hasAnchor;
-        }
     }
 
     public static List<Bind> GetAllAsList()

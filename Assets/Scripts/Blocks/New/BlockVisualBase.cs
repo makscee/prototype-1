@@ -5,7 +5,7 @@ using UnityEngine;
 public class BlockVisualBase : MonoBehaviour
 {
     public Block block;
-    public readonly Dictionary<Model, BlockVisualModel> _models = new Dictionary<Model, BlockVisualModel>();
+    readonly Dictionary<Model, BlockVisualModel> _models = new Dictionary<Model, BlockVisualModel>();
     Model _currentModel;
     public Action<BlockVisualModel> onModelChange;
 

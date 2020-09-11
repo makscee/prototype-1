@@ -16,14 +16,13 @@ public class BlockPhysics : MonoBehaviour
 
     void Update()
     {
-        if (!parent.IsAnchored) return;
         var maxSpeedChange = MaxAcceleration * Time.deltaTime;
         // _velocity = Vector2.ClampMagnitude(parent.logic.Position - Position, 50f);
-        
+        var bindStrengthDivisor = 1f / BindMatrix.GetBindsCount(parent);
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(parent))
         {
             var v = bind.GetTarget(parent) - Position;
-            var f = v * (bind.Strength * Bind.StrengthMultiplier);
+            var f = v * (bind.Strength * bindStrengthDivisor * Bind.StrengthMultiplier);
 
             _desiredVelocity += f;
         }

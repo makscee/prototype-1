@@ -30,8 +30,6 @@
           </e>
           <e p="Blocks" t="Include">
             <e p="BlockEditor.cs" t="Include" />
-            <e p="BlockOld.cs" t="Include" />
-            <e p="FieldCircle.cs" t="Include" />
             <e p="FieldMatrix.cs" t="Include" />
             <e p="New" t="Include">
               <e p="Block.cs" t="Include" />
@@ -43,8 +41,6 @@
               <e p="NodeBlock.cs" t="Include" />
               <e p="RootBlock.cs" t="Include" />
             </e>
-            <e p="PulseBlock.cs" t="Include" />
-            <e p="PulseBlockCenter.cs" t="Include" />
           </e>
           <e p="CameraScript.cs" t="Include" />
           <e p="Colors" t="Include">

@@ -9,13 +9,7 @@ public class NodeBlockSerialized : JsonUtilitySerializable
     public static bool Create(NodeBlock b, out NodeBlockSerialized result)
     {
         result = null;
-        if (!b.IsAnchored)
-        {
-            return false;
-        }
-
         result = new NodeBlockSerialized {X = b.logic.X, Y = b.logic.Y, RootId = b.rootId};
-
         return true;
     }
 

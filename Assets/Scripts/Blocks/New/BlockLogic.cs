@@ -51,12 +51,12 @@ public class BlockLogic : MonoBehaviour
 
     void Update()
     {
-        UpdateUnanchoredCoords();
+        // UpdateUnanchoredCoords();
     }
 
     void UpdateUnanchoredCoords()
     {
-        if (parent.IsAnchored) return;
+        // if (parent.IsAnchored) return;
         
         var x = Mathf.RoundToInt(parent.physics.X);
         var y = Mathf.RoundToInt(parent.physics.Y);

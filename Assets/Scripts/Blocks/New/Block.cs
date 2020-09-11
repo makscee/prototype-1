@@ -8,6 +8,8 @@ public class Block : MonoBehaviour, IBindable, IBindHandler
     public BlockView view;
     public BlockPhysics physics;
     public int rootId;
+    public bool PulseConnected => Roots.Blocks[rootId].pulseVersion == pulseVersion;
+    public int pulseVersion;
 
     protected virtual void OnEnable()
     {
@@ -38,14 +40,6 @@ public class Block : MonoBehaviour, IBindable, IBindHandler
     {
         return transform.position;
     }
-
-    protected bool AnchorSelf;
-    public bool IsAnchor()
-    {
-        return AnchorSelf;
-    }
-
-    public bool IsAnchored { get; set; }
 
     public bool Used { get; set; }
     public void OnBind(Bind bind)
