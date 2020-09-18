@@ -11,7 +11,7 @@ public class Painter : MonoBehaviour
     public Palette palette;
     public Color Default;
     public bool ForceDefault;
-    [SerializeField, Range(0, 7)]int numInPalette;
+    [SerializeField, Range(0, 3)]int numInPalette;
     public Painter subscribedTo;
     public Vector3 MultiplyBy = new Vector3(1, 1, 1);
     public Object PaintOn;
@@ -66,6 +66,18 @@ public class Painter : MonoBehaviour
 
     void ObtainPaintAction()
     {
+        
+        var graphic = PaintOn == null ? GetComponent<Graphic>() : PaintOn as Graphic;
+        if (graphic != null)
+        {
+            _paint = c =>
+            {
+                c.a = graphic.color.a;
+                graphic.color = c;
+            };
+            return;
+        }
+        
         var rawImg = PaintOn == null ? GetComponent<RawImage>() : PaintOn as RawImage;
         if (rawImg != null)
         {

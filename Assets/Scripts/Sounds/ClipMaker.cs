@@ -69,9 +69,9 @@ public static class ClipMaker
 
     public static AudioClip Add(AudioClip clipA, AudioClip clipB)
     {
+        if (clipA == null && clipB == null) return Empty;
         if (clipA == null) return clipB;
         if (clipB == null) return clipA;
-        Debug.Log($"Clip add {clipA} {clipB}");
         var samples = clipA.samples + clipB.samples;
         var data = new float[samples];
         clipA.GetData(data, 0);
@@ -87,5 +87,17 @@ public static class ClipMaker
         var result = AudioClip.Create("A+B", samples, 1, clipA.frequency, false);
         result.SetData(data, 0);
         return result;
+    }
+
+    static AudioClip _empty;
+
+    public static AudioClip Empty
+    {
+        get
+        {
+            if (_empty == null)
+                _empty = AudioClip.Create("empty", 8, 1, 44100, false);
+            return _empty;
+        }
     }
 }

@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
     Camera _camera;
+
+    public Action nextClickOverride;
 
     void Start()
     {
@@ -47,6 +50,13 @@ public class BackgroundInputHandler : MonoBehaviour, IDragHandler, IBeginDragHan
     public void OnPointerClick(PointerEventData eventData)
     {
         if (_dragging || Input.touchCount > 1 || eventData.button != PointerEventData.InputButton.Left) return;
+
+        if (nextClickOverride != null)
+        {
+            nextClickOverride();
+            nextClickOverride = null;
+            return;
+        }
         
         Utils.GetInputCoords(out var x, out var y);
         if (FieldMatrix.Get(x, y, out var block))

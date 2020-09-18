@@ -23,9 +23,19 @@ public class NodeBlock : Block
         };
         logic.onUnbind += bind =>
         {
-
             if (bind.Second == this && bind.First is Block)
                 RefreshStepNumber();
+            var alone = true;
+            foreach (var adjacentBind in BindMatrix.GetAllAdjacentBinds(this))
+            {
+                if (adjacentBind.First is Block && adjacentBind.First != this ||
+                    adjacentBind.Second is Block && adjacentBind.Second != this)
+                {
+                    alone = false;
+                    break;
+                }
+            }
+            if (alone) Destroy();
         };
     }
 

@@ -29,18 +29,16 @@
             <e p="StaticAnchor.cs" t="Include" />
           </e>
           <e p="Blocks" t="Include">
+            <e p="Block.cs" t="Include" />
             <e p="BlockEditor.cs" t="Include" />
+            <e p="BlockLogic.cs" t="Include" />
+            <e p="BlockPhysics.cs" t="Include" />
+            <e p="BlockView.cs" t="Include" />
+            <e p="BlockVisualBase.cs" t="Include" />
+            <e p="BlockVisualModel.cs" t="Include" />
             <e p="FieldMatrix.cs" t="Include" />
-            <e p="New" t="Include">
-              <e p="Block.cs" t="Include" />
-              <e p="BlockLogic.cs" t="Include" />
-              <e p="BlockPhysics.cs" t="Include" />
-              <e p="BlockView.cs" t="Include" />
-              <e p="BlockVisualBase.cs" t="Include" />
-              <e p="BlockVisualModel.cs" t="Include" />
-              <e p="NodeBlock.cs" t="Include" />
-              <e p="RootBlock.cs" t="Include" />
-            </e>
+            <e p="NodeBlock.cs" t="Include" />
+            <e p="RootBlock.cs" t="Include" />
           </e>
           <e p="CameraScript.cs" t="Include" />
           <e p="Colors" t="Include">
@@ -82,7 +80,6 @@
             <e p="SoundsPlayer.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
-            <e p="CentralRack.cs" t="Include" />
             <e p="ConfigCanvas.cs" t="Include" />
             <e p="DarkOverlay.cs" t="Include" />
             <e p="PaletteButton.cs" t="Include" />
@@ -92,13 +89,23 @@
             <e p="RootEditor.cs" t="Include" />
             <e p="RootEditorScreen.cs" t="Include" />
             <e p="RootEditorsFolder.cs" t="Include" />
+            <e p="SlidingPanels" t="Include">
+              <e p="SlidingPanel.cs" t="Include" />
+              <e p="SlidingPanelBookmark.cs" t="Include" />
+              <e p="SlidingPanelsFolder.cs" t="Include" />
+              <e p="SlidingPanelsGroup.cs" t="Include" />
+            </e>
             <e p="SoundEditor.cs" t="Include" />
             <e p="SplitSlider.cs" t="Include" />
             <e p="WaveEditor.cs" t="Include" />
             <e p="WaveEditorAddRecordButton.cs" t="Include" />
+            <e p="WaveRenderer.cs" t="Include" />
             <e p="WaveTextureProvider.cs" t="Include" />
           </e>
-          <e p="Utils.cs" t="Include" />
+          <e p="Utils" t="Include">
+            <e p="Multiline.cs" t="Include" />
+            <e p="Utils.cs" t="Include" />
+          </e>
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />

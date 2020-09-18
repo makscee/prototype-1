@@ -18,19 +18,23 @@ public class SplitSlider : MonoBehaviour, IDragHandler, IPointerClickHandler, IE
 
     void Update()
     {
-        if (value != _valueBefore)
+        if (Math.Abs(top.rectTransform.rect.height - GetHeight(value, true)) > 0.001f)
         {
             value = Mathf.Clamp(value, 0f, 1f);
             ValueUpdated(value);
             _valueBefore = value;
         }
     }
-    
+
+    float GetHeight(float v, bool top)
+    {
+        return (top ? 1 - v : v) * rect.rect.height;
+    }
     void ValueUpdated(float v)
     {
         var heightTotal = rect.rect.height;
-        var topHeight = (1 - v) * heightTotal;
-        var bottomHeight = v * heightTotal;
+        var topHeight = GetHeight(v, true);
+        var bottomHeight = GetHeight(v, false);
         top.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, topHeight);
         bottom.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, bottomHeight);
         var textRectTransform = valueText.rectTransform;

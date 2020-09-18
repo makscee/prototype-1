@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public static class Utils
@@ -79,5 +81,15 @@ public static class Utils
         var worldPos = SharedObjects.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         x = (int) Math.Round(worldPos.x);
         y = (int) Math.Round(worldPos.y);
+    }
+
+    static Dictionary<Transform, CanvasScaler> _scalers = new Dictionary<Transform, CanvasScaler>();
+    public static Vector2 ScaledScreenCoords(Vector2 v, Transform transform)
+    {
+        if (!_scalers.ContainsKey(transform)) 
+            _scalers.Add(transform, transform.GetComponentInParent<CanvasScaler>());
+        var scaler = _scalers[transform];
+        var scale = scaler.referenceResolution / new Vector2(Screen.width, Screen.height);
+        return v * scale;
     }
 }

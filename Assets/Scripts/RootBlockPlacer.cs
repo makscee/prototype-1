@@ -8,16 +8,11 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [SerializeField] RawImage background;
     [SerializeField] Palette palette;
     [SerializeField] Transform blockVisual;
-    Camera _camera;
-
-    void Start()
-    {
-        _camera = SharedObjects.Instance.Camera;
-    }
+    [SerializeField] Camera cam;
 
     void Update()
     {
-        blockVisual.position = (Vector2)_camera.transform.position;
+        blockVisual.position = (Vector2)cam.transform.position;
     }
 
     const float DarkenAlpha = 0.6f;
@@ -27,6 +22,7 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         SharedObjects.Instance.configCanvas.Disable();
         palette.ColorsId = Colors.GetRandomFreeId();
         background.color = new Color(0, 0, 0, DarkenAlpha);
+        SnapToGrid();
     }
 
     void FinishPlacing()
@@ -36,7 +32,7 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             .WhenDone(() =>
             {
                 gameObject.SetActive(false);
-                var position = _camera.transform.position;
+                var position = cam.transform.position;
                 int x = Mathf.RoundToInt(position.x), y = Mathf.RoundToInt(position.y);
                 var newRootBlock = RootBlock.Create(x, y, -1, palette.ColorsId);
                 SharedObjects.Instance.configCanvas.Enable();
@@ -52,7 +48,7 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
-        _camera.transform.position -= _camera.ScreenToWorldPoint(eventData.delta) - _camera.ScreenToWorldPoint(Vector3.zero);
+        cam.transform.position -= cam.ScreenToWorldPoint(eventData.delta) - cam.ScreenToWorldPoint(Vector3.zero);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -63,10 +59,10 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     void SnapToGrid()
     {
-        var position = _camera.transform.position;
+        var position = cam.transform.position;
         var snappedPos = new Vector3(Mathf.Round(position.x), Mathf.Round(position.y), position.z);
         Animator.Interpolate(position, snappedPos, 0.2f).Type(InterpolationType.InvSquare)
-            .PassDelta(v => _camera.transform.position += v);
+            .PassDelta(v => cam.transform.position += v);
     }
 
     public void OnPointerClick(PointerEventData eventData)

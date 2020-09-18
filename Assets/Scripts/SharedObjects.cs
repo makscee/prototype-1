@@ -10,6 +10,8 @@ public class SharedObjects : MonoBehaviour
     public GameObject bindVisualsCanvas;
     public ConfigCanvas configCanvas;
 
+    public BackgroundInputHandler backgroundInputHandler;
+
     public static SharedObjects Instance;
 
     void OnEnable()

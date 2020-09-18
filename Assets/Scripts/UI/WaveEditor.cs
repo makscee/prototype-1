@@ -213,7 +213,7 @@ public class WaveEditor : RootEditorScreen, IDragHandler, IBeginDragHandler, IEn
                     .PassDelta(v => _curDragged.anchoredPosition += new Vector2(v, 0)).WhenDone(() =>
                     {
                         CutClip(_cutFrom, _cutTo);
-                        _curDragged.position = new Vector3(0, _curDragged.position.y);
+                        _curDragged.anchoredPosition = new Vector3(0, _curDragged.position.y);
                     });
             }
         }
