@@ -99,7 +99,11 @@
             <e p="SplitSlider.cs" t="Include" />
             <e p="WaveEditor.cs" t="Include" />
             <e p="WaveEditorAddRecordButton.cs" t="Include" />
-            <e p="WaveRenderer.cs" t="Include" />
+            <e p="WaveRender" t="Include">
+              <e p="WavePart.cs" t="Include" />
+              <e p="WavePartsContainer.cs" t="Include" />
+              <e p="WaveRenderer.cs" t="Include" />
+            </e>
             <e p="WaveTextureProvider.cs" t="Include" />
           </e>
           <e p="Utils" t="Include">

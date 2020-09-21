@@ -5,7 +5,6 @@ public class Prefabs : MonoBehaviour
     public GameObject nodeBlock;
     public GameObject rootBlock;
     public GameObject bindVisual;
-    public GameObject fieldCircle;
     public GameObject pixel;
     public GameObject rollingButton;
 

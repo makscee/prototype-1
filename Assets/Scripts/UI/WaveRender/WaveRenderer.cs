@@ -6,7 +6,8 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class WaveRenderer : Graphic
 {
-    [SerializeField] AudioClip clip;
+    public AudioClip clip;
+    public int samplesFrom, samplesTo;
     
     public List<Multiline> multilines = new List<Multiline>();
 
@@ -23,18 +24,20 @@ public class WaveRenderer : Graphic
         height = rect.height;
         multilines.Clear();
 
-        var data = new float[clip.samples];
-        clip.GetData(data, 0);
-        var positions = new Vector2[lines * 2];
+        var dataLength = samplesTo - samplesFrom;
+        var data = new float[dataLength];
+        clip.GetData(data, samplesFrom);
+        var positions = new Vector2[(lines - 1) * 2];
         var positionsInd = 0;
         for (var i = 0; i < lines - 1; i++)
         {
             float min = 1f, max = -1f;
-            for (var j = i * clip.samples / lines; j < (i + 1) * clip.samples / lines; j++)
+            for (var j = i * dataLength / lines; j < (i + 1) * dataLength / lines; j++)
             {
                 min = Mathf.Min(min, data[j]);
                 max = Mathf.Max(max, data[j]);
             }
+            if (max == -1f) continue;
 
             positions[positionsInd++] = new Vector2(width / 2 + min * width / 2, height - height / lines * i);
             positions[positionsInd++] = new Vector2(width / 2 + max * width / 2, height - height / lines * i);
