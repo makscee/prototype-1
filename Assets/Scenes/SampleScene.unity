@@ -308,7 +308,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 97.82001, y: -31}
+  m_AnchoredPosition: {x: 97.82007, y: -31}
   m_SizeDelta: {x: 167.7909, y: 49.329895}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &259070703
@@ -439,9 +439,9 @@ RectTransform:
   m_Father: {fileID: 1400483469}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -690.1, y: 266.2}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 32, y: 32}
   m_SizeDelta: {x: 64, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &329971240
@@ -966,7 +966,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 97.82001, y: -121.29999}
+  m_AnchoredPosition: {x: 97.82007, y: -121.30005}
   m_SizeDelta: {x: 167.7909, y: 49.329895}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &564435510
@@ -1700,22 +1700,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f974d06ca6da90e41ad8ccd46c66ef88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeBlock: {fileID: 251989167824789121, guid: 1a48c896cbbb78e47a739492aeee22e6,
-    type: 3}
-  rootBlock: {fileID: 4115909928036307132, guid: eb439737dd7b6bd47964f19a895e9d08,
-    type: 3}
-  bindVisual: {fileID: 9045975286132907859, guid: 6c26debb8acb70b4db7a187978e0468c,
-    type: 3}
-  pixel: {fileID: 2769389204050510749, guid: f3253610ceb584640afc265228438e8d, type: 3}
-  rootCanvas: {fileID: 0}
-  blockVisualBase: {fileID: 7040440144472880495, guid: 35ba8e68686ecc74d83f7a4961d19365,
-    type: 3}
-  nodeDeadendVisualModel: {fileID: 6897376495429527264, guid: a36e059d2401d6b4eb121c81faa72305,
-    type: 3}
-  nodePipeVisualModel: {fileID: 7181191671502347847, guid: 50b5e5e3c22a06045ba878373c5d5630,
-    type: 3}
-  rootBlockVisualModel: {fileID: 7764886673762801825, guid: 9dcf52651b3a8e74b8ad2d7feeec707d,
-    type: 3}
 --- !u!4 &896206950
 Transform:
   m_ObjectHideFlags: 0
@@ -2467,15 +2451,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors:
-  - {r: 0.95, g: 0.95, b: 0.97, a: 1}
-  - {r: 0.84, g: 0.88, b: 0.94, a: 1}
-  - {r: 0.55, g: 0.58, b: 0.67, a: 1}
-  - {r: 0.22, g: 0.23, b: 0.27, a: 1}
+  - {r: 0.9599999, g: 0.93000007, b: 1, a: 1}
+  - {r: 0.86, g: 0.84000003, b: 0.97, a: 1}
+  - {r: 0.65, g: 0.68999994, b: 0.88, a: 1}
+  - {r: 0.26, g: 0.27999997, b: 0.45, a: 1}
   targetColors:
-  - {r: 0.95, g: 0.95, b: 0.97, a: 1}
-  - {r: 0.84, g: 0.88, b: 0.94, a: 1}
-  - {r: 0.55, g: 0.58, b: 0.67, a: 1}
-  - {r: 0.22, g: 0.23, b: 0.27, a: 1}
+  - {r: 0.96, g: 0.93, b: 1, a: 1}
+  - {r: 0.86, g: 0.84, b: 0.97, a: 1}
+  - {r: 0.65, g: 0.69, b: 0.88, a: 1}
+  - {r: 0.26, g: 0.28, b: 0.45, a: 1}
   useOwnColors: 0
   ownColors:
   - {r: 0, g: 0, b: 0, a: 0}

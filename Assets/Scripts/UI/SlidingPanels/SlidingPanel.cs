@@ -11,17 +11,17 @@ public class SlidingPanel : MonoBehaviour
     public float speed = 7;
     public SlidingPanelBookmark bookmark;
     RectTransform _rectTransform;
+    public bool orientedLeft;
 
     public bool IsOpen { get; private set; }
 
     void Awake()
     {
         _rectTransform = GetComponent<RectTransform>();
-        // bookmark.onDrag += v => targetWidth -= Utils.ScaledScreenCoords(v, transform).x;
         bookmark.onDrag += v =>
         {
-            targetWidth = Screen.width - Input.mousePosition.x;
-            // bookmark.transform.position += new Vector3(0f, v.y);
+            if (orientedLeft) targetWidth = Utils.ScaledScreenCoords(Input.mousePosition, transform).x;
+            else targetWidth = Utils.ScaledScreenCoords(new Vector2(Screen.width - Input.mousePosition.x, 0), transform).x;
         };
     }
 
@@ -38,6 +38,7 @@ public class SlidingPanel : MonoBehaviour
 
     public void Open()
     {
+        gameObject.SetActive(true);
         targetWidth = openWidth;
         IsOpen = true;
     }
