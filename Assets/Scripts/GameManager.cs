@@ -59,17 +59,16 @@ public class GameManager : MonoBehaviour
     {
         SaveState();
         FileStorage.SaveJsonToFile(jsonGameState, GameStateFileName);
-        foreach (var rootBlock in Roots.Blocks)
-            if (rootBlock != null)
-                FileStorage.SaveAudioClipToFile(rootBlock.soundsPlayer.Clip, rootBlock.rootId);
+        foreach (var rootBlock in Roots.Blocks.Values)
+            FileStorage.SaveAudioClipToFile(rootBlock.soundsPlayer.Clip, rootBlock.rootId);
     }
 
     public void LoadGameFromFile()
     {
         jsonGameState = FileStorage.LoadGameFromFile(GameStateFileName);
         LoadSavedState();
-        foreach (var rootBlock in Roots.Blocks)
-            if (rootBlock != null && FileStorage.GetAudioClipFromFile(rootBlock.rootId, out var result))
+        foreach (var rootBlock in Roots.Blocks.Values)
+            if (FileStorage.GetAudioClipFromFile(rootBlock.rootId, out var result))
                 rootBlock.soundsPlayer.Clip = result;
     }
 

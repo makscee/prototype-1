@@ -6,7 +6,7 @@ public class WavePart : MonoBehaviour
 {
     public LayoutElement layoutElement;
     WavePartsContainer _container;
-    WaveRenderer _waveRenderer;
+    public WaveRenderer waveRenderer;
     int _samplesFrom, _samplesTo;
     public Painter background, wave;
 
@@ -16,8 +16,8 @@ public class WavePart : MonoBehaviour
         set
         {
             _samplesFrom = value;
-            _waveRenderer.samplesFrom = _samplesFrom;
-            _waveRenderer.SetVerticesDirty();
+            waveRenderer.samplesFrom = _samplesFrom;
+            waveRenderer.SetVerticesDirty();
         }
     }
 
@@ -27,8 +27,8 @@ public class WavePart : MonoBehaviour
         set
         {
             _samplesTo = value;
-            _waveRenderer.samplesTo = _samplesTo;
-            _waveRenderer.SetVerticesDirty();
+            waveRenderer.samplesTo = _samplesTo;
+            waveRenderer.SetVerticesDirty();
         }
     }
 
@@ -36,7 +36,7 @@ public class WavePart : MonoBehaviour
     {
         layoutElement = GetComponent<LayoutElement>();
         _container = GetComponentInParent<WavePartsContainer>();
-        _waveRenderer = GetComponentInChildren<WaveRenderer>();
-        _waveRenderer.clip = _container.clip;
+        waveRenderer = GetComponentInChildren<WaveRenderer>();
+        waveRenderer.clip = _container.clip;
     }
 }

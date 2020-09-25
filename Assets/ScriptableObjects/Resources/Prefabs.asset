@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fe3ff83357e40ea956a2a7dc5aa0c1a, type: 3}
+  m_Name: Prefabs
+  m_EditorClassIdentifier: 
+  nodeBlock: {fileID: 251989167824789121, guid: 1a48c896cbbb78e47a739492aeee22e6,
+    type: 3}
+  rootBlock: {fileID: 4115909928036307132, guid: eb439737dd7b6bd47964f19a895e9d08,
+    type: 3}
+  bindVisual: {fileID: 9045975286132907859, guid: 6c26debb8acb70b4db7a187978e0468c,
+    type: 3}
+  pixel: {fileID: 2769389204050510749, guid: f3253610ceb584640afc265228438e8d, type: 3}
+  rootCanvas: {fileID: 966177044309363772, guid: b44077fc9406f4b43ac71fd0ddfb2650,
+    type: 3}
+  blockVisualsCanvas: {fileID: 4816536208317694209, guid: 04965d2105d15b0439747d127cc7715c,
+    type: 3}
+  leftRootPanel: {fileID: 4761933653303415217, guid: 6fd6b9fccea742d44a9a74132544891f,
+    type: 3}
+  rightPanelGroup: {fileID: 1739377728294565395, guid: c953926ef5164664590706ccf2317632,
+    type: 3}
+  blockVisualBase: {fileID: 7040440144472880495, guid: 35ba8e68686ecc74d83f7a4961d19365,
+    type: 3}
+  nodeDeadendVisualModel: {fileID: 6897376495429527264, guid: a36e059d2401d6b4eb121c81faa72305,
+    type: 3}
+  nodePipeVisualModel: {fileID: 7181191671502347847, guid: 50b5e5e3c22a06045ba878373c5d5630,
+    type: 3}
+  rootBlockVisualModel: {fileID: 7764886673762801825, guid: 9dcf52651b3a8e74b8ad2d7feeec707d,
+    type: 3}

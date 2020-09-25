@@ -52,16 +52,14 @@ public class RootBlock : Block
         }
     }
 
-    public static RootBlock Create(int x, int y, int rootId = -1, int colorsId = -1)
+    public static RootBlock Create(int x, int y, int rootId = -1)
     {
         rootId = rootId == -1 ? Roots.Count : rootId;
-        var b = Instantiate(Prefabs.Instance.rootBlock, Roots.RootCanvases(rootId).transform).GetComponent<RootBlock>();
+        var b = Instantiate(Prefabs.Instance.rootBlock, Roots.RootCanvases[rootId].transform).GetComponent<RootBlock>();
         b.rootId = rootId;
-        Roots.Blocks[rootId] = b;
         b.logic.SetCoords(x, y);
         b.transform.position = b.logic.Position;
         b.StartInit();
-        if (colorsId != -1) Roots.Palettes(rootId).ColorsId = colorsId;
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position), b, Vector2.zero, Bind.BlockStaticBindStrength);
         b.view.SetDirty();
         return b;

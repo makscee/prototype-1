@@ -8,12 +8,12 @@ public class RootBlockSerialized : JsonUtilitySerializable
     public static bool Create(RootBlock b, out RootBlockSerialized result)
     {
         result = null;
-        result = new RootBlockSerialized {X = b.logic.X, Y = b.logic.Y, Id = b.rootId, ColorsId = Roots.Palettes(b.rootId).ColorsId};
+        result = new RootBlockSerialized {X = b.logic.X, Y = b.logic.Y, Id = b.rootId, ColorsId = Roots.Palettes[b.rootId].ColorsId};
         return true;
     }
 
     public void Deserialize()
     {
-        RootBlock.Create(X, Y, Id, ColorsId); 
+        Roots.CreateRoot(X, Y, Id, ColorsId);
     }
 }

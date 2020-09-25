@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layoutElement: {fileID: 4054241040885575197}
+  waveRenderer: {fileID: 8541805701303370041}
   background: {fileID: 1069823890613760931}
   wave: {fileID: 8488174019839091306}
 --- !u!114 &4054241040885575197
@@ -126,13 +127,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.22, g: 0.23, b: 0.27, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   clip: {fileID: 8300000, guid: 64758bb7e1c2e2d4287ddebe55b296e6, type: 3}
   samplesFrom: 5000
   samplesTo: 14546
-  width: 202.3303
-  height: 640
+  selectSamplesFrom: 0
+  selectSamplesTo: 0
+  width: 720
+  height: 1280
   resolution: 2473
   thickness: 1.67
 --- !u!114 &8488174019839091306
@@ -222,9 +225,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.55, g: 0.58, b: 0.67, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

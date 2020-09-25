@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -75,6 +76,8 @@ public static class Colors
         },
     };
 
+    public static int Count => Palettes.Length;
+
     static readonly Color[] SystemPalette =
         {
             new Color(0.98f, 0.96f, 0.91f),
@@ -91,15 +94,16 @@ public static class Colors
     public static int GetRandomFreeId()
     {
         var ids = Enumerable.Range(0, Palettes.Length).ToList();
-        foreach (var palette in Roots.AllPalettes)
-            if (palette != null)
-                ids.Remove(palette.ColorsId);
+        foreach (var palette in Roots.Palettes.Values)
+            ids.Remove(palette.ColorsId);
 
         return ids[Random.Range(0, ids.Count)];
     }
 
     public static bool IsFreeId(int id)
     {
-        return Roots.AllPalettes.All(palette => palette != null && palette.ColorsId != id);
+        return Roots.Palettes.Values.All(palette => palette != null && palette.ColorsId != id);
     }
+
+    public static Action OnSomeRootPalettesChanged;
 }

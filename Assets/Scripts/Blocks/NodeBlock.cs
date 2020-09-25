@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class NodeBlock : Block
 {
@@ -12,6 +14,8 @@ public class NodeBlock : Block
         {
             if (e.button == PointerEventData.InputButton.Middle) Destroy();
         };
+        logic.onTap += e => OnDeadendTap();
+        
         logic.onPulseReceive += OnPulseDeadEnd;
         logic.onBind += bind =>
         {
@@ -56,6 +60,17 @@ public class NodeBlock : Block
     void Update()
     {
         if (_stepNumberDirty) RefreshStepNumber();
+    }
+
+    void OnDeadendTap()
+    {
+        if (BindMatrix.GetOutBindsCount(this) != 0) return;
+        var dirs = new List<int>(4);
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
+            if (bind.First is Block block && bind.Second == this)
+                dirs.Add(Utils.DirFromCoords(logic.Position - block.logic.Position));
+        Roots.DirectionsPanelsGroup[rootId].OpenOneCloseRest(Roots.DirectionsFolders[rootId][dirs[Random.Range(0, dirs.Count)]]);
+        Roots.RootPanelsGroup.OpenOneCloseRest(Roots.RootPanelsFolders[rootId]);
     }
 
     void OnPulseDeadEnd(Block from)
@@ -104,7 +119,7 @@ public class NodeBlock : Block
     {
         var position = new Vector2(x, y);
         var startPosition = position + Vector2.ClampMagnitude(Roots.Blocks[rootId].logic.Position - position, startOffsetClamp);
-        var b = Instantiate(Prefabs.Instance.nodeBlock, startPosition, Quaternion.identity, Roots.RootCanvases(rootId).transform).GetComponent<NodeBlock>();
+        var b = Instantiate(Prefabs.Instance.nodeBlock, startPosition, Quaternion.identity, Roots.RootCanvases[rootId].transform).GetComponent<NodeBlock>();
         b.rootId = rootId;
         b.logic.SetCoords(x, y);
         b.StartInit();

@@ -84,12 +84,15 @@ public static class Utils
     }
 
     static Dictionary<Transform, CanvasScaler> _scalers = new Dictionary<Transform, CanvasScaler>();
-    public static Vector2 ScaledScreenCoords(Vector2 v, Transform transform)
+    public static Vector2 ScaledScreenCoords(Vector2 v, Transform transform, bool reversed = false)
     {
         if (!_scalers.ContainsKey(transform)) 
             _scalers.Add(transform, transform.GetComponentInParent<CanvasScaler>());
         var scaler = _scalers[transform];
-        var scale = scaler.referenceResolution / new Vector2(Screen.width, Screen.height);
+        Vector2 scale;
+        if (reversed)
+            scale = new Vector2(Screen.width, Screen.height) / scaler.referenceResolution;
+        else scale = scaler.referenceResolution / new Vector2(Screen.width, Screen.height);
         return v * scale;
     }
 }

@@ -8,9 +8,15 @@ public class SlidingPanelsGroup : MonoBehaviour
 
     void Awake()
     {
+        CollectChildren();
+    }
+
+    public void CollectChildren()
+    {
         _folders = GetComponentsInChildren<SlidingPanelsFolder>();
     }
 
+    bool _closeActionAdded;
     public void OpenOneCloseRest(SlidingPanelsFolder openFolder)
     {
         var actionAdded = false;
@@ -36,11 +42,18 @@ public class SlidingPanelsGroup : MonoBehaviour
             openFolder.Open();
             openFolder.transform.SetAsFirstSibling();
         }
-        SharedObjects.Instance.backgroundInputHandler.nextClickOverride = CloseAll;
+
+        if (!_closeActionAdded)
+        {
+            SharedObjects.Instance.backgroundInputHandler.nextClickOverride += CloseAll;
+            _closeActionAdded = true;
+        }
+        transform.SetAsLastSibling();
     }
 
     public void CloseAll()
     {
+        _closeActionAdded = false;
         foreach (var folder in _folders)
         {
             folder.Close();

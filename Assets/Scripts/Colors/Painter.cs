@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 [ExecuteInEditMode]
 public class Painter : MonoBehaviour
 {
-    Action<Color> _paint;
+    Action<Color> _paintAction;
     public Palette palette;
     public Color Default;
     public bool ForceDefault;
@@ -37,7 +37,7 @@ public class Painter : MonoBehaviour
         PaintRefresh();
     }
 
-    Color _colorBefore;
+    Color _currentColor;
 
     public Color Color
     {
@@ -50,12 +50,11 @@ public class Painter : MonoBehaviour
                    * new Color(MultiplyBy.x, MultiplyBy.y, MultiplyBy.z, 1);
         }
     }
-
     public void PaintRefresh()
     {
-        if (_colorBefore == Color) return;
-        _paint?.Invoke(Color);
-        _colorBefore = Color;
+        if (_currentColor == Color) return;
+        _paintAction?.Invoke(Color);
+        _currentColor = Color;
     }
 
     void TryObtainPalette()
@@ -70,7 +69,7 @@ public class Painter : MonoBehaviour
         var graphic = PaintOn == null ? GetComponent<Graphic>() : PaintOn as Graphic;
         if (graphic != null)
         {
-            _paint = c =>
+            _paintAction = c =>
             {
                 c.a = graphic.color.a;
                 graphic.color = c;
@@ -81,7 +80,7 @@ public class Painter : MonoBehaviour
         var rawImg = PaintOn == null ? GetComponent<RawImage>() : PaintOn as RawImage;
         if (rawImg != null)
         {
-            _paint = c =>
+            _paintAction = c =>
             {
                 c.a = rawImg.color.a;
                 rawImg.color = c;
@@ -92,7 +91,7 @@ public class Painter : MonoBehaviour
         var img = PaintOn == null ? GetComponent<Image>() : PaintOn as Image;
         if (img != null)
         {
-            _paint = c => 
+            _paintAction = c => 
             {
                 c.a = img.color.a;
                 img.color = c;
@@ -103,7 +102,7 @@ public class Painter : MonoBehaviour
         var text = PaintOn == null ? GetComponent<Text>() : PaintOn as Text;
         if (text != null)
         {
-            _paint = c => 
+            _paintAction = c => 
             {
                 c.a = text.color.a;
                 text.color = c;
@@ -114,7 +113,7 @@ public class Painter : MonoBehaviour
         var sr = PaintOn == null ? GetComponent<SpriteRenderer>() : PaintOn as SpriteRenderer;
         if (sr != null)
         {
-            _paint = c => 
+            _paintAction = c => 
             {
                 c.a = sr.color.a;
                 sr.color = c;
@@ -125,7 +124,7 @@ public class Painter : MonoBehaviour
         var outline = PaintOn == null ? GetComponent<Outline>() : PaintOn as Outline;
         if (outline != null)
         {
-            _paint = c => 
+            _paintAction = c => 
             {
                 c.a = outline.effectColor.a;
                 outline.effectColor = c;
@@ -136,7 +135,7 @@ public class Painter : MonoBehaviour
         var cam = PaintOn == null ? GetComponent<Camera>() : PaintOn as Camera;
         if (cam != null)
         {
-            _paint = c => 
+            _paintAction = c => 
             {
                 c.a = cam.backgroundColor.a;
                 cam.backgroundColor = c;

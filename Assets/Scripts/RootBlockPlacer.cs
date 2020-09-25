@@ -19,7 +19,6 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void StartPlacing()
     {
         gameObject.SetActive(true);
-        SharedObjects.Instance.configCanvas.Disable();
         palette.ColorsId = Colors.GetRandomFreeId();
         background.color = new Color(0, 0, 0, DarkenAlpha);
         SnapToGrid();
@@ -34,8 +33,7 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 gameObject.SetActive(false);
                 var position = cam.transform.position;
                 int x = Mathf.RoundToInt(position.x), y = Mathf.RoundToInt(position.y);
-                var newRootBlock = RootBlock.Create(x, y, -1, palette.ColorsId);
-                SharedObjects.Instance.configCanvas.Enable();
+                Roots.CreateRoot(x, y, -1, palette.ColorsId);
             });
     }
 

@@ -18,9 +18,12 @@ public static class BindMatrix
 
         Matrix[first][second] = b;
         Matrix[second][first] = b;
-        
-        if (first is Block block1) Roots.Blocks[block1.rootId].pulseVersionDirty = true;
-        else if (second is Block block2) Roots.Blocks[block2.rootId].pulseVersionDirty = true;
+
+        if (first is Block block1 && second is Block block2)
+        {
+            Roots.Blocks[block1.rootId].pulseVersionDirty = true;
+            Roots.Blocks[block2.rootId].pulseVersionDirty = true;
+        }
 
         if (first is IBindHandler firstH)
             firstH.OnBind(b);

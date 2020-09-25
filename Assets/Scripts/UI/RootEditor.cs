@@ -24,7 +24,7 @@ public class RootEditor : MonoBehaviour
                 button.onClick.Invoke();
             }
 
-            palette.copyOf = Roots.Palettes(rootBlockId);
+            palette.copyOf = Roots.Palettes[rootBlockId];
         }
     }
 

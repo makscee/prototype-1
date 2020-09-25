@@ -52,6 +52,10 @@
           </e>
           <e p="GameManager.cs" t="Include" />
           <e p="GlobalPulse.cs" t="Include" />
+          <e p="IdHolders" t="Include">
+            <e p="DirectionIdHolder.cs" t="Include" />
+            <e p="RootIdHolder.cs" t="Include" />
+          </e>
           <e p="KeyboardHandler.cs" t="Include" />
           <e p="Pixel" t="Include">
             <e p="Pixel.cs" t="Include" />
@@ -59,9 +63,11 @@
             <e p="PixelRoad.cs" t="Include" />
             <e p="WeightedColor.cs" t="Include" />
           </e>
-          <e p="Prefabs.cs" t="Include" />
           <e p="RootBlockPlacer.cs" t="Include" />
           <e p="Roots.cs" t="Include" />
+          <e p="ScriptableObjects" t="Include">
+            <e p="Prefabs.cs" t="Include" />
+          </e>
           <e p="Serialization" t="Include">
             <e p="BindSerialized.cs" t="Include" />
             <e p="FileStorage.cs" t="Include" />
@@ -81,15 +87,18 @@
           </e>
           <e p="UI" t="Include">
             <e p="ConfigCanvas.cs" t="Include" />
+            <e p="ConfigPanel" t="Include">
+              <e p="ConfigPanel.cs" t="Include" />
+            </e>
             <e p="DarkOverlay.cs" t="Include" />
             <e p="PaletteButton.cs" t="Include" />
             <e p="PalettePicker.cs" t="Include" />
-            <e p="RollingButton.cs" t="Include" />
             <e p="RootBlockButton.cs" t="Include" />
             <e p="RootEditor.cs" t="Include" />
             <e p="RootEditorScreen.cs" t="Include" />
             <e p="RootEditorsFolder.cs" t="Include" />
             <e p="SlidingPanels" t="Include">
+              <e p="RootPlaceholderBookmark.cs" t="Include" />
               <e p="SlidingPanel.cs" t="Include" />
               <e p="SlidingPanelBookmark.cs" t="Include" />
               <e p="SlidingPanelsFolder.cs" t="Include" />
@@ -100,6 +109,7 @@
             <e p="WaveEditor.cs" t="Include" />
             <e p="WaveEditorAddRecordButton.cs" t="Include" />
             <e p="WaveRender" t="Include">
+              <e p="Selector.cs" t="Include" />
               <e p="WavePart.cs" t="Include" />
               <e p="WavePartsContainer.cs" t="Include" />
               <e p="WaveRenderer.cs" t="Include" />
@@ -107,6 +117,7 @@
             <e p="WaveTextureProvider.cs" t="Include" />
           </e>
           <e p="Utils" t="Include">
+            <e p="Line.cs" t="Include" />
             <e p="Multiline.cs" t="Include" />
             <e p="Utils.cs" t="Include" />
           </e>

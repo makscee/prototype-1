@@ -16,9 +16,14 @@ public class SplitSlider : MonoBehaviour, IDragHandler, IPointerClickHandler, IE
     public float MultipliedValueFloat => Min + value * (Max - Min);
     public int MultipliedValueInt => (int) MultipliedValueFloat;
 
+    public void InitValue(float v)
+    {
+        value = (v - Min) / (Max - Min);
+    }
     void Update()
     {
-        if (Math.Abs(top.rectTransform.rect.height - GetHeight(value, true)) > 0.001f)
+        if (Math.Abs(top.rectTransform.rect.height - GetHeight(value, true)) > 0.001f ||
+            Math.Abs(bottom.rectTransform.rect.height - GetHeight(value, false)) > 0.001f)
         {
             value = Mathf.Clamp(value, 0f, 1f);
             ValueUpdated(value);

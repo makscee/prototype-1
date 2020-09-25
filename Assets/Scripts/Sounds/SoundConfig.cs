@@ -3,7 +3,6 @@ using UnityEngine;
 public class SoundConfig
 {
     int _selectFrom = 0, _selectTo = 3000, _rate = 44100;
-    float _volume = 1f;
 
     public int SelectFrom
     {
@@ -32,15 +31,7 @@ public class SoundConfig
             _clipCache = null;
         }
     }
-    public float Volume
-    {
-        get => _volume;
-        set
-        {
-            _volume = value;
-            _clipCache = null;
-        }
-    }
+    public float Volume { get; set; } = 1f;
 
     SoundsPlayer _player;
     public SoundConfig(SoundsPlayer player)
