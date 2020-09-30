@@ -5,11 +5,16 @@ public class SoundsPlayer : MonoBehaviour
 {
     public AudioSource[] AudioSources = new AudioSource[4];
     public SoundConfig[] Configs = new SoundConfig[4];
-    public AudioClip Clip;
+    public int rootId;
+    public SlicedAudioClip SlicedClip => Roots.Root[rootId].slicedClip;
+
+    void Start()
+    {
+        rootId = GetComponent<RootBlock>().rootId;
+    }
 
     void OnEnable()
     {
-        Clip = Resources.Load<AudioClip>("Clips/clip1");
         for (var i = 0; i < 4; i++)
         {
             var newSource = gameObject.AddComponent<AudioSource>(); 

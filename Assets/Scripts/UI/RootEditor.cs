@@ -8,7 +8,7 @@ public class RootEditor : MonoBehaviour
     public Transform buttonBackgroundsParent;
     public GameObject buttonBackgroundPrefab;
     public int rootBlockId;
-    public RootBlock RootBlock => Roots.Blocks[rootBlockId];
+    public RootBlock RootBlock => Roots.Root[rootBlockId].block;
     Dictionary<string, Transform> _buttonBackgrounds = new Dictionary<string, Transform>();
     [SerializeField] Button[] defaultButtons;
     [SerializeField] Palette palette;
@@ -24,7 +24,7 @@ public class RootEditor : MonoBehaviour
                 button.onClick.Invoke();
             }
 
-            palette.copyOf = Roots.Palettes[rootBlockId];
+            palette.copyOf = Roots.Root[rootBlockId].palette;
         }
     }
 

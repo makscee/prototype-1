@@ -55,7 +55,7 @@ public class RootBlock : Block
     public static RootBlock Create(int x, int y, int rootId = -1)
     {
         rootId = rootId == -1 ? Roots.Count : rootId;
-        var b = Instantiate(Prefabs.Instance.rootBlock, Roots.RootCanvases[rootId].transform).GetComponent<RootBlock>();
+        var b = Instantiate(Prefabs.Instance.rootBlock, Roots.Root[rootId].rootCanvas.transform).GetComponent<RootBlock>();
         b.rootId = rootId;
         b.logic.SetCoords(x, y);
         b.transform.position = b.logic.Position;

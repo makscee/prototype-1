@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -16,10 +17,20 @@ public static class FileStorage
         File.WriteAllText(Path(fileName), json);
     }
 
-    public static void SaveAudioClipToFile(AudioClip clip, int rootId)
+    public static void SaveAudioClipToFile(SlicedAudioClip clip, int rootId)
     {
-        var data = new float[clip.samples];
-        clip.GetData(data, 0);
+        SaveAudioClipDataToFile(clip.data.first, rootId);
+        SaveAudioClipSlicesToFile(clip, rootId);
+    }
+
+    static void SaveAudioClipSlicesToFile(SlicedAudioClip clip, int rootId)
+    {
+        var s = string.Join(" ", clip.slices);
+        File.WriteAllText(GetClipSlicesPath(rootId), s);
+    }
+
+    static void SaveAudioClipDataToFile(IEnumerable<float> data, int rootId)
+    {
         using (var file = File.Create(GetClipFilePath(rootId)))
         {
             using (var writer = new BinaryWriter(file))
@@ -35,6 +46,10 @@ public static class FileStorage
     {
         return Path($"clip_{rootId}", "dat");
     }
+    static string GetClipSlicesPath(int rootId)
+    {
+        return Path($"clip_slices{rootId}", "txt");
+    }
     public static bool GetAudioClipFromFile(int rootId, out AudioClip result)
     {
         var path = GetClipFilePath(rootId);
@@ -48,6 +63,25 @@ public static class FileStorage
         Buffer.BlockCopy(bytes, 0, data, 0, bytes.Length);
         result = AudioClip.Create("clip", data.Length, 1, 44100, false);
         result.SetData(data, 0);
+        return true;
+    }
+
+    public static bool GetAudioClipSlicesFromFile(int rootId, out int[] result)
+    {
+        var path = Path(GetClipSlicesPath(rootId));
+        if (!File.Exists(path))
+        {
+            result = null;
+            return false;
+        }
+        var s = File.ReadAllText(path);
+        var sArr = s.Split(new char[] {' '});
+        result = new int[sArr.Length];
+        for (var i = 0; i < sArr.Length; i++)
+        {
+            result[i] = int.Parse(sArr[i]);
+        }
+
         return true;
     }
 

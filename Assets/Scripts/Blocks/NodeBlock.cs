@@ -69,15 +69,15 @@ public class NodeBlock : Block
         foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
             if (bind.First is Block block && bind.Second == this)
                 dirs.Add(Utils.DirFromCoords(logic.Position - block.logic.Position));
-        Roots.DirectionsPanelsGroup[rootId].OpenOneCloseRest(Roots.DirectionsFolders[rootId][dirs[Random.Range(0, dirs.Count)]]);
-        Roots.RootPanelsGroup.OpenOneCloseRest(Roots.RootPanelsFolders[rootId]);
+        Roots.Root[rootId].directionPanelsGroup.OpenOneCloseRest(Roots.Root[rootId].directionPanels[dirs[Random.Range(0, dirs.Count)]]);
+        Roots.RootPanelsGroup.OpenOneCloseRest(Roots.Root[rootId].rootPanelsFolder);
     }
 
     void OnPulseDeadEnd(Block from)
     {
         if (from == null || BindMatrix.GetOutBindsCount(this) != 0) return;
         var dir = Utils.DirFromCoords(logic.Position - from.logic.Position);
-        var root = Roots.Blocks[rootId]; 
+        var root = Roots.Root[rootId].block; 
         root.soundsPlayer.Play(dir); 
         PixelDriver.Add(PixelRoad.Circle(root.view.PrimaryPainter.palette.GetColor(dir),
             2f, 3f, 0.05f, 0.5f, logic.X, logic.Y).SetWeight(0.3f));
@@ -118,8 +118,8 @@ public class NodeBlock : Block
     public static NodeBlock Create(int x, int y, int rootId = 0, float startOffsetClamp = 2f)
     {
         var position = new Vector2(x, y);
-        var startPosition = position + Vector2.ClampMagnitude(Roots.Blocks[rootId].logic.Position - position, startOffsetClamp);
-        var b = Instantiate(Prefabs.Instance.nodeBlock, startPosition, Quaternion.identity, Roots.RootCanvases[rootId].transform).GetComponent<NodeBlock>();
+        var startPosition = position + Vector2.ClampMagnitude(Roots.Root[rootId].block.logic.Position - position, startOffsetClamp);
+        var b = Instantiate(Prefabs.Instance.nodeBlock, startPosition, Quaternion.identity, Roots.Root[rootId].rootCanvas.transform).GetComponent<NodeBlock>();
         b.rootId = rootId;
         b.logic.SetCoords(x, y);
         b.StartInit();

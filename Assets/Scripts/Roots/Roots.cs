@@ -4,29 +4,25 @@ using UnityEngine;
 
 public static class Roots
 {
-    public static int Count => Blocks.Count;
-    
-    public static readonly Dictionary<int, RootBlock> Blocks = new Dictionary<int, RootBlock>();
-    public static readonly Dictionary<int, GameObject> RootCanvases = new Dictionary<int, GameObject>();
-    public static readonly Dictionary<int, GameObject> VisualCanvases = new Dictionary<int, GameObject>();
-    public static readonly Dictionary<int, SlidingPanelsFolder> RootPanelsFolders = new Dictionary<int, SlidingPanelsFolder>();
-    public static readonly Dictionary<int, SlidingPanelsGroup> DirectionsPanelsGroup = new Dictionary<int, SlidingPanelsGroup>();
-    public static readonly Dictionary<int, Dictionary<int, SlidingPanelsFolder>> DirectionsFolders = new Dictionary<int, Dictionary<int, SlidingPanelsFolder>>();
-    public static readonly Dictionary<int, Palette> Palettes = new Dictionary<int, Palette>();
+    public static int Count => Root.Count;
+
+    public static readonly Dictionary<int, Root> Root = new Dictionary<int, Root>();
 
     public static void CreateRoot(int x, int y, int id = -1, int colorsId = -1)
     {
-        if (id == -1) id = Blocks.Count;
+        if (id == -1) id = Root.Count;
         if (colorsId == -1) colorsId = Colors.GetRandomFreeId();
+        Root.Add(id, new Root());
 
         CreateRootCanvas(id, colorsId);
         CreateVisualsCanvas(id);
         
         var block = RootBlock.Create(x, y, id);
-        Blocks.Add(id, block);
+        Root[id].block = block;
         
         CreateLeftRootPanel(id);
         CreateRightDirectionsPanels(id);
+        CreateSlicedAudioClip(id);
     }
 
     static void CreateRootCanvas(int id, int colorsId)
@@ -36,9 +32,9 @@ public static class Roots
         
         var palette = go.GetComponent<Palette>(); 
         palette.ColorsId = colorsId;
-        
-        Palettes.Add(id, palette);
-        RootCanvases.Add(id, go);
+
+        Root[id].palette = palette;
+        Root[id].rootCanvas = go;
     }
 
     static void CreateVisualsCanvas(int id)
@@ -47,9 +43,9 @@ public static class Roots
         go.name = $"BlockVisualsCanvas{id}";
         
         var palette = go.GetComponent<Palette>();
-        palette.copyOf = Palettes[id];
+        palette.copyOf = Root[id].palette;
         
-        VisualCanvases.Add(id, go);
+        Root[id].visualsCanvas = go;
     }
 
     static SlidingPanelsGroup _rootPanelsGroupCache;
@@ -70,12 +66,12 @@ public static class Roots
         go.name = $"RootPanels{id}";
 
         RootPanelsGroup.GetComponent<SlidingPanelsGroup>().CollectChildren();
-        go.GetComponent<Palette>().copyOf = Palettes[id];
+        go.GetComponent<Palette>().copyOf = Root[id].palette;
         go.GetComponent<RootIdHolder>().id = id;
         var folder = go.GetComponent<SlidingPanelsFolder>(); 
-        folder.onOpen += () => DirectionsPanelsGroup[id].transform.SetAsLastSibling();
+        folder.onOpen += () => Root[id].directionPanelsGroup.transform.SetAsLastSibling();
         
-        RootPanelsFolders.Add(id, folder);
+        Root[id].rootPanelsFolder = folder;
     }
 
     static Transform _rightDirectionsPanels;
@@ -86,14 +82,18 @@ public static class Roots
         var go = Object.Instantiate(Prefabs.Instance.rightPanelGroup, _rightDirectionsPanels);
         go.name = $"DirectionsPanelsGroup{id}";
 
-        go.GetComponent<Palette>().copyOf = Palettes[id];
+        go.GetComponent<Palette>().copyOf = Root[id].palette;
         go.GetComponent<RootIdHolder>().id = id;
-        
-        DirectionsPanelsGroup.Add(id, go.GetComponent<SlidingPanelsGroup>());
-        DirectionsFolders.Add(id, new Dictionary<int, SlidingPanelsFolder>());
+
+        Root[id].directionPanelsGroup = go.GetComponent<SlidingPanelsGroup>();
         foreach (var idHolder in go.GetComponentsInChildren<DirectionIdHolder>())
         {
-            DirectionsFolders[id].Add(idHolder.id, idHolder.GetComponent<SlidingPanelsFolder>());
+            Root[id].directionPanels[idHolder.id] = idHolder.GetComponent<SlidingPanelsFolder>();
         }
+    }
+
+    static void CreateSlicedAudioClip(int id)
+    {
+        Root[id].slicedClip = SlicedAudioClip.CreateFromAsset(Resources.Load<SlicedAudioClipAsset>("SlicedAudioClipAsset"));
     }
 }

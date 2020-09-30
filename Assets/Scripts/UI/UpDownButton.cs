@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class WaveEditorAddRecordButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class UpDownButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
     public Action OnDown, OnUp;
     
@@ -14,5 +14,10 @@ public class WaveEditorAddRecordButton : MonoBehaviour, IPointerDownHandler, IPo
     public void OnPointerUp(PointerEventData eventData)
     {
         OnUp?.Invoke();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        
     }
 }

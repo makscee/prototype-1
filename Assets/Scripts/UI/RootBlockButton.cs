@@ -13,7 +13,7 @@ public class RootBlockButton : MonoBehaviour
 
     void OnEnable()
     {
-        if (Roots.Blocks[rootId] != null)
+        if (Roots.Root[rootId].palette != null)
             Enable();
         else if (Roots.Count == rootId)
             EnableAdd();

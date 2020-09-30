@@ -94,15 +94,15 @@ public static class Colors
     public static int GetRandomFreeId()
     {
         var ids = Enumerable.Range(0, Palettes.Length).ToList();
-        foreach (var palette in Roots.Palettes.Values)
-            ids.Remove(palette.ColorsId);
+        foreach (var root in Roots.Root.Values)
+            ids.Remove(root.palette.ColorsId);
 
         return ids[Random.Range(0, ids.Count)];
     }
 
     public static bool IsFreeId(int id)
     {
-        return Roots.Palettes.Values.All(palette => palette != null && palette.ColorsId != id);
+        return Roots.Root.Values.All(root => root.palette.ColorsId != id);
     }
 
     public static Action OnSomeRootPalettesChanged;

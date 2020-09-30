@@ -8,7 +8,7 @@ public class Block : MonoBehaviour, IBindable, IBindHandler
     public BlockView view;
     public BlockPhysics physics;
     public int rootId;
-    public bool PulseConnected => Roots.Blocks[rootId].pulseVersion == pulseVersion;
+    public bool PulseConnected => Roots.Root[rootId].block.pulseVersion == pulseVersion;
     public int pulseVersion;
 
     protected virtual void OnEnable()

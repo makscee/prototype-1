@@ -11,7 +11,7 @@ public class ConfigPanel : MonoBehaviour
         _direction = GetComponentInParent<DirectionIdHolder>().id;
         GameManager.OnNextFrame += () =>
         {
-            var rootBlock = Roots.Blocks[GetComponentInParent<RootIdHolder>().id];
+            var rootBlock = Roots.Root[GetComponentInParent<RootIdHolder>().id].block;
             var soundsPlayer = rootBlock.soundsPlayer;
             var config = soundsPlayer.Configs[_direction]; 
             rate.InitValue(config.Rate);

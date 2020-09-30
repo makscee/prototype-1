@@ -61,7 +61,7 @@ public static class ClipMaker
             clip.GetData(data, sampleStart);
         }
         
-        var newClip = AudioClip.Create(clip.name + "-sub", sampleAmount, 1, sampleRate, false);
+        var newClip = AudioClip.Create(clip.name, sampleAmount, 1, sampleRate, false);
         newClip.SetData(data, 0);
         // Debug.Log($"end: sampleStart = {sampleStart} sampleAmount = {sampleAmount}");
         return newClip;
@@ -84,9 +84,15 @@ public static class ClipMaker
             j++;
         }
 
-        var result = AudioClip.Create("A+B", samples, 1, clipA.frequency, false);
+        var result = AudioClip.Create(clipA.name, samples, 1, clipA.frequency, false);
         result.SetData(data, 0);
         return result;
+    }
+
+    public static AudioClip CutAway(AudioClip clip, int from, int to)
+    {
+        return Add(Make(clip, 0, from, clip.frequency),
+            Make(clip, to, clip.samples, clip.frequency));
     }
 
     static AudioClip _empty;

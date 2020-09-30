@@ -33,7 +33,7 @@ public class SoundConfig
     }
     public float Volume { get; set; } = 1f;
 
-    SoundsPlayer _player;
+    readonly SoundsPlayer _player;
     public SoundConfig(SoundsPlayer player)
     {
         _player = player;
@@ -82,7 +82,7 @@ public class SoundConfig
         get
         {
             if (_clipCache != null) return _clipCache;
-            var clip = _player.Clip;
+            var clip = _player.SlicedClip.audioClip;
             var amount = SelectTo - SelectFrom;
             if (amount == 0) return null;
             var newClip = ClipMaker.Make(clip, _selectFrom, _selectTo, Rate);

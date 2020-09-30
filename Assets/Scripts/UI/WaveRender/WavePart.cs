@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class WavePart : MonoBehaviour
 {
     public LayoutElement layoutElement;
-    WavePartsContainer _container;
     public WaveRenderer waveRenderer;
     int _samplesFrom, _samplesTo;
     public Painter background, wave;
@@ -35,8 +34,6 @@ public class WavePart : MonoBehaviour
     void Awake()
     {
         layoutElement = GetComponent<LayoutElement>();
-        _container = GetComponentInParent<WavePartsContainer>();
         waveRenderer = GetComponentInChildren<WaveRenderer>();
-        waveRenderer.clip = _container.clip;
     }
 }

@@ -21,8 +21,8 @@ public static class BindMatrix
 
         if (first is Block block1 && second is Block block2)
         {
-            Roots.Blocks[block1.rootId].pulseVersionDirty = true;
-            Roots.Blocks[block2.rootId].pulseVersionDirty = true;
+            Roots.Root[block1.rootId].block.pulseVersionDirty = true;
+            Roots.Root[block2.rootId].block.pulseVersionDirty = true;
         }
 
         if (first is IBindHandler firstH)
@@ -43,8 +43,8 @@ public static class BindMatrix
         Matrix[first]?.Remove(second);
         Matrix[second]?.Remove(first);
         
-        if (first is Block block1) Roots.Blocks[block1.rootId].pulseVersionDirty = true;
-        else if (second is Block block2) Roots.Blocks[block2.rootId].pulseVersionDirty = true;
+        if (first is Block block1) Roots.Root[block1.rootId].block.pulseVersionDirty = true;
+        else if (second is Block block2) Roots.Root[block2.rootId].block.pulseVersionDirty = true;
         
         if (first is IBindHandler firstH)
             firstH.OnUnbind(bind);

@@ -19,17 +19,12 @@ public class PaletteButton : MonoBehaviour
     public void Apply()
     {
         if (!Available) return;
-        Roots.Palettes[id].ColorsId = palette.ColorsId;
+        Roots.Root[id].palette.ColorsId = palette.ColorsId;
         palettePicker.RefreshAll();
         Colors.OnSomeRootPalettesChanged();
     }
 
-    void OnEnable()
-    {
-        Refresh();
-    }
-
-    bool Selected => Roots.Palettes[id].ColorsId == palette.ColorsId;
+    bool Selected => Roots.Root[id].palette.ColorsId == palette.ColorsId;
     bool Available => Colors.IsFreeId(palette.ColorsId);
 
     public void Refresh()
