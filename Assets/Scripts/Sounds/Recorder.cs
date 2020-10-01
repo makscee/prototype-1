@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class Recorder
@@ -17,11 +18,11 @@ public static class Recorder
         var data = new float[(int)((Time.time - _startRecordingTime) * Recording.frequency)];
         Recording.GetData(data, 0);
         trimmedRecord.SetData(data, 0);
-        Recording = TrimSilence(trimmedRecord, MinVolume);
+        Recording = TrimSilenceAndNormalize(trimmedRecord, MinVolume);
         _recordingInProgress = false;
     }
     
-    public static AudioClip TrimSilence(AudioClip clip, float min)
+    public static AudioClip TrimSilenceAndNormalize(AudioClip clip, float min)
     {
         var data = new float[clip.samples];
         clip.GetData(data, 0);
@@ -42,12 +43,27 @@ public static class Recorder
         for (i = samples.Count - 1; i > 0; i--)
             if (Mathf.Abs(samples[i]) > min)
                 break;
-        
+
         samples.RemoveRange(i, samples.Count - i);
+        Normalize(samples);
 
         var result = AudioClip.Create(clip.name, samples.Count, clip.channels, clip.frequency, false);
         result.SetData(samples.ToArray(), 0);
         return result;
+    }
+
+    public static void Normalize(List<float> data)
+    {
+        var max = 0f;
+        foreach (var val in data)
+        {
+            max = Mathf.Max(Mathf.Abs(val), max);
+        }
+        var scale = 1f / max;
+        for (int i = 0; i < data.Count; i++)
+        {
+            data[i] *= scale;
+        }
     }
 
     static bool _recordingInProgress;
