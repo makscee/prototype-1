@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [ExecuteInEditMode]
 public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
@@ -17,6 +18,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
     bool _isDirty;
     [SerializeField] GameObject wavePartPrefab;
     [SerializeField] Transform wavePartsParent;
+    VerticalLayoutGroup _wavePartsLayoutGroup;
 
     List<WavePart> _waveParts = new List<WavePart>();
 
@@ -47,6 +49,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
     {
         _rectTransform = GetComponent<RectTransform>();
         _direction = GetComponentInParent<DirectionIdHolder>().id;
+        _wavePartsLayoutGroup = wavePartsParent.GetComponent<VerticalLayoutGroup>();
         recordButton.OnDown = StartRecording;
         recordButton.OnUp = EndRecording;
         GameManager.OnNextFrame += () =>
@@ -121,10 +124,18 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
     }
 
     
-    bool _dragTop, _dragging;
+    bool _dragTop, _dragSideways, _dragging;
+    WavePart _draggedWavePart;
+    Vector3 _draggedWavePartStartPos;
     public void OnDrag(PointerEventData eventData)
     {
-        var sampleDelta = -Utils.ScaledScreenCoords(eventData.delta, transform).y / _rectTransform.rect.height * slicedAudioClip.Samples;
+        if (_dragSideways)
+        {
+            _draggedWavePart.rectTransform.position += new Vector3(eventData.delta.x, 0f);
+            return;
+        }
+        var scaledDelta = Utils.ScaledScreenCoords(eventData.delta, transform);
+        var sampleDelta = -scaledDelta.y / _rectTransform.rect.height * slicedAudioClip.Samples;
         if (_dragTop) SelectFrom += sampleDelta;
         else SelectTo += sampleDelta;
     }
@@ -132,7 +143,14 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
     public void OnBeginDrag(PointerEventData eventData)
     {
         _dragging = true;
-        
+        _dragSideways = Mathf.Abs(eventData.delta.x) > Mathf.Abs(eventData.delta.y); 
+        if (_dragSideways)
+        {
+            _draggedWavePart = GetWavePartFromScreenPos(eventData.position);
+            _draggedWavePartStartPos = _draggedWavePart.rectTransform.position;
+            _wavePartsLayoutGroup.enabled = false;
+            return;
+        }
         var pos = Utils.ScaledScreenCoords(eventData.position, transform);
         var mid = _rectTransform.rect.height * (1f - (SelectFrom - slicedAudioClip.slices[0] + (SelectTo - SelectFrom) / 2f) / slicedAudioClip.Samples);
         _dragTop = pos.y > mid;
@@ -141,6 +159,19 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
     public void OnEndDrag(PointerEventData eventData)
     {
         _dragging = false;
+        if (_dragSideways)
+        {
+            if (-_draggedWavePart.rectTransform.anchoredPosition.x > _draggedWavePart.rectTransform.rect.width)
+            {
+                Roots.Root[_rootBlock.rootId].slicedClip.RemoveSlice(_draggedWavePart.transform.GetSiblingIndex());
+                Refresh();
+            }
+            else
+            {
+                _draggedWavePart.rectTransform.position = _draggedWavePartStartPos;
+            }
+            _wavePartsLayoutGroup.enabled = true;
+        }
         UpdateSoundConfig();
     }
 
@@ -155,13 +186,14 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
             return;
         }
 
-        var wavePart = _waveParts.Find(w => samplePos > w.SamplesFrom && samplePos < w.SamplesTo);
+        var wavePart = GetWavePartFromScreenPos(eventData.position);
         SelectFrom = wavePart.SamplesFrom;
         SelectTo = wavePart.SamplesTo;
         UpdateSoundConfig();
     }
 
     bool _recording;
+
     public void StartRecording()
     {
         slicedAudioClip.StartRecording();
@@ -173,6 +205,13 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
         slicedAudioClip.EndRecording();
         Refresh();
         _recording = false;
+    }
+
+    WavePart GetWavePartFromScreenPos(Vector2 pos)
+    {
+        var samplePos = ScreenPosToSamples(pos);
+        var wavePart = _waveParts.Find(w => samplePos > w.SamplesFrom && samplePos < w.SamplesTo);
+        return wavePart;
     }
 
     int ScreenPosToSamples(Vector2 pos)

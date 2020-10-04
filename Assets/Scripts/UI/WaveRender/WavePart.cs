@@ -8,6 +8,7 @@ public class WavePart : MonoBehaviour
     public WaveRenderer waveRenderer;
     int _samplesFrom, _samplesTo;
     public Painter background, wave;
+    public RectTransform rectTransform;
 
     public int SamplesFrom
     {
@@ -33,6 +34,7 @@ public class WavePart : MonoBehaviour
 
     void Awake()
     {
+        rectTransform = GetComponent<RectTransform>();
         layoutElement = GetComponent<LayoutElement>();
         waveRenderer = GetComponentInChildren<WaveRenderer>();
     }

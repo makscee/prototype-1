@@ -5,7 +5,6 @@ public class SharedObjects : MonoBehaviour
     public Camera Camera;
 
     public GameObject bindVisualsCanvas;
-    public ConfigCanvas configCanvas;
 
     public BackgroundInputHandler backgroundInputHandler;
 
