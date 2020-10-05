@@ -12,13 +12,15 @@ public static class Roots
     {
         if (id == -1) id = Root.Count;
         if (colorsId == -1) colorsId = Colors.GetRandomFreeId();
-        Root.Add(id, new Root());
+        var root = new Root();
+        root.id = id;
+        Root.Add(id, root);
 
         CreateRootCanvas(id, colorsId);
         CreateVisualsCanvas(id);
         
         var block = RootBlock.Create(x, y, id);
-        Root[id].block = block;
+        root.block = block;
         
         CreateLeftRootPanel(id);
         CreateRightDirectionsPanels(id);

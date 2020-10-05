@@ -13,7 +13,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
     public UpDownButton recordButton;
     int _direction;
     [Range(1, 8)]public int resolutionDivisor = 2;
-    [SerializeField] float _selectFrom = 3000, _selectTo = 8000;
+    [SerializeField] float _selectFrom = 0, _selectTo = 0;
     public float thickness = 1;
     public RectTransform selector;
     bool _isDirty;
@@ -62,6 +62,10 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
             _selectFrom = _rootBlock.soundsPlayer.Configs[_direction].SelectFrom;
             _selectTo = _rootBlock.soundsPlayer.Configs[_direction].SelectTo;
             Refresh();
+            if (_selectFrom == 0 && _selectTo == 0)
+            {
+                SelectRandomSlice();
+            }
         };
     }
 
@@ -196,7 +200,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
         }
         if (SelectFromInt <= from && SelectToInt >= to)
         {
-            _selectTo -= length;
+            _selectTo -= length; 
         }
         else if (SelectFrom >= from && SelectToInt <= to)
         {
@@ -224,14 +228,12 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
 
     void SelectRandomSlice()
     {
-        Debug.Log($"{_waveParts.Count}");
         var randomPart = _waveParts[Random.Range(0, _waveParts.Count)];
         Select(randomPart.SamplesFrom, randomPart.SamplesTo);
     }
 
     void Select(int from, int to)
     {
-        Debug.Log($"select from {from} select to {to}");
         SelectFrom = from;
         SelectTo = to;
         UpdateSoundConfig();
@@ -263,7 +265,10 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
     public void EndRecording()
     {
         slicedAudioClip.EndRecording();
-        Refresh();
+        foreach (var wavePartsContainer in Roots.Root[_rootBlock.rootId].wavePartsContainers)
+        {
+            wavePartsContainer.Refresh();
+        }
         _recording = false;
     }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SoundConfig
 {
-    int _selectFrom = 0, _selectTo = 3000, _rate = 44100;
+    int _selectFrom = 0, _selectTo = 0, _rate = 44100;
 
     public int SelectFrom
     {
@@ -37,43 +37,6 @@ public class SoundConfig
     public SoundConfig(SoundsPlayer player)
     {
         _player = player;
-    }
-    public void CutoutAdjust(int from, int to)
-    {
-        var length = to - from;
-        if (from > _selectTo) return;
-        if (_selectFrom >= to)
-        {
-            _selectFrom -= length;
-            _selectTo -= length;
-            return;
-        }
-
-        if (from <= _selectFrom && to >= _selectTo)
-        {
-            _selectFrom = from;
-            _selectTo = from;
-            return;
-        }
-        
-        if (_selectFrom <= from && _selectTo >= to)
-        {
-            _selectTo -= length;
-            return;
-        }
-
-        if (from < _selectFrom && _selectFrom < to)
-        {
-            _selectFrom = from;
-            _selectTo -= length;
-            return;
-        }
-
-        if (from < _selectTo && _selectTo < to)
-        {
-            _selectTo = from;
-            return;
-        }
     }
 
     AudioClip _clipCache;

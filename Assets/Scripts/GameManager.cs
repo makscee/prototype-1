@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
  
 public class GameManager : MonoBehaviour
@@ -76,6 +77,8 @@ public class GameManager : MonoBehaviour
 
     public void ClearField()
     {
+        foreach (var root in Roots.Root.Values.ToArray())
+            root.Destroy();
         foreach (var block in FieldMatrix.GetAllAsList())
             block.Destroy();
     }

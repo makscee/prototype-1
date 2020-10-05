@@ -34,4 +34,9 @@ public class PaletteButton : MonoBehaviour
             : !Selected && !Available ? new Vector3(0.6f, 0.6f) : Vector3.one;
         tint.color = !Selected && !Available ? new Color(0f, 0f, 0f, 0.32f) : Color.clear;
     }
+
+    void OnDestroy()
+    {
+        Colors.OnSomeRootPalettesChanged -= Refresh;
+    }
 }

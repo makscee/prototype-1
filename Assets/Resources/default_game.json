@@ -2,204 +2,132 @@
     "NodeBlocks": [
         {
             "X": 0,
-            "Y": 1,
-            "RootId": 0
-        },
-        {
-            "X": 0,
-            "Y": 2,
-            "RootId": 0
-        },
-        {
-            "X": 0,
             "Y": 3,
             "RootId": 0
         },
         {
             "X": 0,
+            "Y": 7,
+            "RootId": 0
+        },
+        {
+            "X": -1,
             "Y": 4,
             "RootId": 0
         },
         {
-            "X": 0,
+            "X": -1,
             "Y": 5,
             "RootId": 0
         },
         {
-            "X": 0,
-            "Y": 6,
-            "RootId": 0
-        },
-        {
-            "X": 0,
-            "Y": -1,
-            "RootId": 0
-        },
-        {
-            "X": 0,
-            "Y": -2,
-            "RootId": 0
-        },
-        {
-            "X": 1,
-            "Y": 0,
-            "RootId": 0
-        },
-        {
-            "X": 1,
-            "Y": 4,
-            "RootId": 0
-        },
-        {
-            "X": -1,
-            "Y": 2,
-            "RootId": 0
-        },
-        {
             "X": -1,
             "Y": 6,
             "RootId": 0
         },
         {
             "X": -1,
-            "Y": 0,
+            "Y": 7,
+            "RootId": 0
+        },
+        {
+            "X": -1,
+            "Y": 8,
+            "RootId": 0
+        },
+        {
+            "X": -1,
+            "Y": 9,
             "RootId": 0
         },
         {
             "X": -2,
-            "Y": 0,
+            "Y": 5,
             "RootId": 0
         },
         {
-            "X": -3,
-            "Y": 0,
-            "RootId": 0
-        },
-        {
-            "X": -3,
-            "Y": 1,
+            "X": -2,
+            "Y": 9,
             "RootId": 0
         }
     ],
     "RootBlocks": [
         {
-            "X": 0,
-            "Y": 0,
+            "X": -1,
+            "Y": 3,
             "Id": 0,
-            "ColorsId": 0
+            "ColorsId": 4
         }
     ],
     "Binds": [
         {
-            "FirstX": 0,
-            "FirstY": 0,
-            "SecondX": 0,
-            "SecondY": -1,
-            "Strength": 5
-        },
-        {
-            "FirstX": 0,
-            "FirstY": 0,
-            "SecondX": 0,
-            "SecondY": 1,
-            "Strength": 5
-        },
-        {
-            "FirstX": 0,
-            "FirstY": 0,
-            "SecondX": 1,
-            "SecondY": 0,
-            "Strength": 5
-        },
-        {
-            "FirstX": 0,
-            "FirstY": 0,
+            "FirstX": -1,
+            "FirstY": 3,
             "SecondX": -1,
-            "SecondY": 0,
+            "SecondY": 4,
             "Strength": 5
         },
         {
-            "FirstX": 0,
-            "FirstY": 1,
-            "SecondX": 0,
-            "SecondY": 2,
-            "Strength": 5
-        },
-        {
-            "FirstX": 0,
-            "FirstY": 2,
-            "SecondX": -1,
-            "SecondY": 2,
-            "Strength": 5
-        },
-        {
-            "FirstX": 0,
-            "FirstY": 2,
+            "FirstX": -1,
+            "FirstY": 3,
             "SecondX": 0,
             "SecondY": 3,
             "Strength": 5
         },
         {
-            "FirstX": 0,
-            "FirstY": 3,
-            "SecondX": 0,
-            "SecondY": 4,
-            "Strength": 5
-        },
-        {
-            "FirstX": 0,
+            "FirstX": -1,
             "FirstY": 4,
-            "SecondX": 1,
-            "SecondY": 4,
-            "Strength": 5
-        },
-        {
-            "FirstX": 0,
-            "FirstY": 4,
-            "SecondX": 0,
+            "SecondX": -1,
             "SecondY": 5,
             "Strength": 5
         },
         {
-            "FirstX": 0,
+            "FirstX": -1,
             "FirstY": 5,
-            "SecondX": 0,
-            "SecondY": 6,
-            "Strength": 5
-        },
-        {
-            "FirstX": 0,
-            "FirstY": 6,
             "SecondX": -1,
             "SecondY": 6,
             "Strength": 5
         },
         {
-            "FirstX": 0,
-            "FirstY": -1,
-            "SecondX": 0,
-            "SecondY": -2,
+            "FirstX": -1,
+            "FirstY": 5,
+            "SecondX": -2,
+            "SecondY": 5,
             "Strength": 5
         },
         {
             "FirstX": -1,
-            "FirstY": 0,
+            "FirstY": 6,
+            "SecondX": -1,
+            "SecondY": 7,
+            "Strength": 5
+        },
+        {
+            "FirstX": -1,
+            "FirstY": 7,
+            "SecondX": -1,
+            "SecondY": 8,
+            "Strength": 5
+        },
+        {
+            "FirstX": -1,
+            "FirstY": 7,
+            "SecondX": 0,
+            "SecondY": 7,
+            "Strength": 5
+        },
+        {
+            "FirstX": -1,
+            "FirstY": 8,
+            "SecondX": -1,
+            "SecondY": 9,
+            "Strength": 5
+        },
+        {
+            "FirstX": -1,
+            "FirstY": 9,
             "SecondX": -2,
-            "SecondY": 0,
-            "Strength": 5
-        },
-        {
-            "FirstX": -2,
-            "FirstY": 0,
-            "SecondX": -3,
-            "SecondY": 0,
-            "Strength": 5
-        },
-        {
-            "FirstX": -3,
-            "FirstY": 0,
-            "SecondX": -3,
-            "SecondY": 1,
+            "SecondY": 9,
             "Strength": 5
         }
     ],
@@ -207,28 +135,28 @@
         {
             "rootId": 0,
             "selectFrom": [
-                7860,
-                321,
-                12231,
-                12231
+                7894,
+                369,
+                12239,
+                12239
             ],
             "selectTo": [
-                11920,
-                7581,
-                14299,
-                14289
+                12239,
+                7894,
+                14544,
+                14544
             ],
             "rate": [
                 44100,
                 44100,
-                21028,
+                31259,
                 44100
             ],
             "volume": [
                 1.0,
                 1.0,
-                1.0,
-                1.0
+                0.7651756405830383,
+                0.7784421443939209
             ]
         }
     ]

@@ -13,7 +13,7 @@ public class SlidingPanelsFolder : MonoBehaviour
     SlidingPanelsGroup _parent;
     
     public bool IsOpen => primary.IsOpen || secondary.IsOpen;
-    void Awake()
+    void Start()
     {
         _parent = GetComponentInParent<SlidingPanelsGroup>();
         primary.bookmark.onClick += () => _parent.OpenOneCloseRest(this);
@@ -22,12 +22,16 @@ public class SlidingPanelsFolder : MonoBehaviour
             if (!primary.IsOpen) _parent.OpenOneCloseRest(this);
         };
 
-        var ind = transform.GetSiblingIndex(); 
-        var offsetPos = Screen.height / SlidingPanelBookmark.OffsetByScreenDivision;
-        var indOffsetPos = Utils.ScaledScreenCoords(new Vector2(0, ind * SlidingPanelBookmark.OffsetByPixels), transform, true).y;
-        var offset = offsetPos + indOffsetPos;
-        primary.bookmark.transform.position = new Vector3(primary.bookmark.transform.position.x, offset);
-        secondary.bookmark.transform.position = new Vector3(secondary.bookmark.transform.position.x, offset);
+        GameManager.OnNextFrame += () =>
+        {
+            var ind = transform.GetSiblingIndex();
+            var offsetPos = Screen.height / SlidingPanelBookmark.OffsetByScreenDivision;
+            var indOffsetPos = Utils.ScaledScreenCoords(
+                new Vector2(0, ind * SlidingPanelBookmark.OffsetByPixels), transform, true).y;
+            var offset = offsetPos + indOffsetPos;
+            primary.bookmark.transform.position = new Vector3(primary.bookmark.transform.position.x, offset);
+            secondary.bookmark.transform.position = new Vector3(secondary.bookmark.transform.position.x, offset);
+        };
 
         if (open)
         {

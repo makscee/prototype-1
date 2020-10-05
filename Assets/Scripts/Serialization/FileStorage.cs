@@ -68,7 +68,7 @@ public static class FileStorage
 
     public static bool GetAudioClipSlicesFromFile(int rootId, out int[] result)
     {
-        var path = Path(GetClipSlicesPath(rootId));
+        var path = GetClipSlicesPath(rootId);
         if (!File.Exists(path))
         {
             result = null;
