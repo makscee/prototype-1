@@ -89,6 +89,7 @@ public static class Roots
         foreach (var idHolder in go.GetComponentsInChildren<DirectionIdHolder>())
         {
             Root[id].directionPanels[idHolder.id] = idHolder.GetComponent<SlidingPanelsFolder>();
+            Root[id].wavePartsContainers[idHolder.id] = idHolder.GetComponentInChildren<WavePartsContainer>();
         }
     }
 

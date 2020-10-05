@@ -6,7 +6,8 @@ public class Root
     public GameObject rootCanvas, visualsCanvas;
     public SlidingPanelsFolder rootPanelsFolder;
     public SlidingPanelsGroup directionPanelsGroup;
-    public SlidingPanelsFolder[] directionPanels = new SlidingPanelsFolder[4];
+    public readonly SlidingPanelsFolder[] directionPanels = new SlidingPanelsFolder[4];
+    public readonly WavePartsContainer[] wavePartsContainers = new WavePartsContainer[4];
     public Palette palette;
     public SlicedAudioClip slicedClip;
 }

@@ -77,12 +77,7 @@ public static class ClipMaker
         clipA.GetData(data, 0);
         var dataB = new float[clipB.samples];
         clipB.GetData(dataB, 0);
-        var j = 0;
-        for (var i = clipA.samples; i < samples; i++)
-        {
-            data[i] = dataB[j];
-            j++;
-        }
+        Array.Copy(dataB, 0, data, clipA.samples, clipB.samples);
 
         var result = AudioClip.Create(clipA.name, samples, 1, clipA.frequency, false);
         result.SetData(data, 0);

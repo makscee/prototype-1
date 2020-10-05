@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 [ExecuteInEditMode]
 public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
@@ -44,6 +45,9 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
             _isDirty = true;
         }
     }
+
+    public int SelectFromInt => Mathf.RoundToInt(_selectFrom);
+    public int SelectToInt => Mathf.RoundToInt(_selectTo);
 
     void Start()
     {
@@ -95,14 +99,15 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
         var selectFromPos = totalHeight * (SelectFrom - slicedAudioClip.slices[0]) / slicedAudioClip.Samples;
         var selectHeight = totalHeight * (SelectTo - SelectFrom) / slicedAudioClip.Samples;
         selector.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, selectFromPos, selectHeight);
+        UpdateSoundConfig();
         
         _isDirty = false;
     }
 
     void UpdateSoundConfig()
     {
-        _rootBlock.soundsPlayer.Configs[_direction].SelectFrom = Mathf.RoundToInt(SelectFrom);
-        _rootBlock.soundsPlayer.Configs[_direction].SelectTo = Mathf.RoundToInt(SelectTo);
+        _rootBlock.soundsPlayer.Configs[_direction].SelectFrom = SelectFromInt;
+        _rootBlock.soundsPlayer.Configs[_direction].SelectTo = SelectToInt;
     }
 
     void OnValidate()
@@ -163,8 +168,14 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
         {
             if (-_draggedWavePart.rectTransform.anchoredPosition.x > _draggedWavePart.rectTransform.rect.width)
             {
-                Roots.Root[_rootBlock.rootId].slicedClip.RemoveSlice(_draggedWavePart.transform.GetSiblingIndex());
-                Refresh();
+                var ind = _draggedWavePart.transform.GetSiblingIndex();
+                var from = _draggedWavePart.SamplesFrom;
+                var to = _draggedWavePart.SamplesTo;
+                slicedAudioClip.RemoveSlice(ind);
+                foreach (var wavePartsContainer in Roots.Root[_rootBlock.rootId].wavePartsContainers)
+                {
+                    wavePartsContainer.SliceRemoveAdjust(from, to);
+                }
             }
             else
             {
@@ -172,6 +183,57 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
             }
             _wavePartsLayoutGroup.enabled = true;
         }
+        UpdateSoundConfig();
+    }
+
+    public void SliceRemoveAdjust(int from, int to)
+    {
+        var length = to - from;
+        if (SelectToInt < from)
+        {
+            Refresh();
+            return;
+        }
+        if (SelectFromInt <= from && SelectToInt >= to)
+        {
+            _selectTo -= length;
+        }
+        else if (SelectFrom >= from && SelectToInt <= to)
+        {
+            _selectFrom = from;
+            _selectTo = from;
+        }
+        else if (SelectFromInt <= from)
+        {
+            _selectTo = from;
+        }
+        else if (SelectFromInt < to && SelectToInt > to)
+        {
+            _selectFrom = from;
+            _selectTo -= length;
+        } else if (_selectFrom >= to)
+        {
+            _selectFrom -= length;
+            _selectTo -= length;
+        }
+        
+        Refresh();
+        
+        if (_selectTo - _selectFrom < 10) SelectRandomSlice();
+    }
+
+    void SelectRandomSlice()
+    {
+        Debug.Log($"{_waveParts.Count}");
+        var randomPart = _waveParts[Random.Range(0, _waveParts.Count)];
+        Select(randomPart.SamplesFrom, randomPart.SamplesTo);
+    }
+
+    void Select(int from, int to)
+    {
+        Debug.Log($"select from {from} select to {to}");
+        SelectFrom = from;
+        SelectTo = to;
         UpdateSoundConfig();
     }
 
@@ -187,9 +249,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
         }
 
         var wavePart = GetWavePartFromScreenPos(eventData.position);
-        SelectFrom = wavePart.SamplesFrom;
-        SelectTo = wavePart.SamplesTo;
-        UpdateSoundConfig();
+        Select(wavePart.SamplesFrom, wavePart.SamplesTo);
     }
 
     bool _recording;
