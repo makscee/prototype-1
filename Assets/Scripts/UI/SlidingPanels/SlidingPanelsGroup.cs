@@ -19,28 +19,14 @@ public class SlidingPanelsGroup : MonoBehaviour
     bool _closeActionAdded;
     public void OpenOneCloseRest(SlidingPanelsFolder openFolder)
     {
-        var actionAdded = false;
+        openFolder.Open();
+        openFolder.transform.SetAsFirstSibling();
         foreach (var folder in _folders)
         {
             if (folder != openFolder && folder.IsOpen)
             {
                 folder.Close();
-                if (!actionAdded)
-                {
-                    folder.onTargetReached += () =>
-                    {
-                        openFolder.Open();
-                        openFolder.transform.SetAsFirstSibling();
-                    };
-                    actionAdded = true;
-                }
             }
-        }
-
-        if (!actionAdded)
-        {
-            openFolder.Open();
-            openFolder.transform.SetAsFirstSibling();
         }
 
         if (!_closeActionAdded)

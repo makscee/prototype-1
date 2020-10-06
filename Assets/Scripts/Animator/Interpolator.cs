@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum InterpolationType
 {
-    Square, InvSquare, Linear
+    Square, InvSquare, Linear, OverflowReturn
 }
 
 [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
@@ -49,6 +49,14 @@ public class Interpolator<T> : IUpdateable
         _whenDone = action;
         return this;
     }
+
+    Action _onDeltaSignChange;
+    float _lastDeltaF, _lastF;
+    public Interpolator<T> OnDeltaSignChange(Action action)
+    {
+        _onDeltaSignChange = action;
+        return this;
+    }
     public Interpolator<T> Delay(float t)
     {
         _delay = t;
@@ -88,21 +96,35 @@ public class Interpolator<T> : IUpdateable
             delta = -_delay;
         }
         var before = _cur;
-        var tUnit = _t / _over;
+        var x = _t / _over;
+        var f = 0f;
 
         switch (_interpolationType)
         {
             case InterpolationType.Linear:
+                f = x;
                 break;
             case InterpolationType.Square:
-                tUnit *= tUnit;
+                f = x * x;
                 break;
             case InterpolationType.InvSquare:
-                tUnit = 1 - (1 - tUnit) * (1 - tUnit);
+                f = 1 - (1 - x) * (1 - x);
+                break;
+            case InterpolationType.OverflowReturn:
+                f = x * x * 0.194638370849f + Mathf.Sin(x * 2.3f) * 1.08f;
                 break;
         }
+
+        if (_onDeltaSignChange != null)
+        {
+            var deltaF = f - _lastF;
+            if (deltaF * _lastDeltaF < 0)
+                _onDeltaSignChange();
+            _lastDeltaF = deltaF;
+            _lastF = f;
+        }
         
-        _cur = _addFunc(_from, _multiplyFunc(_subtractFunc(_to, _from), tUnit));
+        _cur = _addFunc(_from, _multiplyFunc(_subtractFunc(_to, _from), f));
         _passDelta?.Invoke(_subtractFunc(_cur, before));
         _passValue?.Invoke(_cur);
         if (_t == _over)

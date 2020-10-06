@@ -24,16 +24,33 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         SnapToGrid();
     }
 
+    bool _placing;
     void FinishPlacing()
     {
+        if (_placing) return;
+        var position = cam.transform.position;
+        int x = Mathf.RoundToInt(position.x), y = Mathf.RoundToInt(position.y);
+        if (FieldMatrix.Get(x, y, out _))
+        {
+            Animator.Interpolate(
+                    new Color(0.3f, 0f, 0f, DarkenAlpha), 
+                    new Color(0f, 0f, 0f, DarkenAlpha), 1f)
+                .Type(InterpolationType.Square)
+                .PassValue(v => background.color = v);
+            return;
+        }
+        _placing = true;
         Animator.Interpolate(DarkenAlpha, 0f, 1f).Type(InterpolationType.Linear)
-            .PassValue(v => background.color = new Color(0, 0, 0, v))
+            .PassValue(v =>
+            {
+                background.color = new Color(0, 0, 0, v);
+                Debug.Log($"{v}");
+            })
             .WhenDone(() =>
             {
                 gameObject.SetActive(false);
-                var position = cam.transform.position;
-                int x = Mathf.RoundToInt(position.x), y = Mathf.RoundToInt(position.y);
                 Roots.CreateRoot(x, y, -1, palette.ColorsId);
+                _placing = false;
             });
     }
 

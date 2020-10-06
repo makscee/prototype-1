@@ -5,6 +5,7 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class SlidingPanel : MonoBehaviour
 {
+    const float AnimationTime = 0.2f;
     public float targetWidth;
     public float openWidth;
     public float closedWidth;
@@ -36,19 +37,30 @@ public class SlidingPanel : MonoBehaviour
         _rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
     }
 
-    public void Open()
+    public Interpolator<float> Open()
     {
         gameObject.SetActive(true);
         targetWidth = openWidth;
         IsOpen = true;
+        return Animator.Interpolate(_rectTransform.rect.width, openWidth, AnimationTime).Type(InterpolationType.OverflowReturn)
+            .PassValue(
+                v =>
+                {
+                    SetWidth(v);
+                    targetWidth = v;
+                });
     }
 
-    public void Close()
+    public Interpolator<float> Close()
     {
         targetWidth = closedWidth;
         IsOpen = false;
+        return Animator.Interpolate(_rectTransform.rect.width, closedWidth, AnimationTime).Type(InterpolationType.OverflowReturn)
+            .PassValue(
+                v =>
+                {
+                    SetWidth(v);
+                    targetWidth = v;
+                });
     }
-
-    const float TargetReachedThreshold = 30f;
-    public bool TargetReached => Mathf.Abs(_rectTransform.rect.width - targetWidth) < TargetReachedThreshold;
 }

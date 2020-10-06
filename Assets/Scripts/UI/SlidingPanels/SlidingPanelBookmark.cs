@@ -8,7 +8,7 @@ public class SlidingPanelBookmark : MonoBehaviour, IPointerClickHandler, IDragHa
     public Action onBeginDrag;
     public Action onClick;
 
-    public const float OffsetByScreenDivision = 6, OffsetByPixels = 50;
+    public const float OffsetByScreenDivision = 6, OffsetByPixels = 100;
 
     public void OnPointerClick(PointerEventData eventData)
     {

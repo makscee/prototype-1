@@ -17,7 +17,7 @@ public class Root
         if (block != null) block.Destroy();
         Object.Destroy(rootCanvas);
         Object.Destroy(visualsCanvas);
-        Object.Destroy(rootPanelsFolder.gameObject);
+        if (rootPanelsFolder != null) Object.Destroy(rootPanelsFolder.gameObject);
         if (directionPanelsGroup != null) Object.Destroy(directionPanelsGroup.gameObject);
         Roots.Root.Remove(id);
     }

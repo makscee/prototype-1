@@ -7,7 +7,6 @@ public class SlidingPanelsFolder : MonoBehaviour
     public SlidingPanel primary;
     public SlidingPanel secondary;
     public Action onOpen;
-    public Action onTargetReached;
     public bool open;
 
     SlidingPanelsGroup _parent;
@@ -45,15 +44,6 @@ public class SlidingPanelsFolder : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (onTargetReached != null && primary.TargetReached && secondary.TargetReached)
-        {
-            onTargetReached();
-            onTargetReached = null;
-        }
-    }
-
     public void Open()
     {
         primary.Open();
@@ -63,7 +53,8 @@ public class SlidingPanelsFolder : MonoBehaviour
 
     public void Close()
     {
-        primary.Close();
+        transform.SetAsFirstSibling();
+        primary.Close().OnDeltaSignChange(transform.SetAsLastSibling);
         secondary.Close();
     }
 }
