@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ public class BlockVisualModel : MonoBehaviour
 {
     public Painter primary, secondary;
     string _text;
-    [SerializeField]Text textComponent;
+    [SerializeField]TextMeshProUGUI textComponent;
     public bool IsShown { get; private set; }
 
     public string Text

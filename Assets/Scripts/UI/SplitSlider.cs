@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ public class SplitSlider : MonoBehaviour, IDragHandler, IPointerClickHandler, IE
 {
     [SerializeField] RawImage top, bottom;
     [SerializeField] RectTransform rect;
-    [SerializeField] Text valueText;
+    [SerializeField] TextMeshProUGUI valueText;
 
     float _valueBefore;
     [field: Range(0f, 1f)] public float value;

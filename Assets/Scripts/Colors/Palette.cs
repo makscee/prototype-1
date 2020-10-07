@@ -28,10 +28,11 @@ public class Palette : MonoBehaviour
     void Update()
     {
         if (targetColors.SequenceEqual(colors)) return;
-        for (var i = 0; i < 4; i++)
-        {
-            colors[i] = Color.Lerp(colors[i], targetColors[i], Time.deltaTime * LerpSpeed);
-        }
+        // for (var i = 0; i < 4; i++)
+        // {
+        //     colors[i] = Color.Lerp(colors[i], targetColors[i], Time.deltaTime * LerpSpeed);
+        // }
+        targetColors.CopyTo(colors, 0);
     }
 
     void OnValidate()

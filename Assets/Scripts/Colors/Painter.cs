@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -65,7 +66,6 @@ public class Painter : MonoBehaviour
 
     void ObtainPaintAction()
     {
-        
         var graphic = PaintOn == null ? GetComponent<Graphic>() : PaintOn as Graphic;
         if (graphic != null)
         {
@@ -73,6 +73,17 @@ public class Painter : MonoBehaviour
             {
                 c.a = graphic.color.a;
                 graphic.color = c;
+            };
+            return;
+        }
+        
+        var tmp = PaintOn == null ? GetComponent<TextMeshPro>() : PaintOn as TextMeshPro;
+        if (tmp != null)
+        {
+            _paintAction = c =>
+            {
+                c.a = tmp.color.a;
+                tmp.color = c;
             };
             return;
         }
