@@ -44,7 +44,6 @@ public class RootBlockPlacer : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             .PassValue(v =>
             {
                 background.color = new Color(0, 0, 0, v);
-                Debug.Log($"{v}");
             })
             .WhenDone(() =>
             {
