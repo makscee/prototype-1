@@ -1072,7 +1072,7 @@ PrefabInstance:
     - target: {fileID: 2467137291892534819, guid: 483283b3404e9134ca516f9c06fca09b,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -69.94006
+      value: -69.9996
       objectReference: {fileID: 0}
     - target: {fileID: 2467137291892534819, guid: 483283b3404e9134ca516f9c06fca09b,
         type: 3}
@@ -1943,6 +1943,11 @@ PrefabInstance:
         type: 3}
       propertyPath: palette
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2090189696310154698, guid: 29f144e896f42554a8136e9aa6200d18,
+        type: 3}
+      propertyPath: m_text
+      value: Rate
       objectReference: {fileID: 0}
     - target: {fileID: 2425003488231380084, guid: 29f144e896f42554a8136e9aa6200d18,
         type: 3}

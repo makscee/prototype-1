@@ -27,10 +27,11 @@ public class Painter : MonoBehaviour
         set => numInPalette = value;
     }
 
-    void OnEnable()
+    void Awake()
     {
         if (palette == null) TryObtainPalette();
         ObtainPaintAction();
+        PaintRefresh();
     }
 
     void Update()

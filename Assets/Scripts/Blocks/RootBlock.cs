@@ -30,6 +30,7 @@ public class RootBlock : Block
     void Update()
     {
         if (pulseVersionDirty) PulseConnectionUpdate();
+        Roots.Root[rootId].pulse.Update();
     }
 
     public bool pulseVersionDirty;

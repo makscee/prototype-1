@@ -11,7 +11,7 @@ public static class BindMatrix
     {
         if (IsBound(first, second)) return;
         
-        var b = new Bind(first, second, offset, strength, ropeLength, breakDistance);
+        var b = new Bind(first, second, offset, strength);
         
         if (!Matrix.ContainsKey(first)) Matrix[first] = new Dictionary<IBindable, Bind>();
         if (!Matrix.ContainsKey(second)) Matrix[second] = new Dictionary<IBindable, Bind>();
@@ -99,10 +99,5 @@ public static class BindMatrix
     public static List<Bind> GetAllAsList()
     {
         return Matrix.Values.SelectMany(dict => dict.Values).Distinct().ToList();
-    }
-
-    public static void Clear()
-    {
-        
     }
 }

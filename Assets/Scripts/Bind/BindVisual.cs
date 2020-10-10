@@ -9,7 +9,7 @@ public class BindVisual : MonoBehaviour
     RectTransform _rectTransform;
 
     const float MinWidth = 0.5f, MaxWidth = 0.7f;
-    float MaxLength;
+    const float MaxLength = 3;
 
     public Bind bind;
 
@@ -42,7 +42,6 @@ public class BindVisual : MonoBehaviour
         bindVisual = Instantiate(Prefabs.Instance.bindVisual, SharedObjects.Instance.bindVisualsCanvas.transform).GetComponent<BindVisual>();
         bindVisual.first = bind.First;
         bindVisual.second = bind.Second;
-        bindVisual.MaxLength = bind.BreakDistance > -1 ? bind.BreakDistance : 3;
         bindVisual.bind = bind;
         bindVisual._painter.subscribedTo = block.view.SecondaryPainter;
 
@@ -56,8 +55,6 @@ public class BindVisual : MonoBehaviour
 
     void Update()
     {
-        bind.Update();
-        
         var firstPosition = first.GetPosition();
         var dir = (second.GetPosition() - firstPosition) / 2;
         transform.position = firstPosition + dir;

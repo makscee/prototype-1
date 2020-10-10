@@ -53,7 +53,6 @@
             <e p="PostFx.cs" t="Include" />
           </e>
           <e p="GameManager.cs" t="Include" />
-          <e p="GlobalPulse.cs" t="Include" />
           <e p="IdHolders" t="Include">
             <e p="DirectionIdHolder.cs" t="Include" />
             <e p="RootIdHolder.cs" t="Include" />
@@ -65,6 +64,7 @@
             <e p="PixelRoad.cs" t="Include" />
             <e p="WeightedColor.cs" t="Include" />
           </e>
+          <e p="Pulse.cs" t="Include" />
           <e p="Roots" t="Include">
             <e p="Root.cs" t="Include" />
             <e p="RootBlockPlacer.cs" t="Include" />

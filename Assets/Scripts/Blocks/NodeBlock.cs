@@ -31,17 +31,7 @@ public class NodeBlock : Block
             UpdateDirs();
             if (bind.Second == this && bind.First is Block)
                 RefreshStepNumber();
-            var alone = true;
-            foreach (var adjacentBind in BindMatrix.GetAllAdjacentBinds(this))
-            {
-                if (adjacentBind.First is Block && adjacentBind.First != this ||
-                    adjacentBind.Second is Block && adjacentBind.Second != this)
-                {
-                    alone = false;
-                    break;
-                }
-            }
-            if (alone) Destroy();
+            _alone = CheckAlone();
         };
     }
 
@@ -76,7 +66,26 @@ public class NodeBlock : Block
 
     void Update()
     {
+        if (_alone && CheckAlone()) Destroy();
+        else _alone = false;
         if (_stepNumberDirty) RefreshStepNumber();
+    }
+
+    bool _alone;
+    bool CheckAlone()
+    {
+        var result = true;
+        foreach (var adjacentBind in BindMatrix.GetAllAdjacentBinds(this))
+        {
+            if (adjacentBind.First is Block && adjacentBind.First != this ||
+                adjacentBind.Second is Block && adjacentBind.Second != this)
+            {
+                result = false;
+                break;
+            }
+        }
+
+        return result;
     }
 
     void OnDeadendTap()
@@ -133,7 +142,7 @@ public class NodeBlock : Block
         }
     }
 
-    public static NodeBlock Create(int x, int y, int rootId = 0, float startOffsetClamp = 2f)
+    public static NodeBlock Create(int x, int y, int rootId = 0, float startOffsetClamp = 0f)
     {
         var position = new Vector2(x, y);
         var startPosition = position + Vector2.ClampMagnitude(Roots.Root[rootId].block.logic.Position - position, startOffsetClamp);

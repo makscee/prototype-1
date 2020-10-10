@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class RootPanel : MonoBehaviour
 {
+    [SerializeField] SplitSlider bpmSlider;
     SlidingPanel _panel;
-    DuoLine _line;
+    [SerializeField] DuoLine _line;
     int _id;
 
     void Start()
@@ -13,6 +14,7 @@ public class RootPanel : MonoBehaviour
         _id = GetComponentInParent<RootIdHolder>().id;
         _panel.onOpen += CreateLine;
         _panel.onClose += ClearLine;
+        bpmSlider.onValueChange = v => Roots.Root[_id].pulse.Bpm = Mathf.Round(v);
     }
 
     void CreateLine()
@@ -22,6 +24,7 @@ public class RootPanel : MonoBehaviour
 
     void ClearLine()
     {
-        Destroy(_line.gameObject);
+        if (_line != null)
+            Destroy(_line.gameObject);
     }
 }

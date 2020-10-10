@@ -44,31 +44,16 @@ public class BlockLogic : MonoBehaviour
 
     void OnDisable()
     {
-        GlobalPulse.UnsubscribeFromNext(PassPulse);
+        Roots.Root[parent.rootId].pulse.UnsubscribeFromNext(PassPulse);
         BindMatrix.RemoveAllBinds(parent);
         FieldMatrix.ClearMe(parent);
-    }
-
-    void Update()
-    {
-        // UpdateUnanchoredCoords();
-    }
-
-    void UpdateUnanchoredCoords()
-    {
-        // if (parent.IsAnchored) return;
-        
-        var x = Mathf.RoundToInt(parent.physics.X);
-        var y = Mathf.RoundToInt(parent.physics.Y);
-        if (x != X || y != Y)
-            SetCoords(x, y);
     }
 
     public void ReceivePulse(Block from = null)
     {
         if (HasPulse) return;
         onPulseReceive?.Invoke(from);
-        GlobalPulse.SubscribeToNext(PassPulse);
+        Roots.Root[parent.rootId].pulse.SubscribeToNext(PassPulse);
         HasPulse = true;
         parent.view.SetDirty();
     }
