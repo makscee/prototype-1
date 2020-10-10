@@ -11,6 +11,7 @@ public class Prefabs : ScriptableObject
     public GameObject blockVisualsCanvas;
     public GameObject leftRootPanel;
     public GameObject rightPanelGroup;
+    public GameObject duoLine;
     
     #region BlockVisualModels
 

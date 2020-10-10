@@ -27,6 +27,7 @@ MonoBehaviour:
     type: 3}
   rightPanelGroup: {fileID: 1739377728294565395, guid: c953926ef5164664590706ccf2317632,
     type: 3}
+  duoLine: {fileID: 565949038027432765, guid: 7997cf4a3429fbd448ab324e11845454, type: 3}
   blockVisualBase: {fileID: 7040440144472880495, guid: 35ba8e68686ecc74d83f7a4961d19365,
     type: 3}
   nodeDeadendVisualModel: {fileID: 6897376495429527264, guid: a36e059d2401d6b4eb121c81faa72305,

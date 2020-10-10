@@ -19,6 +19,7 @@ public class NodeBlock : Block
         logic.onPulseReceive += OnPulseDeadEnd;
         logic.onBind += bind =>
         {
+            UpdateDirs();
             if (bind.Second == this && bind.First is Block block && block.rootId == rootId)
             {
                 pulseVersion = block.pulseVersion;
@@ -27,6 +28,7 @@ public class NodeBlock : Block
         };
         logic.onUnbind += bind =>
         {
+            UpdateDirs();
             if (bind.Second == this && bind.First is Block)
                 RefreshStepNumber();
             var alone = true;
@@ -57,6 +59,21 @@ public class NodeBlock : Block
         view.SetDirty();
     }
 
+    public readonly bool[] dirs = new bool[4];
+    public bool DeadEnd => BindMatrix.GetOutBindsCount(this) == 0;
+    void UpdateDirs()
+    {
+        if (!DeadEnd)
+        {
+            for (var i = 0; i < 4; i++)
+                dirs[i] = false;
+            return;
+        }
+        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
+            if (bind.First is Block block && bind.Second == this)
+                dirs[Utils.DirFromCoords(logic.Position - block.logic.Position)] = true;
+    }
+
     void Update()
     {
         if (_stepNumberDirty) RefreshStepNumber();
@@ -64,12 +81,13 @@ public class NodeBlock : Block
 
     void OnDeadendTap()
     {
-        if (BindMatrix.GetOutBindsCount(this) != 0) return;
-        var dirs = new List<int>(4);
-        foreach (var bind in BindMatrix.GetAllAdjacentBinds(this))
-            if (bind.First is Block block && bind.Second == this)
-                dirs.Add(Utils.DirFromCoords(logic.Position - block.logic.Position));
-        Roots.Root[rootId].directionPanelsGroup.OpenOneCloseRest(Roots.Root[rootId].directionPanels[dirs[Random.Range(0, dirs.Count)]]);
+        if (!DeadEnd) return;
+        var d = new List<int>();
+        for (var i = 0; i < 4; i++)
+        {
+            if (dirs[i]) d.Add(i);
+        }
+        Roots.Root[rootId].directionPanelsGroup.OpenOneCloseRest(Roots.Root[rootId].directionPanels[d[Random.Range(0, d.Count)]]);
         Roots.RootPanelsGroup.OpenOneCloseRest(Roots.Root[rootId].rootPanelsFolder);
     }
 
@@ -128,6 +146,7 @@ public class NodeBlock : Block
             .PassValue(v => startModel.transform.localScale = new Vector3(v, v, 1))
             .Type(InterpolationType.InvSquare).NullCheck(startModel.gameObject);
         BindMatrix.AddBind(StaticAnchor.Create(b.logic.Position, false), b, Vector2.zero, Bind.BlockStaticBindStrength);
+        Roots.Root[rootId].DeadEndsSetDirty();
         return b;
     }
 

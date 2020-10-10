@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d8dd4112eb34c4a8d23f0f258bc0590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 2394806886134572764}
 --- !u!1 &2394806885616376858
 GameObject:
   m_ObjectHideFlags: 0
@@ -1078,6 +1079,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2394806886334738066}
   - component: {fileID: 2394806886334738067}
+  - component: {fileID: 2810461014941736344}
   m_Layer: 5
   m_Name: SlidingPanelPrimary
   m_TagString: Untagged
@@ -1124,6 +1126,18 @@ MonoBehaviour:
   speed: 7
   bookmark: {fileID: 2394806885383426023}
   orientedLeft: 1
+--- !u!114 &2810461014941736344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2394806886334738065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3f27296493947c7a9d4dc7e87eeb308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2394806886351112927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,6 +1554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d8dd4112eb34c4a8d23f0f258bc0590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 2394806886660801799}
 --- !u!1 &4761933653303415217
 GameObject:
   m_ObjectHideFlags: 0

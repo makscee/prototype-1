@@ -13,6 +13,7 @@ public class SlidingPanel : MonoBehaviour
     public SlidingPanelBookmark bookmark;
     RectTransform _rectTransform;
     public bool orientedLeft;
+    public Action onOpen, onClose;
 
     public bool IsOpen { get; private set; }
 
@@ -42,6 +43,7 @@ public class SlidingPanel : MonoBehaviour
         gameObject.SetActive(true);
         targetWidth = openWidth;
         IsOpen = true;
+        onOpen?.Invoke();
         return Animator.Interpolate(_rectTransform.rect.width, openWidth, AnimationTime).Type(InterpolationType.OverflowReturn)
             .PassValue(
                 v =>
@@ -55,6 +57,7 @@ public class SlidingPanel : MonoBehaviour
     {
         targetWidth = closedWidth;
         IsOpen = false;
+        onClose?.Invoke();
         return Animator.Interpolate(_rectTransform.rect.width, closedWidth, AnimationTime).Type(InterpolationType.OverflowReturn)
             .PassValue(
                 v =>

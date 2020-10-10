@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Root
@@ -11,6 +12,26 @@ public class Root
     public readonly WavePartsContainer[] wavePartsContainers = new WavePartsContainer[4];
     public Palette palette;
     public SlicedAudioClip slicedClip;
+    List<NodeBlock> _deadEnds;
+    public List<NodeBlock> DeadEnds
+    {
+        get
+        {
+            if (_deadEnds == null)
+            {
+                _deadEnds = new List<NodeBlock>();
+                foreach (var b in FieldMatrix.GetAllAsList())
+                    if (b is NodeBlock node && node.rootId == id && node.DeadEnd)
+                        _deadEnds.Add(node);
+            }
+            return _deadEnds;
+        }
+    }
+
+    public void DeadEndsSetDirty()
+    {
+        _deadEnds = null;
+    }
 
     public void Destroy()
     {

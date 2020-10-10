@@ -48,6 +48,7 @@
           </e>
           <e p="Effects" t="Include">
             <e p="Blit.cs" t="Include" />
+            <e p="DuoLine.cs" t="Include" />
             <e p="NoiseGenerator.cs" t="Include" />
             <e p="PostFx.cs" t="Include" />
           </e>
@@ -99,6 +100,9 @@
             <e p="FpsCounter.cs" t="Include" />
             <e p="PaletteButton.cs" t="Include" />
             <e p="PalettePicker.cs" t="Include" />
+            <e p="RootPanel" t="Include">
+              <e p="RootPanel.cs" t="Include" />
+            </e>
             <e p="SlidingPanels" t="Include">
               <e p="RootPlaceholderBookmark.cs" t="Include" />
               <e p="SlidingPanel.cs" t="Include" />

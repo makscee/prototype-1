@@ -132,6 +132,18 @@ public class Painter : MonoBehaviour
             return;
         }
 
+        var lr = PaintOn == null ? GetComponent<LineRenderer>() : PaintOn as LineRenderer;
+        if (lr != null)
+        {
+            _paintAction = c =>
+            {
+                c.a = lr.startColor.a;
+                lr.startColor = c;
+                lr.endColor = c;
+            };
+            return;
+        }
+
         var outline = PaintOn == null ? GetComponent<Outline>() : PaintOn as Outline;
         if (outline != null)
         {

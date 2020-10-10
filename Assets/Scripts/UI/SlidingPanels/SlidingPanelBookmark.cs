@@ -7,6 +7,7 @@ public class SlidingPanelBookmark : MonoBehaviour, IPointerClickHandler, IDragHa
     public Action<Vector2> onDrag;
     public Action onBeginDrag;
     public Action onClick;
+    public Transform icon;
 
     public const float OffsetByScreenDivision = 6, OffsetByPixels = 100;
 
