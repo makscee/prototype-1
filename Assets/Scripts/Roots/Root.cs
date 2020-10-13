@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class Root
 {
@@ -43,4 +45,6 @@ public class Root
         if (directionPanelsGroup != null) Object.Destroy(directionPanelsGroup.gameObject);
         Roots.Root.Remove(id);
     }
+
+    public Action onSlicedClipUpdate;
 }

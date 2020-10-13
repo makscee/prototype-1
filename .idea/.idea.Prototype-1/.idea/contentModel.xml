@@ -103,6 +103,7 @@
             <e p="RootPanel" t="Include">
               <e p="RootPanel.cs" t="Include" />
             </e>
+            <e p="SlicedClipPicker.cs" t="Include" />
             <e p="SlidingPanels" t="Include">
               <e p="RootPlaceholderBookmark.cs" t="Include" />
               <e p="SlidingPanel.cs" t="Include" />

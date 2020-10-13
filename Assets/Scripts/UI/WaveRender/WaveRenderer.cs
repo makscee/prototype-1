@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,33 +9,42 @@ public class WaveRenderer : Graphic
 {
     public int samplesFrom, samplesTo;
     public int selectSamplesFrom, selectSamplesTo;
-    public float width, height;
     public int resolution = 1000;
 
-    public List<Multiline> multilines = new List<Multiline>();
-    public List<Line> lines = new List<Line>();
+    readonly List<Multiline> _multilines = new List<Multiline>();
+    readonly List<Line> _lines = new List<Line>();
 
     readonly List<UIVertex> _vertexBuffer = new List<UIVertex>();
     readonly List<int> _indexBuffer = new List<int>();
 
-    WavePartsContainer _container;
+    SlicedAudioClip _slicedClip;
 
-    protected override void OnEnable()
+    public SlicedAudioClip SlicedClip
     {
-        base.OnEnable();
-        _container = GetComponentInParent<WavePartsContainer>();
+        get
+        {
+            if (_slicedClip == null && clipAsset != null) 
+                _slicedClip = SlicedAudioClip.CreateFromAsset(clipAsset);
+            return _slicedClip;
+        }
+        set => _slicedClip = value;
     }
 
-    void DrawWave(int resolution = 1000)
-    {
-        if (_container.slicedAudioClip == null) return;
-        var rect = rectTransform.rect;
-        width = rect.width;
-        height = rect.height;
-        lines.Clear();
+    public SlicedAudioClipAsset clipAsset;
+    public float thickness;
 
+    void DrawWave()
+    {
+        if (SlicedClip == null) return;
+        var rect = rectTransform.rect;
+        var width = rect.width;
+        var height = rect.height;
+        _lines.Clear();
+
+        if (samplesTo == 0 && samplesFrom == 0)
+            samplesTo = _slicedClip.slices.Last();
         var dataLength = samplesTo - samplesFrom;
-        var data = _container.slicedAudioClip.data;
+        var data = SlicedClip.data;
 
         const float addWidth = 0.03f;
         for (var i = 0; i < resolution - 1; i++)
@@ -49,31 +59,31 @@ public class WaveRenderer : Graphic
             if (max == -1f) continue;
             var inSelection = batchSampleStart > selectSamplesFrom && batchSampleStart < selectSamplesTo;
             var t = inSelection
-                ? _container.thickness * 2
-                : _container.thickness;
+                ? thickness * 2
+                : thickness;
             min -= addWidth / 2;
             max += addWidth / 2;
 
             var line = new Line(color, t, new Vector2(width / 2 + min * width / 2, height - height / resolution * i), 
                 new Vector2(width / 2 + max * width / 2, height - height / resolution * i));
-            lines.Add(line);
+            _lines.Add(line);
         }
     }
     
     protected override void OnPopulateMesh(VertexHelper vh)
     {
-        DrawWave(resolution);
+        DrawWave();
         vh.Clear();
 
         _vertexBuffer.Clear();
         _indexBuffer.Clear();
 
-        foreach (var multiline in multilines)
+        foreach (var multiline in _multilines)
         {
             DrawMultiLine(_vertexBuffer, _indexBuffer, multiline);
         }
 
-        foreach (var line in lines)
+        foreach (var line in _lines)
         {
             DrawLine(_vertexBuffer, _indexBuffer, line);
         }

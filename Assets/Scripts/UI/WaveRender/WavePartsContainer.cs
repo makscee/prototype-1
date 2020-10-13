@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 [ExecuteInEditMode]
 public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
-    public SlicedAudioClip slicedAudioClip => Roots.Root[_rootBlock.rootId].slicedClip;
+    public SlicedAudioClip slicedAudioClip => Roots.Root[_rootId].slicedClip;
     public UpDownButton recordButton;
     int _direction;
     [Range(1, 8)]public int resolutionDivisor = 2;
@@ -25,6 +25,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
 
     RectTransform _rectTransform;
     RootBlock _rootBlock;
+    int _rootId;
 
     public float SelectFrom
     {
@@ -58,15 +59,19 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
         recordButton.OnUp = EndRecording;
         GameManager.OnNextFrame += () =>
         {
-            _rootBlock = Roots.Root[GetComponentInParent<RootIdHolder>().id].block;
+            _rootId = GetComponentInParent<RootIdHolder>().id;
+            _rootBlock = Roots.Root[_rootId].block;
             _selectFrom = _rootBlock.soundsPlayer.Configs[_direction].SelectFrom;
             _selectTo = _rootBlock.soundsPlayer.Configs[_direction].SelectTo;
             Refresh();
+            Roots.Root[_rootId].onSlicedClipUpdate += Refresh;
+            Roots.Root[_rootId].onSlicedClipUpdate += SelectRandomSlice;
             if (_selectFrom == 0 && _selectTo == 0)
             {
                 SelectRandomSlice();
             }
         };
+        
     }
 
     void Refresh()
@@ -95,7 +100,9 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
             var length = 1f * _waveParts[i].SamplesTo - _waveParts[i].SamplesFrom;
             var heightPercent = length / slicedAudioClip.Samples;
             _waveParts[i].layoutElement.preferredHeight = totalHeight * heightPercent;
+            _waveParts[i].waveRenderer.SlicedClip = slicedAudioClip;
             _waveParts[i].waveRenderer.resolution =  Mathf.RoundToInt(resolution * heightPercent);
+            _waveParts[i].waveRenderer.thickness = thickness;
             _waveParts[i].waveRenderer.selectSamplesFrom = Mathf.RoundToInt(SelectFrom);
             _waveParts[i].waveRenderer.selectSamplesTo = Mathf.RoundToInt(SelectTo);
         }
@@ -176,7 +183,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
                 var from = _draggedWavePart.SamplesFrom;
                 var to = _draggedWavePart.SamplesTo;
                 slicedAudioClip.RemoveSlice(ind);
-                foreach (var wavePartsContainer in Roots.Root[_rootBlock.rootId].wavePartsContainers)
+                foreach (var wavePartsContainer in Roots.Root[_rootId].wavePartsContainers)
                 {
                     wavePartsContainer.SliceRemoveAdjust(from, to);
                 }
@@ -265,7 +272,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
     public void EndRecording()
     {
         slicedAudioClip.EndRecording();
-        foreach (var wavePartsContainer in Roots.Root[_rootBlock.rootId].wavePartsContainers)
+        foreach (var wavePartsContainer in Roots.Root[_rootId].wavePartsContainers)
         {
             wavePartsContainer.Refresh();
         }

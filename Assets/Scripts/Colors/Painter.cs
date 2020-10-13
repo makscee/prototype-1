@@ -27,7 +27,7 @@ public class Painter : MonoBehaviour
         set => numInPalette = value;
     }
 
-    void Awake()
+    void OnEnable()
     {
         if (palette == null) TryObtainPalette();
         ObtainPaintAction();

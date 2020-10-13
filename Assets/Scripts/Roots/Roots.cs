@@ -95,8 +95,8 @@ public static class Roots
         }
     }
 
-    static void CreateSlicedAudioClip(int id)
+    static void CreateSlicedAudioClip(int rootId, int clipId = 1)
     {
-        Root[id].slicedClip = SlicedAudioClip.CreateFromAsset(Resources.Load<SlicedAudioClipAsset>("SlicedAudioClipAsset"));
+        Root[rootId].slicedClip = SlicedAudioClip.CreateFromAsset(Resources.Load<SlicedAudioClipAsset>($"SlicedClips/slicedClip{clipId}"));
     }
 }
