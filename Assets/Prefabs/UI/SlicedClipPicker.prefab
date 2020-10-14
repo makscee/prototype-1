@@ -162,10 +162,10 @@ RectTransform:
   m_Father: {fileID: 8460507683424275218}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0, y: -3}
-  m_SizeDelta: {x: -42.02207, y: -52.385193}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 57.97793, y: 64.11383}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4191327439348112886
 CanvasRenderer:
@@ -290,7 +290,7 @@ GameObject:
   - component: {fileID: 2137591148191657656}
   - component: {fileID: 1068494455737964380}
   m_Layer: 5
-  m_Name: Clip1
+  m_Name: SlicedClipPicker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,7 +316,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 434.39426}
+  m_SizeDelta: {x: 99.2, y: 434.39426}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1068494455737964380
 MonoBehaviour:
