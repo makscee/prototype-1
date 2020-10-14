@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   X: 0
   Y: 0
-  _spriteRenderer: {fileID: 4375740871544347388}
+  spriteRenderer: {fileID: 4375740871544347388}
 --- !u!212 &4375740871544347388
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -62,6 +62,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

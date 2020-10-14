@@ -83,16 +83,16 @@ public static class Utils
         y = (int) Math.Round(worldPos.y);
     }
 
-    static Dictionary<Transform, CanvasScaler> _scalers = new Dictionary<Transform, CanvasScaler>();
+    static Dictionary<Transform, RectTransform> _canvasTransforms = new Dictionary<Transform, RectTransform>();
     public static Vector2 ScaledScreenCoords(Vector2 v, Transform transform, bool reversed = false)
     {
-        if (!_scalers.ContainsKey(transform)) 
-            _scalers.Add(transform, transform.GetComponentInParent<CanvasScaler>());
-        var scaler = _scalers[transform];
+        if (!_canvasTransforms.ContainsKey(transform))
+            _canvasTransforms.Add(transform, transform.GetComponentInParent<Canvas>().GetComponent<RectTransform>());
+        var size = _canvasTransforms[transform].rect.size;
         Vector2 scale;
         if (reversed)
-            scale = new Vector2(Screen.width, Screen.height) / scaler.referenceResolution;
-        else scale = scaler.referenceResolution / new Vector2(Screen.width, Screen.height);
+            scale = new Vector2(Screen.width, Screen.height) / size;
+        else scale = size / new Vector2(Screen.width, Screen.height);
         return v * scale;
     }
 }

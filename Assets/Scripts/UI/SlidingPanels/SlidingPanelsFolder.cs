@@ -24,10 +24,7 @@ public class SlidingPanelsFolder : MonoBehaviour
         GameManager.OnNextFrame += () =>
         {
             var ind = transform.GetSiblingIndex();
-            var offsetPos = Screen.height / SlidingPanelBookmark.OffsetByScreenDivision;
-            var indOffsetPos = Utils.ScaledScreenCoords(
-                new Vector2(0, ind * SlidingPanelBookmark.OffsetByPixels), transform, true).y;
-            var offset = offsetPos + indOffsetPos;
+            var offset = SlidingPanelBookmark.GetHeightPositionByIndex(ind, transform);
             primary.bookmark.transform.position = new Vector3(primary.bookmark.transform.position.x, offset);
             secondary.bookmark.transform.position = new Vector3(secondary.bookmark.transform.position.x, offset);
         };

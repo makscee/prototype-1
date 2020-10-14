@@ -5,7 +5,8 @@ public class Pixel : MonoBehaviour
 {
     public int X, Y;
     
-    [SerializeField] SpriteRenderer _spriteRenderer;
+    [SerializeField] SpriteRenderer spriteRenderer;
+    Color _current;
 
     void Start()
     {
@@ -14,12 +15,15 @@ public class Pixel : MonoBehaviour
 
     void SetColor(Color c)
     {
-        _spriteRenderer.color = c;
+        spriteRenderer.color = c;
+        _current = c;
     }
 
     void Update()
     {
-        SetColor(PixelDriver.GetColor(X, Y));
+        var c = PixelDriver.GetColor(X, Y);
+        if (c == _current) return;
+        SetColor(c);
     }
 
     void OnDisable()

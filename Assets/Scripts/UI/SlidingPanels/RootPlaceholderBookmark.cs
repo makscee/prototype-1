@@ -6,7 +6,7 @@ public class RootPlaceholderBookmark : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] RootBlockPlacer rootBlockPlacer;
     int _position;
-    void Awake()
+    void Start()
     {
         Reposition();
     }
@@ -21,9 +21,7 @@ public class RootPlaceholderBookmark : MonoBehaviour, IPointerClickHandler
         transform.SetAsFirstSibling();
         var ind = Roots.Count;
         _position = ind;
-        var offsetPos = Screen.height / SlidingPanelBookmark.OffsetByScreenDivision;
-        var indOffsetPos = Utils.ScaledScreenCoords(new Vector2(0, ind * SlidingPanelBookmark.OffsetByPixels), transform, true).y;
-        var offset = offsetPos + indOffsetPos;
+        var offset = SlidingPanelBookmark.GetHeightPositionByIndex(ind, transform);
         transform.position = new Vector3(transform.position.x, offset);
     }
 

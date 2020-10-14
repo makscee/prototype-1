@@ -57,7 +57,7 @@ public class SplitSlider : MonoBehaviour, IDragHandler, IPointerClickHandler, IE
     bool _dragging;
     public void OnDrag(PointerEventData eventData)
     {
-        value += eventData.delta.y / rect.rect.height;
+        value += Utils.ScaledScreenCoords(eventData.delta, transform).y / rect.rect.height;
     }
 
     public Action<float> onValueChange;

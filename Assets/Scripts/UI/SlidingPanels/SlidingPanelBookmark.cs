@@ -33,4 +33,12 @@ public class SlidingPanelBookmark : MonoBehaviour, IPointerClickHandler, IDragHa
     {
         _dragging = false;
     }
+
+    public static float GetHeightPositionByIndex(int index, Transform transform)
+    {
+        var offsetPos = Screen.height / OffsetByScreenDivision;
+        var scaledOffsetValue = Utils.ScaledScreenCoords(new Vector2(0, OffsetByPixels), transform, true);
+        var offset = offsetPos + scaledOffsetValue.y * index;
+        return offset;
+    }
 }

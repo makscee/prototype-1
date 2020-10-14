@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 [ExecuteInEditMode]
 public class SlidingPanel : MonoBehaviour
@@ -41,7 +40,6 @@ public class SlidingPanel : MonoBehaviour
     public Interpolator<float> Open()
     {
         gameObject.SetActive(true);
-        targetWidth = openWidth;
         IsOpen = true;
         onOpen?.Invoke();
         return Animator.Interpolate(_rectTransform.rect.width, openWidth, AnimationTime).Type(InterpolationType.OverflowReturn)
@@ -55,7 +53,6 @@ public class SlidingPanel : MonoBehaviour
 
     public Interpolator<float> Close()
     {
-        targetWidth = closedWidth;
         IsOpen = false;
         onClose?.Invoke();
         return Animator.Interpolate(_rectTransform.rect.width, closedWidth, AnimationTime).Type(InterpolationType.OverflowReturn)
