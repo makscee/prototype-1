@@ -33,15 +33,12 @@ public class Pulse
     }
 
 
-    float _t;
+    float _lastT;
     public void Update()
     {
-        _t += Time.deltaTime;
-        if (_t > _tickTime)
-        {
-            _t -= _tickTime;
-            DoPulse();
-        }
+        var t = Time.time - Mathf.Floor(Time.time / _tickTime) * _tickTime;
+        if (_lastT > t) DoPulse();
+        _lastT = t;
     }
 
     void DoPulse()

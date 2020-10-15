@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour
         PixelDriver.Update();
         OnNextFrame?.Invoke();
         OnNextFrame = null;
+        foreach (var root in Roots.Root.Values)
+        {
+            root.pulse.Update();
+        }
     }
 
     public void LoadFromMemoryOrFile()

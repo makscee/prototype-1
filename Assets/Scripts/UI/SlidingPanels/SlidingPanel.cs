@@ -39,9 +39,9 @@ public class SlidingPanel : MonoBehaviour
 
     public Interpolator<float> Open()
     {
-        gameObject.SetActive(true);
-        IsOpen = true;
+        if (IsOpen) return null;
         onOpen?.Invoke();
+        IsOpen = true;
         return Animator.Interpolate(_rectTransform.rect.width, openWidth, AnimationTime).Type(InterpolationType.OverflowReturn)
             .PassValue(
                 v =>
@@ -53,6 +53,7 @@ public class SlidingPanel : MonoBehaviour
 
     public Interpolator<float> Close()
     {
+        if (!IsOpen) return null;
         IsOpen = false;
         onClose?.Invoke();
         return Animator.Interpolate(_rectTransform.rect.width, closedWidth, AnimationTime).Type(InterpolationType.OverflowReturn)
