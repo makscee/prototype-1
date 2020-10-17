@@ -36,3 +36,5 @@ MonoBehaviour:
     type: 3}
   rootBlockVisualModel: {fileID: 7764886673762801825, guid: 9dcf52651b3a8e74b8ad2d7feeec707d,
     type: 3}
+  FadeoutCircle: {fileID: 235612917316092261, guid: 306e3ae8997465240b8414fb74372552,
+    type: 3}

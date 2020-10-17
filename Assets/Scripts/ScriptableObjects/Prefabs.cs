@@ -21,6 +21,12 @@ public class Prefabs : ScriptableObject
     public GameObject rootBlockVisualModel;
 
     #endregion
+
+    #region Effects
+
+    public GameObject FadeoutCircle;
+
+    #endregion
     
     public static Prefabs Instance => GetInstance();
 

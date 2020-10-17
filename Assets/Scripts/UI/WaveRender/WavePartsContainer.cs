@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -57,6 +58,7 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
         _wavePartsLayoutGroup = wavePartsParent.GetComponent<VerticalLayoutGroup>();
         recordButton.OnDown = StartRecording;
         recordButton.OnUp = EndRecording;
+        StartCoroutine(nameof(RecordButtonCircleEffect));
         GameManager.OnNextFrame += () =>
         {
             _rootId = GetComponentInParent<RootIdHolder>().id;
@@ -71,7 +73,19 @@ public class WavePartsContainer : MonoBehaviour, IDragHandler, IBeginDragHandler
                 SelectRandomSlice();
             }
         };
-        
+    }
+
+    IEnumerator RecordButtonCircleEffect()
+    {
+        var panel = GetComponentInParent<SlidingPanel>();
+        while (true)
+        {
+            if (!_recording && panel.IsOpen)
+            {
+                FadeoutCircleEffect.Create(recordButton.transform, 1f, 130);
+            }
+            yield return new WaitForSeconds(3f);
+        }
     }
 
     void Refresh()

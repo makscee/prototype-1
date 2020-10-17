@@ -44,6 +44,7 @@
           <e p="Effects" t="Include">
             <e p="Blit.cs" t="Include" />
             <e p="DuoLine.cs" t="Include" />
+            <e p="FadeoutCircleEffect.cs" t="Include" />
             <e p="NoiseGenerator.cs" t="Include" />
             <e p="PostFx.cs" t="Include" />
           </e>
