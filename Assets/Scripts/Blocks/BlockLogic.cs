@@ -109,4 +109,18 @@ public class BlockLogic : MonoBehaviour
         _dragging = false;
         onEndDrag?.Invoke(eventData);
     }
+
+    public static void KillAllPulses()
+    {
+        foreach (var root in Roots.Root.Values)
+        {
+            root.pulse.Clear();
+        }
+        foreach (var block in FieldMatrix.GetAllAsList())
+        {
+            if (!block.logic.HasPulse) continue;
+            block.logic.HasPulse = false;
+            block.view.SetDirty();
+        }
+    }
 }

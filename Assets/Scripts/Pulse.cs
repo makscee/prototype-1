@@ -32,6 +32,13 @@ public class Pulse
         _subscribers -= a;
     }
 
+    public void Clear()
+    {
+        _subscribers = null;
+    }
+
+    public bool HasActivePulse => _subscribers != null;
+
 
     float _lastT;
     public void Update()

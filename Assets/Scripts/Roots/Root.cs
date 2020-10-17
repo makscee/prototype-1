@@ -14,7 +14,7 @@ public class Root
     public readonly WavePartsContainer[] wavePartsContainers = new WavePartsContainer[4];
     public Palette palette;
     public SlicedAudioClip slicedClip;
-    public Pulse pulse = new Pulse();
+    public readonly Pulse pulse = new Pulse();
     List<NodeBlock> _deadEnds;
     public List<NodeBlock> DeadEnds
     {
