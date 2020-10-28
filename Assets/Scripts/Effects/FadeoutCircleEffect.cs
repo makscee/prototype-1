@@ -13,7 +13,7 @@ public class FadeoutCircleEffect : MonoBehaviour
             image.color = image.color.LerpAlpha(1f, 0f, v);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, v * _endSize);
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, v * _endSize);
-        }).WhenDone(() => Destroy(gameObject));
+        }).WhenDone(() => Destroy(gameObject)).NullCheck(rectTransform.gameObject);
     }
     
     public static void Create(Transform under, float time, float endSize)

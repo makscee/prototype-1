@@ -250,10 +250,164 @@ PrefabInstance:
       propertyPath: m_Name
       value: Entry (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 500930805212178207, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: clipTexture
+      value: 
+      objectReference: {fileID: 4900000, guid: 84bbd30e88eed6f4dbed7a937d497fef, type: 3}
     - target: {fileID: 500930805343024184, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
       propertyPath: m_text
       value: 6. Hold to record sounds from micrrophone
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930805343024185, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: palette
+      value: 
+      objectReference: {fileID: 1263535283}
+    - target: {fileID: 500930805788103424, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: palette
+      value: 
+      objectReference: {fileID: 1263535283}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 87eed2b7d490b4a48aa410524b0200b0, type: 3}
+--- !u!1001 &42231416
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 837802994}
+    m_Modifications:
+    - target: {fileID: 500930804721942306, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: text
+      value: Drag audio part to remove it
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942306, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: clipTexture
+      value: 
+      objectReference: {fileID: 4900000, guid: be5c29dd3068e2e4aaeffc50fa558d9c, type: 3}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 247.63806
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -2174
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930804721942308, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_Name
+      value: Entry (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 500930805212178207, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: clipTexture
+      value: 
+      objectReference: {fileID: 4900000, guid: 84bbd30e88eed6f4dbed7a937d497fef, type: 3}
+    - target: {fileID: 500930805343024184, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: m_text
+      value: 8. Hold to record sounds from micrrophone
       objectReference: {fileID: 0}
     - target: {fileID: 500930805343024185, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
@@ -2636,6 +2790,7 @@ RectTransform:
   - {fileID: 273404055}
   - {fileID: 1554583934}
   - {fileID: 782912977}
+  - {fileID: 907198987}
   - {fileID: 1122811866}
   m_Father: {fileID: 1917610071}
   m_RootOrder: 0
@@ -2643,7 +2798,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 2387.7217}
+  m_SizeDelta: {x: 0, y: 2685.38}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &837802995
 MonoBehaviour:
@@ -2810,6 +2965,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Entry (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 500930805212178207, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: clipTexture
+      value: 
+      objectReference: {fileID: 4900000, guid: aee82fb158d64f94fa6cdfab8675e984, type: 3}
     - target: {fileID: 500930805343024184, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
       propertyPath: m_text
@@ -2955,6 +3115,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 897655283}
   m_CullTransparentMesh: 0
+--- !u!224 &907198987 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
+    type: 3}
+  m_PrefabInstance: {fileID: 42231416}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &914250835
 GameObject:
   m_ObjectHideFlags: 0
@@ -3749,7 +3915,7 @@ RectTransform:
   m_Father: {fileID: 788265373}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5185476}
+  m_AnchorMin: {x: 0, y: 0.57191366}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -4520,6 +4686,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Entry (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 500930805212178207, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: clipTexture
+      value: 
+      objectReference: {fileID: 4900000, guid: 608f1a071bad587479eea2fec8426d7e, type: 3}
     - target: {fileID: 500930805343024184, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
       propertyPath: m_text
@@ -4797,7 +4968,7 @@ PrefabInstance:
     - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
@@ -4822,7 +4993,7 @@ PrefabInstance:
     - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2174
+      value: -2506
       objectReference: {fileID: 0}
     - target: {fileID: 500930804721942307, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
@@ -4869,10 +5040,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Entry (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 500930805212178207, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: clipTexture
+      value: 
+      objectReference: {fileID: 4900000, guid: 57ba7db8c568e1145a445d061e393370, type: 3}
     - target: {fileID: 500930805343024184, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
       propertyPath: m_text
-      value: 7. Hold to record sounds from micrrophone
+      value: 7. Drag to adjust sound settings
       objectReference: {fileID: 0}
     - target: {fileID: 500930805343024185, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
@@ -5926,6 +6102,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Entry (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 500930805212178207, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: clipTexture
+      value: 
+      objectReference: {fileID: 4900000, guid: f15e58a05dfa0234b8faaf12c97ec3d0, type: 3}
     - target: {fileID: 500930805343024184, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
       propertyPath: m_text
@@ -6045,7 +6226,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1289598859}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.4814524
+  m_Size: 0.42808634
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6632,6 +6813,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Entry (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 500930805212178207, guid: 87eed2b7d490b4a48aa410524b0200b0,
+        type: 3}
+      propertyPath: clipTexture
+      value: 
+      objectReference: {fileID: 4900000, guid: fcbdb8702b6c7b042ba39533eff3f004, type: 3}
     - target: {fileID: 500930805343024184, guid: 87eed2b7d490b4a48aa410524b0200b0,
         type: 3}
       propertyPath: m_text

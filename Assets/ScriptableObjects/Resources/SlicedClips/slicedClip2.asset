@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: slicedClip2
   m_EditorClassIdentifier: 
   audioClip: {fileID: 8300000, guid: baba86b7b2aa843469d30a5b981ddf73, type: 3}
-  slices: 00000000d85d0000a3a40000a06601007cc001001b860200
+  slices: 00000000d85d0000a3a40000022c01007cc001001b860200

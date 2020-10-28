@@ -11,6 +11,7 @@
           <e p="pulse.txt" t="Include" />
           <e p="record.txt" t="Include" />
           <e p="remove.txt" t="Include" />
+          <e p="slice_remove.txt" t="Include" />
           <e p="sounds settings.txt" t="Include" />
         </e>
         <e p="Scripts" t="Include">

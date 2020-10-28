@@ -50,7 +50,7 @@ public class SlidingPanelsFolder : MonoBehaviour
 
     public void Close()
     {
-        if (transform == null) return;
+        if (this == null || transform == null) return;
         transform.SetAsFirstSibling();
         primary.Close()?.OnDeltaSignChange(transform.SetAsLastSibling);
         secondary.Close();
